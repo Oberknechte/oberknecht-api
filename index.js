@@ -17,4 +17,6 @@ require("./lib/arguments/getStreamsFilters");
 
 const oberknechtAPI = require("./lib/api/oberknecht.api");
 
-module.exports = oberknechtAPI;
+module.exports = class {
+    static oberknechtAPI = oberknechtAPI;
+};
