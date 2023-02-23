@@ -1,7 +1,7 @@
 require("./lib/endpoints/_validatetoken");
 require("./lib/endpoints/ban");
 require("./lib/endpoints/deleteMessage");
-require("./lib/endpoints/getUsers");
+// require("./lib/endpoints/gedtUsers");
 require("./lib/endpoints/shoutout");
 require("./lib/endpoints/timeout");
 require("./lib/endpoints/unban");
