@@ -25,6 +25,8 @@ require("./lib/arguments/chatSettings");
 require("./lib/arguments/oberknechtAPIOptions");
 require("./lib/arguments/getStreamsFilters");
 
+require("oberknecht-utils");
+
 const oberknechtAPI = require("./lib/api/oberknecht.api");
 
 module.exports = class {
