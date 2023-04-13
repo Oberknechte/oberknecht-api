@@ -1,6 +1,6 @@
 {
   "name": "oberknecht-api",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "A client for easy usage of the Twitch API (Helix)",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   "dependencies": {
     "@jubewe/jsonsplitter": ">=0.5.6",
     "fs": "^0.0.1-security",
-    "oberknecht-utils": ">=0.0.7",
+    "oberknecht-utils": ">=0.0.8",
     "request": "^2.88.2"
   }
 }
