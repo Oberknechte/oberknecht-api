@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jubewe/oberknecht-api.git"
+    "url": "git+https://github.com/oberknechte/oberknecht-api.git"
   },
   "keywords": [
     "oberknecht",
@@ -18,9 +18,9 @@
   "author": "Jubewe",
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/jubewe/oberknecht-api/issues"
+    "url": "https://github.com/oberknechte/oberknecht-api/issues"
   },
-  "homepage": "https://github.com/jubewe/oberknecht-api#readme",
+  "homepage": "https://github.com/oberknechte/oberknecht-api#readme",
   "dependencies": {
     "@jubewe/jsonsplitter": "^0.7.0",
     "fs": "^0.0.1-security",
