@@ -13,8 +13,6 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
     return new Promise(async (resolve, reject) => {
         if ((!(sym ?? undefined) && !(customtoken ?? undefined)))
             return reject(Error(`sym and customtoken are undefined`));
-        if (!(ids ?? undefined))
-            return reject(Error("ids is undefined"));
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map(a => (0, oberknecht_utils_1.cleanChannelName)(a));
         let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false).map(a => a?.toLowerCase()).filter(a => oberknecht_utils_1.regex.numregex().test(String(a)));

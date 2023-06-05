@@ -8,7 +8,6 @@ import { getUsersResolveType } from "../types/endpoints/_getUsers";
 export async function getUsers(sym: string, logins?: string | string[], ids?: string | string[], noautofilterids?: Boolean /* Prevent filtering of number entries (ids) in logins */, customtoken?: string) {
     return new Promise<getUsersResolveType>(async (resolve, reject) => {
         if ((!(sym ?? undefined) && !(customtoken ?? undefined))) return reject(Error(`sym and customtoken are undefined`));
-        if (!(ids ?? undefined)) return reject(Error("ids is undefined"));
 
         let clientid = i.apiclientData[sym]?._options?.clientid;
         let logins_ = convertToArray(logins, false).map(a => cleanChannelName(a));
