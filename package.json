@@ -1,8 +1,8 @@
 {
   "name": "oberknecht-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A client for easy usage of the Twitch API (Helix)",
-  "main": "./lib-js/api/oberknecht.api",
+  "main": "./export",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
@@ -23,9 +23,9 @@
   },
   "homepage": "https://github.com/oberknechte/oberknecht-api#readme",
   "dependencies": {
-    "@jubewe/jsonsplitter": ">=0.7.0",
+    "@jubewe/jsonsplitter": ">=0.7.2",
     "fs": "^0.0.1-security",
-    "oberknecht-utils": ">=1.1.4",
+    "oberknecht-utils": ">=1.1.5",
     "request": "^2.88.2"
   },
   "devDependencies": {

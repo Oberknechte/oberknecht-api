@@ -3,7 +3,7 @@ import { urls } from "../variables/urls";
 import { _getuser } from "../operations/_getuser";
 import { _validatetoken } from "./_validatetoken";
 import { i } from "..";
-import { colorsType } from "../types/endpoints/updateColor";
+import { colorsType } from "../types/endpoints/color";
 
 export async function updateColor(sym: string, color: colorsType, customtoken?: string) {
     return new Promise<void>(async (resolve, reject) => {

@@ -4,7 +4,7 @@ import { urls } from "../variables/urls";
 import { _getuser } from "../operations/_getuser";
 import { _validatetoken } from "./_validatetoken";
 import { cleanChannelName } from "oberknecht-utils";
-import { announcementColors, announcementColorsType } from "../types/announcementColors";
+import { announcementColors, announcementColorsType } from "../types/endpoints/annoucement";
 
 export async function announce(sym: string, broadcaster_id: string | undefined, message: string, color?: announcementColorsType /** @default color "primary" */, customtoken?: string) {
     return new Promise<void>(async (resolve, reject) => {

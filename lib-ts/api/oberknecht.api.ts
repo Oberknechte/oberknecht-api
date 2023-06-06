@@ -37,8 +37,8 @@ import { getEventsubSubscriptions } from "../endpoints/getEventsubSubscriptions"
 import { deleteEventsubSubscription } from "../endpoints/deleteEventsubSubscription";
 import { getBroadcasterSubscriptions } from "../endpoints/getBroadcasterSubscriptions";
 
-import { colorsType } from "../types/endpoints/updateColor";
-import { announcementColorsType } from "../types/announcementColors";
+import { colorsType } from "../types/endpoints/color";
+import { announcementColorsType } from "../types/endpoints/annoucement";
 import { eventsubSubscriptionTypesType } from "../types/endpoints/eventsub";
 import { eventsubSubscriptionVersionType } from "../types/endpoints/eventsub";
 import { chatSettingEntry } from "../types/endpoints/chatSettings";
@@ -46,31 +46,29 @@ import { oberknechtAPIOptions, oberknechtAPIOptionsType } from "../types/oberkne
 import { getStreamsFiltersType } from "../types/endpoints/getStreams";
 
 export class oberknechtAPI {
-    #symbol = Symbol();
-    get symbol() { return String(this.#symbol) };
+    #symbol = String(Symbol());
+    get symbol() { return this.#symbol };
     get options() { return i.apiclientData[this.symbol]?._options };
 
     static get options(): oberknechtAPIOptionsType { return this.options };
     static get symbol() { return this.symbol };
 
     verified = false;
-    userssplitter: typeof jsonsplitter;
+    userssplitter: jsonsplitter;
     userssplitterpromise;
-    _options: typeof oberknechtAPIOptions;
+    _options: oberknechtAPIOptionsType;
 
     constructor(options: oberknechtAPIOptionsType) {
-        if (!options?.token) throw new Error(`token is undefined`);
-        let data = i.apiclientData[this.symbol] = {};
+        if (options.skipCreation) return;
+        if (!(options?.token)) throw Error(`token is undefined`);
+        let data = i.apiclientData[this.symbol] = {} as Record<string, any>;
         options.startPath = path.resolve(process.cwd(), (options.startPath ?? "./"));
         options.saveIDsPath = path.resolve(options.startPath, (options.saveIDsPath ?? "./userids"));
         options.debug = (options.debug ?? 1);
 
-        // @ts-ignore
         this._options = data._options = options;
         if (options.saveIDs) {
-            // @ts-ignore
             if (!data.jsonsplitters) data.jsonsplitters = {};
-            // @ts-ignore
             let userssplitter = data.jsonsplitters.users = this.userssplitter = new jsonsplitter({
                 debug: options.debug,
                 startpath: options.startPath,
@@ -120,7 +118,7 @@ export class oberknechtAPI {
     };
 
     _validatetoken = (customtoken: string) => { return _validatetoken(this.symbol, customtoken) };
-    _getUsers = (logins: string[] | undefined, ids?: string[] | undefined, noautofilterids?: Boolean, customtoken?: string) => { return _getUsers(this.symbol, logins, ids, noautofilterids, customtoken) };
+    _getUsers = (logins: string | string[] | undefined, ids?: string | string[] | undefined, noautofilterids?: Boolean, customtoken?: string) => { return _getUsers(this.symbol, logins, ids, noautofilterids, customtoken) };
     _getUser = (user: string) => { return _getuser(this.symbol, user) };
 
     ban = (broadcaster_id: string, target_user_id: string, reason, customtoken?: string) => { return ban(this.symbol, broadcaster_id, target_user_id, reason, customtoken) };

@@ -6,6 +6,7 @@ export const oberknechtAPIOptions = {
     // starting at project dir (process.cwd())
     saveIDsPath: String(),
     filechange_interval: Number() ?? 10000,
+    skipCreation: Boolean(),
     // ivr.fi
     use3rdparty: {
         getUsers: Boolean()
@@ -23,6 +24,7 @@ export type oberknechtAPIOptionsType = {
     // starting at project dir (process.cwd())
     saveIDsPath?: string,
     filechange_interval?: number,
+    skipCreation?: boolean,
     // ivr.fi
     use3rdparty?: {
         getUsers?: boolean

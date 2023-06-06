@@ -3,7 +3,7 @@ import { i } from "..";
 import { urls } from "../variables/urls";
 import { _validatetoken } from "./_validatetoken";
 import { cleanChannelName, convertToArray, joinUrlQuery } from "oberknecht-utils";
-import { getColorResponse } from "../types/endpoints/getColor";
+import { getColorResponse } from "../types/endpoints/color";
 import { _getUsers } from "./_getUsers";
 
 export async function getColor(sym: string, userID: string | string[], customtoken?: string) {
