@@ -54,27 +54,23 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
                         return reject2(Error(e ?? r.body));
                     let dat = JSON.parse(r.body);
                     let d = (__1.i.apiclientData[sym]._options?.use3rdparty?.getUsers ? dat : dat.data);
-                    if (__1.i.apiclientData[sym]?._options?.saveIDs) {
-                        d.forEach(async (a) => {
+                    d.forEach(a => {
+                        let b = {
+                            ...a,
+                            _lastUpdated: Date.now(),
+                            displayNameParsed: (!(0, oberknecht_utils_1.isNaM)(a.display_name) ? a.display_name : (0, oberknecht_utils_1.firstCap)(a.login))
+                        };
+                        if (__1.i.apiclientData[sym]?._options?.saveIDs) {
                             __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["logins", a.login], a.id);
                             __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["ids", a.id], a.login);
                             if (!__1.i.apiclientData[sym].jsonsplitters.users.getKeySync(["details"], true))
                                 __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["details"], {});
-                            __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["details", a.id], {
-                                ...a,
-                                _lastUpdated: Date.now(),
-                                displayNameParsed: (!(0, oberknecht_utils_1.isNaM)(a.display_name) ? a.display_name : (0, oberknecht_utils_1.firstCap)(a.login))
-                            });
-                        });
-                    }
-                    ;
-                    d.forEach(a => {
+                            __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["details", a.id], b);
+                        }
+                        ;
                         ret.logins[a.login] = a.id;
                         ret.ids[a.id] = a.login;
-                        ret.details[a.id] = {
-                            ...a,
-                            displayNameParsed: (!(0, oberknecht_utils_1.isNaM)(a.display_name) ? a.display_name : (0, oberknecht_utils_1.firstCap)(a.login))
-                        };
+                        ret.details[a.id] = b;
                     });
                     return resolve2();
                 });

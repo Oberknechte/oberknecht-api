@@ -77,11 +77,7 @@ async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering 
                 let b = dat.details[a];
                 r.ids[b.id] = b.login;
                 r.logins[b.login] = b.id;
-                r.details[b.id] = {
-                    ...b,
-                    displayNameParsed: (!(0, oberknecht_utils_1.isNaM)(b.display_name) ? b.display_name : (0, oberknecht_utils_1.firstCap)(b.login)),
-                    _lastUpdated: Date.now()
-                };
+                r.details[b.id] = b;
             });
             return resolve(r);
         })

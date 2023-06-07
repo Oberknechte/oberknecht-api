@@ -55,27 +55,24 @@ export async function getUsers(sym: string, logins?: string | string[], ids?: st
 
                         let d = (i.apiclientData[sym]._options?.use3rdparty?.getUsers ? dat : dat.data);
 
-                        if (i.apiclientData[sym]?._options?.saveIDs) {
-                            d.forEach(async a => {
+                        d.forEach(a => {
+                            let b = {
+                                ...a,
+                                _lastUpdated: Date.now(),
+                                displayNameParsed: (!isNaM(a.display_name) ? a.display_name : firstCap(a.login))
+                            };
+
+                            if (i.apiclientData[sym]?._options?.saveIDs) {
                                 i.apiclientData[sym].jsonsplitters.users.addKeySync(["logins", a.login], a.id);
                                 i.apiclientData[sym].jsonsplitters.users.addKeySync(["ids", a.id], a.login);
 
                                 if (!i.apiclientData[sym].jsonsplitters.users.getKeySync(["details"], true)) i.apiclientData[sym].jsonsplitters.users.addKeySync(["details"], {});
-                                i.apiclientData[sym].jsonsplitters.users.addKeySync(["details", a.id], {
-                                    ...a,
-                                    _lastUpdated: Date.now(),
-                                    displayNameParsed: (!isNaM(a.display_name) ? a.display_name : firstCap(a.login))
-                                });
-                            });
-                        };
+                                i.apiclientData[sym].jsonsplitters.users.addKeySync(["details", a.id], b);
+                            };
 
-                        d.forEach(a => {
                             ret.logins[a.login] = a.id;
                             ret.ids[a.id] = a.login;
-                            ret.details[a.id] = {
-                                ...a,
-                                displayNameParsed: (!isNaM(a.display_name) ? a.display_name : firstCap(a.login))
-                            };
+                            ret.details[a.id] = b;
                         });
 
                         return resolve2();
