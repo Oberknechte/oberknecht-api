@@ -1,4 +1,4 @@
-import request from "request";
+import { request } from "oberknecht-request";
 import { urls } from "../variables/urls";
 import { _validatetoken } from "./_validatetoken";
 import { pollStatusType, endPollResponse } from "../types/endpoints/poll";

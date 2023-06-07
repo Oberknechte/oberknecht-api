@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.raid = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const _getuser_1 = require("../operations/_getuser");
 const _validatetoken_1 = require("./_validatetoken");
@@ -46,7 +43,7 @@ async function raid(sym, from_broadcaster_id, to_broadcaster_id, customtoken) {
         }
         ;
         from_broadcaster_id_ = (from_broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid);
-        (0, request_1.default)(`${urls_1.urls._url("twitch", "raid")}?from_broadcaster_id=${from_broadcaster_id_}&to_broadcaster_id=${to_broadcaster_id_}`, { method: urls_1.urls.twitch.raid.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "raid")}?from_broadcaster_id=${from_broadcaster_id_}&to_broadcaster_id=${to_broadcaster_id_}`, { method: urls_1.urls.twitch.raid.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
             if (e || r.statusCode !== urls_1.urls._code("twitch", "raid"))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);

@@ -1,4 +1,4 @@
-import request from "request";
+import { request } from "oberknecht-request";
 import { i } from "..";
 import { validateTokenResponse } from "../types/endpoints/validateToken";
 

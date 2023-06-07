@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._validatetoken = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 async function _validatetoken(sym, customtoken) {
     return new Promise((resolve, reject) => {
@@ -14,7 +11,7 @@ async function _validatetoken(sym, customtoken) {
             sym = undefined;
         }
         ;
-        (0, request_1.default)(`https://id.twitch.tv/oauth2/validate`, {
+        (0, oberknecht_request_1.request)(`https://id.twitch.tv/oauth2/validate`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `OAuth ${customtoken_ ?? __1.i.apiclientData[sym]?._options?.token}`

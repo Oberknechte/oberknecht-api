@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.endPoll = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const _validatetoken_1 = require("./_validatetoken");
 const __1 = require("..");
@@ -28,7 +25,7 @@ async function endPoll(sym, id, status, customtoken) {
             id: id,
             status: status
         };
-        (0, request_1.default)(`${urls_1.urls._url("twitch", "endPoll")}`, { method: urls_1.urls.twitch.endPoll.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(body) }, (e, r) => {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "endPoll")}`, { method: urls_1.urls.twitch.endPoll.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(body) }, (e, r) => {
             if (e || (r.statusCode !== urls_1.urls._code("twitch", "endPoll")))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);

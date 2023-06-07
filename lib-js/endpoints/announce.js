@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.announce = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
 const _getuser_1 = require("../operations/_getuser");
@@ -46,7 +43,7 @@ async function announce(sym, broadcaster_id, message, color /** @default color "
         // @ts-ignore
         if ((color ?? undefined) && annoucement_1.announcementColors.includes(color.toLowerCase()))
             reqbody["color"] = color;
-        (0, request_1.default)(`${urls_1.urls._url("twitch", "announcement")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}`, { method: urls_1.urls.twitch.announcement.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(reqbody) }, (e, r) => {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "announcement")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}`, { method: urls_1.urls.twitch.announcement.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(reqbody) }, (e, r) => {
             if (e || (r.statusCode !== urls_1.urls._code("twitch", "announcement")))
                 return reject(Error(e ?? r.body));
             return resolve();

@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPoll = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
 const _validatetoken_1 = require("./_validatetoken");
@@ -31,7 +28,7 @@ async function createPoll(sym, title, choices /* Min. 2, Max. 5 */, duration /* 
             ...(channelPointsVotingEnabled ? { channel_points_voting_enabled: channelPointsVotingEnabled } : {}),
             ...(channelPointsPerVote ? { channel_points_per_vote: channelPointsPerVote } : {})
         };
-        (0, request_1.default)(`${urls_1.urls._url("twitch", "createPoll")}`, { method: urls_1.urls.twitch.createPoll.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(body) }, (e, r) => {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "createPoll")}`, { method: urls_1.urls.twitch.createPoll.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(body) }, (e, r) => {
             if (e || (r.statusCode !== urls_1.urls._code("twitch", "createPoll")))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);

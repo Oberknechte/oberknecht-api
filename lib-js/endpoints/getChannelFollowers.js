@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getChannelFollowers = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
 const _validatetoken_1 = require("./_validatetoken");
@@ -35,7 +32,7 @@ async function getChannelFollowers(sym, broadcaster_id, user_id, customtoken) {
         }
         ;
         broadcaster_id_ = (broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid);
-        (0, request_1.default)(`${urls_1.urls._url("twitch", "channelfollowers")}?broadcaster_id=${broadcaster_id_}${((user_id ?? undefined) ? `&user_id=${user_id}` : "")}`, { headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "channelfollowers")}?broadcaster_id=${broadcaster_id_}${((user_id ?? undefined) ? `&user_id=${user_id}` : "")}`, { headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
             if (e || (r.statusCode !== 200))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);

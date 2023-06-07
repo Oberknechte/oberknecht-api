@@ -1,4 +1,4 @@
-import request from "request";
+import { request } from "oberknecht-request";
 import { i } from "..";
 import { urls } from "../variables/urls";
 import { _getuser } from "../operations/_getuser";

@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUsers = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const _validatetoken_1 = require("./_validatetoken");
 const __1 = require("..");
@@ -49,7 +46,7 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
                 let url = `${urls_1.urls._url("twitch", "users")}${(0, oberknecht_utils_1.joinUrlQuery)("login", chunkLogins, true)}${(0, oberknecht_utils_1.joinUrlQuery)("id", chunkIDs, (chunkLogins.length == 0 ? true : false))}`;
                 if (__1.i.apiclientData[sym]._options?.use3rdparty?.getUsers)
                     url = `${urls_1.urls._url("ivrfitwitch", "users")}${(chunkLogins.length > 0 ? `?login=${chunkLogins}` : "")}${(chunkIDs.length > 0 ? `${(chunkLogins.length > 0 ? "&" : "?")}id=${chunkIDs}` : "")}`;
-                (0, request_1.default)(url, { headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
+                (0, oberknecht_request_1.request)(url, { headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
                     if (e || (r.statusCode !== 200))
                         return reject2(Error(e ?? r.body));
                     let dat = JSON.parse(r.body);

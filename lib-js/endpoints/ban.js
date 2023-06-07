@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ban = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const _getuser_1 = require("../operations/_getuser");
 const _validatetoken_1 = require("./_validatetoken");
@@ -57,7 +54,7 @@ async function ban(sym, broadcaster_id, target_user_id, duration, reason, custom
             reqbody.data.reason = reason.substring(0, 500);
         if (duration ?? undefined)
             reqbody.data.duration = duration;
-        (0, request_1.default)(`${urls_1.urls._url("twitch", "bans")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}`, { method: urls_1.urls.twitch.bans.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(reqbody) }, (e, r) => {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "bans")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}`, { method: urls_1.urls.twitch.bans.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(reqbody) }, (e, r) => {
             if (e || (r.statusCode !== urls_1.urls._code("twitch", "bans")))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);

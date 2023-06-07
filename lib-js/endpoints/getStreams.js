@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getStreams = void 0;
-const request_1 = __importDefault(require("request"));
+const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
 const _validatetoken_1 = require("./_validatetoken");
@@ -27,7 +24,7 @@ async function getStreams(sym, filters, customtoken) {
         Object.keys(filters_)?.forEach(filter => {
             reqqueryparams += (0, oberknecht_utils_1.joinUrlQuery)(filter, filters_[filter], (reqqueryparams.length === 0 ? true : false));
         });
-        (0, request_1.default)(`${urls_1.urls._url("twitch", "streams")}${reqqueryparams}`, { headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "streams")}${reqqueryparams}`, { headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
             if (e || (r.statusCode !== 200))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);
