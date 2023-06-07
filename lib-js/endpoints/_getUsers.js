@@ -24,9 +24,12 @@ async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering 
         let r = {
             logins: {},
             ids: {},
-            details: {}
+            details: {},
+            loginsInvalid: []
         };
         let requestnew = [];
+        r.loginsInvalid = logins_.filter(a => !oberknecht_utils_1.regex.twitch.usernamereg().test(a));
+        logins_ = logins_.filter(a => oberknecht_utils_1.regex.twitch.usernamereg().test(a));
         if (__1.i.apiclientData[sym]?._options?.saveIDs) {
             (0, oberknecht_utils_1.recreate)(logins_).forEach(login => {
                 let u = __1.i.apiclientData[sym]?.jsonsplitters?.users?.getKeySync(["logins", login]);

@@ -6,4 +6,5 @@ export type _getUsersResponse = {
     "ids": ids;
     "logins": logins;
     "details": details;
+    "loginsInvalid": string[];
 };

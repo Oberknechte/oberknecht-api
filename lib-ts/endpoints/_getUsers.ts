@@ -1,4 +1,4 @@
-import { cleanChannelName, convertToArray, recreate } from "oberknecht-utils";
+import { cleanChannelName, convertToArray, recreate, regex } from "oberknecht-utils";
 import { i } from "..";
 import { getUsers } from "./getUsers";
 import { _getUsersResponse } from "../types/_getUsers";
@@ -21,10 +21,14 @@ export async function _getUsers(sym: string, logins?: string | string[], ids?: s
         let r = {
             logins: {},
             ids: {},
-            details: {}
+            details: {},
+            loginsInvalid: []
         } as _getUsersResponse;
 
         let requestnew = [];
+
+        r.loginsInvalid = logins_.filter(a => !regex.twitch.usernamereg().test(a));
+        logins_ = logins_.filter(a => regex.twitch.usernamereg().test(a));
 
         if (i.apiclientData[sym]?._options?.saveIDs) {
             recreate(logins_).forEach(login => {

@@ -7,5 +7,6 @@ export type details = Record<string, userEntry>;
 export type _getUsersResponse = {
     "ids": ids,
     "logins": logins,
-    "details": details
+    "details": details,
+    "loginsInvalid": string[]
 };
