@@ -4,7 +4,7 @@ import { urls } from "../variables/urls";
 import { _validatetoken } from "./_validatetoken";
 import { choices as choices_, createPollResponse } from "../types/endpoints/poll";
 
-export async function createPoll(sym: string, title: string, choices: choices_ /* Min. 2, Max. 5 */, duration: Number /* in Seconds, Min. 15, Max 1800 */, channelPointsVotingEnabled?: boolean, channelPointsPerVote?: boolean, customtoken?: string) {
+export async function createPoll(sym: string, title: string, choices: choices_ /* Min. 2, Max. 5 */, duration: Number /* in Seconds, Min. 15, Max 1800 */, channelPointsVotingEnabled?: boolean, channelPointsPerVote?: number, customtoken?: string) {
     return new Promise<createPollResponse>(async (resolve, reject) => {
         if ((!(sym ?? undefined) && !(customtoken ?? undefined))) return reject(Error(`sym and customtoken are undefined`));
         

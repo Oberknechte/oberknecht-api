@@ -39,6 +39,11 @@ const addEventsubSubscription_1 = require("../endpoints/addEventsubSubscription"
 const getEventsubSubscriptions_1 = require("../endpoints/getEventsubSubscriptions");
 const deleteEventsubSubscription_1 = require("../endpoints/deleteEventsubSubscription");
 const getBroadcasterSubscriptions_1 = require("../endpoints/getBroadcasterSubscriptions");
+const getChannels_1 = require("../endpoints/getChannels");
+const updateChannel_1 = require("../endpoints/updateChannel");
+const getPolls_1 = require("../endpoints/getPolls");
+const createPoll_1 = require("../endpoints/createPoll");
+const endPoll_1 = require("../endpoints/endPoll");
 class oberknechtAPI {
     #symbol = String(Symbol());
     get symbol() { return this.#symbol; }
@@ -160,6 +165,11 @@ class oberknechtAPI {
     getEventsubSubscriptions = (customtoken) => { return (0, getEventsubSubscriptions_1.getEventsubSubscriptions)(this.symbol, customtoken); };
     deleteEventsubSubscription = (id, customtoken) => { return (0, deleteEventsubSubscription_1.deleteEventsubSubscription)(this.symbol, id, customtoken); };
     getBroadcasterSubscriptions = (customtoken, user_id, first, after, before) => { return (0, getBroadcasterSubscriptions_1.getBroadcasterSubscriptions)(this.symbol, customtoken, user_id, first, after, before); };
+    getChannels = (broadcaster_ids, customtoken) => { return (0, getChannels_1.getChannels)(this.symbol, broadcaster_ids, customtoken); };
+    updateChannel = (channelData, customtoken) => { return (0, updateChannel_1.updateChannel)(this.symbol, channelData, customtoken); };
+    getPolls = (id, first, after) => { return (0, getPolls_1.getPolls)(this.symbol, id, first, after, after); };
+    createPoll = (title, choices, duration, channelPointsVotingEnabled, channelPointsPerVote, customtoken) => { return (0, createPoll_1.createPoll)(this.symbol, title, choices, duration, channelPointsVotingEnabled, channelPointsPerVote, customtoken); };
+    endPoll = (id, status, customtoken) => { return (0, endPoll_1.endPoll)(this.symbol, id, status, customtoken); };
 }
 exports.oberknechtAPI = oberknechtAPI;
 ;

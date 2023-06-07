@@ -42,8 +42,15 @@ import { announcementColorsType } from "../types/endpoints/annoucement";
 import { eventsubSubscriptionTypesType } from "../types/endpoints/eventsub";
 import { eventsubSubscriptionVersionType } from "../types/endpoints/eventsub";
 import { chatSettingEntry } from "../types/endpoints/chatSettings";
-import { oberknechtAPIOptions, oberknechtAPIOptionsType } from "../types/oberknechtAPIOptions";
+import { oberknechtAPIOptionsType } from "../types/oberknechtAPIOptions";
 import { getStreamsFiltersType } from "../types/endpoints/getStreams";
+import { getChannels } from "../endpoints/getChannels";
+import { updateChannel } from "../endpoints/updateChannel";
+import { channelData as channelDataType } from "../types/endpoints/updateChannel";
+import { getPolls } from "../endpoints/getPolls";
+import { createPoll } from "../endpoints/createPoll";
+import { choices, pollStatusType } from "../types/endpoints/poll";
+import { endPoll } from "../endpoints/endPoll";
 
 export class oberknechtAPI {
     #symbol = String(Symbol());
@@ -179,4 +186,10 @@ export class oberknechtAPI {
     deleteEventsubSubscription = (id: string, customtoken?: string) => { return deleteEventsubSubscription(this.symbol, id, customtoken) };
 
     getBroadcasterSubscriptions = (customtoken: string, user_id?: string, first?: string, after?: string, before?: string) => { return getBroadcasterSubscriptions(this.symbol, customtoken, user_id, first, after, before) };
+    getChannels = (broadcaster_ids: string | string[], customtoken?: string) => { return getChannels(this.symbol, broadcaster_ids, customtoken) };
+    updateChannel = (channelData: channelDataType, customtoken?: string) => { return updateChannel(this.symbol, channelData, customtoken) };
+    getPolls = (id?: string, first?: string, after?: string) => { return getPolls(this.symbol, id, first, after, after) };
+    createPoll = (title: string, choices: choices, duration: number, channelPointsVotingEnabled?: boolean, channelPointsPerVote?: number, customtoken?: string) => { return createPoll(this.symbol, title, choices, duration, channelPointsVotingEnabled, channelPointsPerVote, customtoken) };
+    endPoll = (id: string, status: pollStatusType, customtoken?: string) => { return endPoll(this.symbol, id, status, customtoken) };
+    
 };

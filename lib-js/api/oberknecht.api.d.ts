@@ -6,6 +6,8 @@ import { eventsubSubscriptionVersionType } from "../types/endpoints/eventsub";
 import { chatSettingEntry } from "../types/endpoints/chatSettings";
 import { oberknechtAPIOptionsType } from "../types/oberknechtAPIOptions";
 import { getStreamsFiltersType } from "../types/endpoints/getStreams";
+import { channelData as channelDataType } from "../types/endpoints/updateChannel";
+import { choices, pollStatusType } from "../types/endpoints/poll";
 export declare class oberknechtAPI {
     #private;
     get symbol(): string;
@@ -66,4 +68,9 @@ export declare class oberknechtAPI {
     getEventsubSubscriptions: (customtoken?: string) => Promise<import("../types/endpoints/eventsub").getEventsubSubscriptionsResponse>;
     deleteEventsubSubscription: (id: string, customtoken?: string) => Promise<void>;
     getBroadcasterSubscriptions: (customtoken: string, user_id?: string, first?: string, after?: string, before?: string) => Promise<import("../types/endpoints/getBroadcasterSubscriptions").getBroadcasterSubscriptionsResponse>;
+    getChannels: (broadcaster_ids: string | string[], customtoken?: string) => Promise<import("../types/endpoints/getChannels").getChannelsResponse>;
+    updateChannel: (channelData: channelDataType, customtoken?: string) => Promise<void>;
+    getPolls: (id?: string, first?: string, after?: string) => Promise<import("../types/endpoints/poll").getPollResponse>;
+    createPoll: (title: string, choices: choices, duration: number, channelPointsVotingEnabled?: boolean, channelPointsPerVote?: number, customtoken?: string) => Promise<import("../types/endpoints/poll").createPollResponse>;
+    endPoll: (id: string, status: pollStatusType, customtoken?: string) => Promise<import("../types/endpoints/poll").endPollResponse>;
 }
