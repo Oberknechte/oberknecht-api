@@ -12,7 +12,7 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
             return reject(Error(`sym and customtoken are undefined`));
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map(a => (0, oberknecht_utils_1.cleanChannelName)(a));
-        let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false).map(a => a?.toLowerCase()).filter(a => oberknecht_utils_1.regex.numregex().test(String(a)));
+        let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false).map(a => String(a)?.toLowerCase()).filter(a => oberknecht_utils_1.regex.numregex().test(a));
         if ((customtoken ?? undefined)) {
             await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then(a => {
@@ -21,9 +21,9 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
                 .catch();
         }
         ;
-        if (!noautofilterids) {
+        if (!(noautofilterids ?? false)) {
             let idsinlogins = logins_.filter(a => oberknecht_utils_1.regex.numregex().test(a));
-            if (!(ids ?? undefined) && (idsinlogins.length > 0)) {
+            if ((idsinlogins.length > 0)) {
                 ids_ = [...ids_, ...idsinlogins];
                 idsinlogins.forEach(a => logins_.splice(logins_.indexOf(a)));
             }

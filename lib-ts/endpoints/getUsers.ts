@@ -11,7 +11,7 @@ export async function getUsers(sym: string, logins?: string | string[], ids?: st
 
         let clientid = i.apiclientData[sym]?._options?.clientid;
         let logins_ = convertToArray(logins, false).map(a => cleanChannelName(a));
-        let ids_ = convertToArray(ids, false).map(a => a?.toLowerCase()).filter(a => regex.numregex().test(String(a)));
+        let ids_ = convertToArray(ids, false).map(a => String(a)?.toLowerCase()).filter(a => regex.numregex().test(a));
 
         if ((customtoken ?? undefined)) {
             await _validatetoken(undefined, customtoken)
@@ -21,9 +21,9 @@ export async function getUsers(sym: string, logins?: string | string[], ids?: st
                 .catch();
         };
 
-        if (!noautofilterids) {
+        if (!(noautofilterids ?? false)) {
             let idsinlogins = logins_.filter(a => regex.numregex().test(a));
-            if (!(ids ?? undefined) && (idsinlogins.length > 0)) {
+            if ((idsinlogins.length > 0)) {
                 ids_ = [...ids_, ...idsinlogins];
                 idsinlogins.forEach(a => logins_.splice(logins_.indexOf(a)));
             };
