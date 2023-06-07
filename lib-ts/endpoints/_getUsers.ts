@@ -1,4 +1,4 @@
-import { cleanChannelName, convertToArray, recreate, regex } from "oberknecht-utils";
+import { cleanChannelName, convertToArray, firstCap, isNaM, recreate, regex } from "oberknecht-utils";
 import { i } from "..";
 import { getUsers } from "./getUsers";
 import { _getUsersResponse } from "../types/_getUsers";
@@ -71,7 +71,11 @@ export async function _getUsers(sym: string, logins?: string | string[], ids?: s
 
                     r.ids[b.id] = b.login;
                     r.logins[b.login] = b.id;
-                    r.details[b.id] = b;
+                    r.details[b.id] = {
+                        ...b,
+                        displayNameParsed: (!isNaM(b.display_name) ? b.display_name : firstCap(b.login)),
+                        _lastUpdated: Date.now()
+                    };
                 });
 
                 return resolve(r);
