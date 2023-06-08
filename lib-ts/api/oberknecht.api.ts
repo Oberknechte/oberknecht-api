@@ -51,6 +51,7 @@ import { getPolls } from "../endpoints/getPolls";
 import { createPoll } from "../endpoints/createPoll";
 import { choices, pollStatusType } from "../types/endpoints/poll";
 import { endPoll } from "../endpoints/endPoll";
+import { getGames } from "../endpoints/getGames";
 
 export class oberknechtAPI {
     #symbol = String(Symbol());
@@ -185,11 +186,12 @@ export class oberknechtAPI {
     getEventsubSubscriptions = (customtoken?: string) => { return getEventsubSubscriptions(this.symbol, customtoken) };
     deleteEventsubSubscription = (id: string, customtoken?: string) => { return deleteEventsubSubscription(this.symbol, id, customtoken) };
 
+    getGames = (ids?: string | string[], names?: string | string[], igdbIDs?: string | string[], customtoken?: string) => { return getGames(this.symbol, ids, names, igdbIDs, customtoken) };
     getBroadcasterSubscriptions = (customtoken: string, user_id?: string, first?: string, after?: string, before?: string) => { return getBroadcasterSubscriptions(this.symbol, customtoken, user_id, first, after, before) };
     getChannels = (broadcaster_ids: string | string[], customtoken?: string) => { return getChannels(this.symbol, broadcaster_ids, customtoken) };
     updateChannel = (channelData: channelDataType, customtoken?: string) => { return updateChannel(this.symbol, channelData, customtoken) };
     getPolls = (id?: string, first?: string, after?: string) => { return getPolls(this.symbol, id, first, after, after) };
     createPoll = (title: string, choices: choices, duration: number, channelPointsVotingEnabled?: boolean, channelPointsPerVote?: number, customtoken?: string) => { return createPoll(this.symbol, title, choices, duration, channelPointsVotingEnabled, channelPointsPerVote, customtoken) };
     endPoll = (id: string, status: pollStatusType, customtoken?: string) => { return endPoll(this.symbol, id, status, customtoken) };
-    
+
 };

@@ -44,6 +44,7 @@ const updateChannel_1 = require("../endpoints/updateChannel");
 const getPolls_1 = require("../endpoints/getPolls");
 const createPoll_1 = require("../endpoints/createPoll");
 const endPoll_1 = require("../endpoints/endPoll");
+const getGames_1 = require("../endpoints/getGames");
 class oberknechtAPI {
     #symbol = String(Symbol());
     get symbol() { return this.#symbol; }
@@ -164,6 +165,7 @@ class oberknechtAPI {
     addEventsubSubscription = (type, version, condition, transport, customtoken) => { return (0, addEventsubSubscription_1.addEventsubSubscription)(this.symbol, type, version, condition, transport, customtoken); };
     getEventsubSubscriptions = (customtoken) => { return (0, getEventsubSubscriptions_1.getEventsubSubscriptions)(this.symbol, customtoken); };
     deleteEventsubSubscription = (id, customtoken) => { return (0, deleteEventsubSubscription_1.deleteEventsubSubscription)(this.symbol, id, customtoken); };
+    getGames = (ids, names, igdbIDs, customtoken) => { return (0, getGames_1.getGames)(this.symbol, ids, names, igdbIDs, customtoken); };
     getBroadcasterSubscriptions = (customtoken, user_id, first, after, before) => { return (0, getBroadcasterSubscriptions_1.getBroadcasterSubscriptions)(this.symbol, customtoken, user_id, first, after, before); };
     getChannels = (broadcaster_ids, customtoken) => { return (0, getChannels_1.getChannels)(this.symbol, broadcaster_ids, customtoken); };
     updateChannel = (channelData, customtoken) => { return (0, updateChannel_1.updateChannel)(this.symbol, channelData, customtoken); };

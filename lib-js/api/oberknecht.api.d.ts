@@ -67,6 +67,7 @@ export declare class oberknechtAPI {
     addEventsubSubscription: (type: eventsubSubscriptionTypesType, version: eventsubSubscriptionVersionType, condition: any, transport: any, customtoken?: string) => Promise<import("../types/endpoints/eventsub").getEventsubSubscriptionsResponse>;
     getEventsubSubscriptions: (customtoken?: string) => Promise<import("../types/endpoints/eventsub").getEventsubSubscriptionsResponse>;
     deleteEventsubSubscription: (id: string, customtoken?: string) => Promise<void>;
+    getGames: (ids?: string | string[], names?: string | string[], igdbIDs?: string | string[], customtoken?: string) => Promise<import("../types/endpoints/getGames").getGamesResponse>;
     getBroadcasterSubscriptions: (customtoken: string, user_id?: string, first?: string, after?: string, before?: string) => Promise<import("../types/endpoints/getBroadcasterSubscriptions").getBroadcasterSubscriptionsResponse>;
     getChannels: (broadcaster_ids: string | string[], customtoken?: string) => Promise<import("../types/endpoints/getChannels").getChannelsResponse>;
     updateChannel: (channelData: channelDataType, customtoken?: string) => Promise<void>;
