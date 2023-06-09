@@ -8,6 +8,7 @@ import { oberknechtAPIOptionsType } from "../types/oberknechtAPIOptions";
 import { getStreamsFiltersType } from "../types/endpoints/getStreams";
 import { channelData as channelDataType } from "../types/endpoints/updateChannel";
 import { choices, pollStatusType } from "../types/endpoints/poll";
+import { createPredictionOutcomesType, endPredictionStatusType } from "../types/endpoints/predictions";
 export declare class oberknechtAPI {
     #private;
     get symbol(): string;
@@ -71,7 +72,10 @@ export declare class oberknechtAPI {
     getBroadcasterSubscriptions: (customtoken: string, user_id?: string, first?: string, after?: string, before?: string) => Promise<import("../types/endpoints/getBroadcasterSubscriptions").getBroadcasterSubscriptionsResponse>;
     getChannels: (broadcaster_ids: string | string[], customtoken?: string) => Promise<import("../types/endpoints/getChannels").getChannelsResponse>;
     updateChannel: (channelData: channelDataType, customtoken?: string) => Promise<void>;
-    getPolls: (id?: string, first?: string, after?: string) => Promise<import("../types/endpoints/poll").getPollResponse>;
+    getPolls: (id?: string, first?: number, after?: string) => Promise<import("../types/endpoints/poll").getPollResponse>;
     createPoll: (title: string, choices: choices, duration: number, channelPointsVotingEnabled?: boolean, channelPointsPerVote?: number, customtoken?: string) => Promise<import("../types/endpoints/poll").createPollResponse>;
     endPoll: (id: string, status: pollStatusType, customtoken?: string) => Promise<import("../types/endpoints/poll").endPollResponse>;
+    getPredictions: (ids?: string | string[], first?: number, after?: string, customtoken?: string) => Promise<import("../types/endpoints/predictions").getPredictionResponse>;
+    createPrediction: (title: string, outcomes: createPredictionOutcomesType, predictionWindow: number, customtoken?: string) => Promise<import("../types/endpoints/predictions").createPredictionResponse>;
+    endPrediction: (id: string, status: endPredictionStatusType, winningOutcomeID?: string, customtoken?: string) => Promise<import("../types/endpoints/predictions").createPredictionResponse>;
 }

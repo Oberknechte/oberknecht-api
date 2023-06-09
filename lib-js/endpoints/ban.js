@@ -17,9 +17,9 @@ async function ban(sym, broadcaster_id, target_user_id, duration, reason, custom
         let target_user_id_ = (0, oberknecht_utils_1.cleanChannelName)(target_user_id);
         let moderator_id = __1.i.apiclientData[sym]?._options?.userid;
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        if ((customtoken ?? undefined)) {
+        if (customtoken ?? undefined) {
             await (0, _validatetoken_1._validatetoken)(sym, customtoken)
-                .then(a => {
+                .then((a) => {
                 moderator_id = a.user_id;
                 clientid = a.client_id;
                 if (!broadcaster_id_)
@@ -27,35 +27,37 @@ async function ban(sym, broadcaster_id, target_user_id, duration, reason, custom
             })
                 .catch();
         }
-        ;
-        if (!__1.i.regex.numregex().test(broadcaster_id_) && __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
+        if (!__1.i.regex.numregex().test(broadcaster_id_) &&
+            __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
             await (0, _getuser_1._getuser)(sym, broadcaster_id_)
-                .then(u => {
+                .then((u) => {
                 broadcaster_id_ = u[1];
             })
                 .catch();
         }
-        ;
-        broadcaster_id_ = (broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid);
+        broadcaster_id_ = broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;
         if (!__1.i.regex.numregex().test(target_user_id_)) {
             await (0, _getuser_1._getuser)(sym, target_user_id_)
-                .then(u => {
+                .then((u) => {
                 target_user_id_ = u[1];
             })
                 .catch();
         }
-        ;
         let reqbody = {
-            "data": {
-                "user_id": target_user_id_
-            }
+            data: {
+                user_id: target_user_id_,
+            },
         };
         if (reason ?? undefined)
             reqbody.data.reason = reason.substring(0, 500);
         if (duration ?? undefined)
             reqbody.data.duration = duration;
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "bans")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}`, { method: urls_1.urls.twitch.bans.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(reqbody) }, (e, r) => {
-            if (e || (r.statusCode !== urls_1.urls._code("twitch", "bans")))
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "bans")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}`, {
+            method: urls_1.urls._method("twitch", "bans"),
+            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+            body: JSON.stringify(reqbody),
+        }, (e, r) => {
+            if (e || r.statusCode !== urls_1.urls._code("twitch", "bans"))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);
             return resolve(dat);
@@ -63,4 +65,3 @@ async function ban(sym, broadcaster_id, target_user_id, duration, reason, custom
     });
 }
 exports.ban = ban;
-;

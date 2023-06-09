@@ -8,24 +8,26 @@ const _validatetoken_1 = require("./_validatetoken");
 const oberknecht_utils_1 = require("oberknecht-utils");
 async function getStreams(sym, filters, customtoken) {
     return new Promise(async (resolve, reject) => {
-        if ((!(sym ?? undefined) && !(customtoken ?? undefined)))
+        if (!(sym ?? undefined) && !(customtoken ?? undefined))
             return reject(Error(`sym and customtoken are undefined`));
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        let filters_ = (0, oberknecht_utils_1.recreate)((filters ?? {}));
-        if ((customtoken ?? undefined)) {
+        let filters_ = (0, oberknecht_utils_1.recreate)(filters ?? {});
+        if (customtoken ?? undefined) {
             await (0, _validatetoken_1._validatetoken)(sym, customtoken)
-                .then(a => {
+                .then((a) => {
                 clientid = a.client_id;
             })
                 .catch();
         }
-        ;
         let reqqueryparams = "";
-        Object.keys(filters_)?.forEach(filter => {
-            reqqueryparams += (0, oberknecht_utils_1.joinUrlQuery)(filter, filters_[filter], (reqqueryparams.length === 0 ? true : false));
+        Object.keys(filters_)?.forEach((filter) => {
+            reqqueryparams += (0, oberknecht_utils_1.joinUrlQuery)(filter, filters_[filter], reqqueryparams.length === 0 ? true : false);
         });
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "streams")}${reqqueryparams}`, { headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
-            if (e || (r.statusCode !== 200))
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getStreams")}${reqqueryparams}`, {
+            method: urls_1.urls._method("twitch", "getStreams"),
+            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+        }, (e, r) => {
+            if (e || r.statusCode !== urls_1.urls._code("twitch", "getStreams"))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);
             if (__1.i.apiclientData[sym]?._options?.saveIDs) {
@@ -34,10 +36,8 @@ async function getStreams(sym, filters, customtoken) {
                     await __1.i.apiclientData[sym].jsonsplitters.users.addKey(["ids", a.user_id], a.user_login);
                 });
             }
-            ;
             return resolve(dat);
         });
     });
 }
 exports.getStreams = getStreams;
-;

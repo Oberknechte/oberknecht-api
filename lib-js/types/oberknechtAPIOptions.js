@@ -12,9 +12,9 @@ exports.oberknechtAPIOptions = {
     skipCreation: Boolean(),
     // ivr.fi
     use3rdparty: {
-        getUsers: Boolean()
+        getUsers: Boolean(),
     },
     maxcacheage: {
-        getUsers: Number()
-    }
+        getUsers: Number(),
+    },
 };

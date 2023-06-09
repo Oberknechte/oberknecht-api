@@ -6,7 +6,7 @@ export declare class urls {
             "Content-Type": string;
             Authorization: string;
         };
-        whispers: {
+        whisper: {
             endpoint: string;
             method: string;
             code: number;
@@ -14,10 +14,10 @@ export declare class urls {
         users: {
             endpoint: string;
         };
-        streams: {
+        getStreams: {
             endpoint: string;
         };
-        shoutouts: {
+        shoutout: {
             endpoint: string;
             method: string;
             code: number;
@@ -31,21 +31,21 @@ export declare class urls {
             method: string;
             code: number;
         };
-        deletemessage: {
+        deleteMessage: {
             endpoint: string;
             method: string;
             code: number;
         };
-        announcement: {
+        announce: {
             endpoint: string;
             method: string;
             code: number;
         };
-        updatechatsettings: {
+        updateChatSettings: {
             endpoint: string;
             method: string;
         };
-        getchatsettings: {
+        getChatSettings: {
             endpoint: string;
             method: string;
         };
@@ -69,24 +69,24 @@ export declare class urls {
             method: string;
             code: number;
         };
-        updatecolor: {
+        updateColor: {
             endpoint: string;
             method: string;
             code: number;
         };
-        getcolor: {
+        getColor: {
             endpoint: string;
         };
         raid: {
             endpoint: string;
             method: string;
         };
-        cancelraid: {
+        cancelRaid: {
             endpoint: string;
             method: string;
             code: number;
         };
-        channelfollowers: {
+        channelFollowers: {
             endpoint: string;
         };
         eventsubSubscriptions: {
@@ -126,6 +126,17 @@ export declare class urls {
             endpoint: string;
             method: string;
         };
+        getPredictions: {
+            endpoint: string;
+        };
+        createPrediction: {
+            endpoint: string;
+            method: string;
+        };
+        endPrediction: {
+            endpoint: string;
+            method: string;
+        };
     };
     static ivrfitwitch: {
         new (): {};
@@ -137,4 +148,5 @@ export declare class urls {
     static _: (...args: any) => any;
     static _url: (...args2: any) => any;
     static _code: (...args2: any) => any;
+    static _method: (...args2: any) => any;
 }

@@ -7,22 +7,22 @@ export type eventsubSubscriptionTypesType = typeof eventsubSubscriptionTypes[num
 export declare const eventsubSubscriptionVersions: readonly ["1", "2", "beta"];
 export type eventsubSubscriptionVersionType = typeof eventsubSubscriptionVersions[number];
 export type eventsubSubscriptionEntry = {
-    "id": string;
-    "status": eventsubSubscriptionStatusType;
-    "type": eventsubSubscriptionTypesType;
-    "version": eventsubSubscriptionVersionType;
-    "condition": object;
-    "created_at": string;
-    "transport": {
-        "method": eventsubSubscriptionTransportMethodType;
+    id: string;
+    status: eventsubSubscriptionStatusType;
+    type: eventsubSubscriptionTypesType;
+    version: eventsubSubscriptionVersionType;
+    condition: object;
+    created_at: string;
+    transport: {
+        method: eventsubSubscriptionTransportMethodType;
     };
-    "cost": number;
+    cost: number;
 };
 export type getEventsubSubscriptionsResponse = {
-    "total": number;
-    "data": Array<eventsubSubscriptionEntry>;
-    "total_cost": number;
-    "max_total_cost": number;
-    "pagination": object;
+    total: number;
+    data: Array<eventsubSubscriptionEntry>;
+    total_cost: number;
+    max_total_cost: number;
+    pagination: object;
 };
 export type addEventsubSubscription = getEventsubSubscriptionsResponse;

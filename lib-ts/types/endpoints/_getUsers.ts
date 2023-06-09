@@ -9,28 +9,28 @@ export type idsEntry = { [key: string]: string };
 export type detailsEntry = { [key: string]: userEntry };
 
 export type getUsersResolveType = {
-    logins: loginsEntry,
-    ids: idsEntry,
-    details: detailsEntry,
-    loginsInvalid: string[]
+  logins: loginsEntry;
+  ids: idsEntry;
+  details: detailsEntry;
+  loginsInvalid: string[];
 };
 
 export type userEntry = {
-    "id": string,
-    "login": string,
-    "display_name": string,
-    "type": userTypesType,
-    "broadcaster_type": broadcasterTypesType,
-    "description": string,
-    "profile_image_url": string,
-    "offline_image_url": string,
-    "view_count": number,
-    "email": string,
-    "created_at": string,
-    "displayNameParsed": string,
-    "_lastUpdated": number
+  id: string;
+  login: string;
+  display_name: string;
+  type: userTypesType;
+  broadcaster_type: broadcasterTypesType;
+  description: string;
+  profile_image_url: string;
+  offline_image_url: string;
+  view_count: number;
+  email: string;
+  created_at: string;
+  displayNameParsed: string;
+  _lastUpdated: number;
 };
 
 export type getUsersResponse = {
-    "data": Array<userEntry>
+  data: Array<userEntry>;
 };

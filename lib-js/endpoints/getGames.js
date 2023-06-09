@@ -8,7 +8,7 @@ const _validatetoken_1 = require("./_validatetoken");
 const oberknecht_utils_1 = require("oberknecht-utils");
 async function getGames(sym, ids, names, igdbIDs, customtoken) {
     return new Promise(async (resolve, reject) => {
-        if ((!(sym ?? undefined) && !(customtoken ?? undefined)))
+        if (!(sym ?? undefined) && !(customtoken ?? undefined))
             return reject(Error(`sym and customtoken are undefined`));
         if (!(ids ?? undefined) && !(names ?? undefined) && !(igdbIDs ?? undefined))
             return reject(Error(`ids, names and igbdIDs is undefined`));
@@ -16,18 +16,20 @@ async function getGames(sym, ids, names, igdbIDs, customtoken) {
         let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false);
         let names_ = (0, oberknecht_utils_1.convertToArray)(names, false);
         let igdbIDs_ = (0, oberknecht_utils_1.convertToArray)(igdbIDs, false);
-        names_.push(...ids_.filter(a => !__1.i.regex.numregex().test(a)));
-        ids_ = ids_.filter(a => __1.i.regex.numregex().test(a));
-        if ((customtoken ?? undefined)) {
+        names_.push(...ids_.filter((a) => !__1.i.regex.numregex().test(a)));
+        ids_ = ids_.filter((a) => __1.i.regex.numregex().test(a));
+        if (customtoken ?? undefined) {
             await (0, _validatetoken_1._validatetoken)(sym, customtoken)
-                .then(a => {
+                .then((a) => {
                 clientid = a.client_id;
             })
                 .catch();
         }
-        ;
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getGames")}${(0, oberknecht_utils_1.joinUrlQuery)(["id", "name", "igdb_id"], [ids_, names_.map(a => encodeURI(a)), igdbIDs_], true)}`, { headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
-            if (e || (r.statusCode !== urls_1.urls._code("twitch", "getGames")))
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getGames")}${(0, oberknecht_utils_1.joinUrlQuery)(["id", "name", "igdb_id"], [ids_, names_.map((a) => encodeURI(a)), igdbIDs_], true)}`, {
+            method: urls_1.urls._method("twitch", "getGames"),
+            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+        }, (e, r) => {
+            if (e || r.statusCode !== urls_1.urls._code("twitch", "getGames"))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);
             return resolve(dat);
@@ -35,4 +37,3 @@ async function getGames(sym, ids, names, igdbIDs, customtoken) {
     });
 }
 exports.getGames = getGames;
-;

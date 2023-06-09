@@ -10,12 +10,11 @@ async function _validatetoken(sym, customtoken) {
             customtoken_ = sym;
             sym = undefined;
         }
-        ;
         (0, oberknecht_request_1.request)(`https://id.twitch.tv/oauth2/validate`, {
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `OAuth ${customtoken_ ?? __1.i.apiclientData[sym]?._options?.token}`
-            }
+                Authorization: `OAuth ${customtoken_ ?? __1.i.apiclientData[sym]?._options?.token}`,
+            },
         }, (e, r) => {
             if (e || r.statusCode !== 200)
                 return reject(Error(e ?? r.body));
@@ -25,4 +24,3 @@ async function _validatetoken(sym, customtoken) {
     });
 }
 exports._validatetoken = _validatetoken;
-;

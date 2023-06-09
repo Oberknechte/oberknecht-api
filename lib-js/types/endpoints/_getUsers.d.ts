@@ -18,20 +18,20 @@ export type getUsersResolveType = {
     loginsInvalid: string[];
 };
 export type userEntry = {
-    "id": string;
-    "login": string;
-    "display_name": string;
-    "type": userTypesType;
-    "broadcaster_type": broadcasterTypesType;
-    "description": string;
-    "profile_image_url": string;
-    "offline_image_url": string;
-    "view_count": number;
-    "email": string;
-    "created_at": string;
-    "displayNameParsed": string;
-    "_lastUpdated": number;
+    id: string;
+    login: string;
+    display_name: string;
+    type: userTypesType;
+    broadcaster_type: broadcasterTypesType;
+    description: string;
+    profile_image_url: string;
+    offline_image_url: string;
+    view_count: number;
+    email: string;
+    created_at: string;
+    displayNameParsed: string;
+    _lastUpdated: number;
 };
 export type getUsersResponse = {
-    "data": Array<userEntry>;
+    data: Array<userEntry>;
 };

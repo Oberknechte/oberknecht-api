@@ -9,46 +9,47 @@ const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
 async function unvip(sym, broadcaster_id, user_id, customtoken) {
     return new Promise(async (resolve, reject) => {
-        if ((!(sym ?? undefined) && !(customtoken ?? undefined)))
+        if (!(sym ?? undefined) && !(customtoken ?? undefined))
             return reject(Error(`sym and customtoken are undefined`));
         if (!(broadcaster_id ?? undefined) || !(user_id ?? undefined))
             return reject(Error(`broadcaster_id and/or user_id is undefined`));
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         let broadcaster_id_ = (0, oberknecht_utils_1.cleanChannelName)(broadcaster_id);
         let user_id_ = (0, oberknecht_utils_1.cleanChannelName)(user_id);
-        if ((customtoken ?? undefined)) {
+        if (customtoken ?? undefined) {
             await (0, _validatetoken_1._validatetoken)(sym, customtoken)
-                .then(a => {
+                .then((a) => {
                 clientid = a.client_id;
                 if (!broadcaster_id_)
                     broadcaster_id_ = a.user_id;
             })
                 .catch();
         }
-        ;
-        if (!__1.i.regex.numregex().test(broadcaster_id_) && __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
+        if (!__1.i.regex.numregex().test(broadcaster_id_) &&
+            __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
             await (0, _getuser_1._getuser)(sym, broadcaster_id_)
-                .then(u => {
+                .then((u) => {
                 broadcaster_id_ = u[1];
             })
                 .catch();
         }
-        ;
-        if (!__1.i.regex.numregex().test(user_id_) && __1.i.regex.twitch.usernamereg().test(user_id_)) {
+        if (!__1.i.regex.numregex().test(user_id_) &&
+            __1.i.regex.twitch.usernamereg().test(user_id_)) {
             await (0, _getuser_1._getuser)(sym, user_id_)
-                .then(u => {
+                .then((u) => {
                 user_id_ = u[1];
             })
                 .catch();
         }
-        ;
-        broadcaster_id_ = (broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid);
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "unvip")}?broadcaster_id=${broadcaster_id_}&user_id=${user_id_}`, { method: urls_1.urls.twitch.unvip.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid) }, (e, r) => {
-            if (e || (r.statusCode !== urls_1.urls._code("twitch", "unvip")))
+        broadcaster_id_ = broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "unvip")}?broadcaster_id=${broadcaster_id_}&user_id=${user_id_}`, {
+            method: urls_1.urls._method("twitch", "unvip"),
+            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+        }, (e, r) => {
+            if (e || r.statusCode !== urls_1.urls._code("twitch", "unvip"))
                 return reject(Error(e ?? r.body));
             return resolve();
         });
     });
 }
 exports.unvip = unvip;
-;

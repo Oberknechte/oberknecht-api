@@ -7,4 +7,3 @@ class i {
     static regex = oberknecht_utils_1.regex;
 }
 exports.i = i;
-;

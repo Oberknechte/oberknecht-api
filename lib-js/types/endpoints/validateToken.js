@@ -62,5 +62,5 @@ exports.scopes = [
     "chat:edit",
     "chat:read",
     "whispers:read",
-    "whispers:edit"
+    "whispers:edit",
 ];

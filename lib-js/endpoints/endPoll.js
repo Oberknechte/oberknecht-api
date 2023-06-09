@@ -7,26 +7,31 @@ const _validatetoken_1 = require("./_validatetoken");
 const __1 = require("..");
 async function endPoll(sym, id, status, customtoken) {
     return new Promise(async (resolve, reject) => {
-        if ((!(sym ?? undefined) && !(customtoken ?? undefined)))
+        if (!(sym ?? undefined) && !(customtoken ?? undefined))
             return reject(Error(`sym and customtoken are undefined`));
+        if (!(id ?? undefined) || !(status ?? undefined))
+            return reject(Error("id or status is undefined"));
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        let broadcaster_id_ = __1.i.apiclientData[sym]?.options?.userid;
-        if ((customtoken ?? undefined)) {
+        let broadcaster_id_ = __1.i.apiclientData[sym]?._options?.userid;
+        if (customtoken ?? undefined) {
             await (0, _validatetoken_1._validatetoken)(sym, customtoken)
-                .then(a => {
+                .then((a) => {
                 clientid = a.client_id;
                 broadcaster_id_ = a.user_id;
             })
                 .catch();
         }
-        ;
         let body = {
             broadcaster_id: broadcaster_id_,
             id: id,
-            status: status
+            status: status,
         };
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "endPoll")}`, { method: urls_1.urls.twitch.endPoll.method, headers: urls_1.urls.twitch._headers(sym, customtoken, clientid), body: JSON.stringify(body) }, (e, r) => {
-            if (e || (r.statusCode !== urls_1.urls._code("twitch", "endPoll")))
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "endPoll")}`, {
+            method: urls_1.urls._method("twitch", "endPoll"),
+            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+            body: JSON.stringify(body),
+        }, (e, r) => {
+            if (e || r.statusCode !== urls_1.urls._code("twitch", "endPoll"))
                 return reject(Error(e ?? r.body));
             let dat = JSON.parse(r.body);
             return resolve(dat);
@@ -34,4 +39,3 @@ async function endPoll(sym, id, status, customtoken) {
     });
 }
 exports.endPoll = endPoll;
-;
