@@ -16,7 +16,7 @@ async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering 
             let idsinlogins = logins_.filter((a) => __1.i.regex.numregex().test(a));
             if (idsinlogins.length > 0) {
                 ids_ = [...ids_, ...idsinlogins];
-                idsinlogins.forEach((a) => logins_.splice(logins_.indexOf(a)));
+                logins_ = logins_.filter(a => !__1.i.regex.numregex().test(a));
             }
         }
         let r = {

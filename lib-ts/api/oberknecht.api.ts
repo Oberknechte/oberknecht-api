@@ -206,8 +206,8 @@ export class oberknechtAPI {
   };
   getUsers = (
     logins: string | string[],
-    ids: string | string[],
-    noautofilterids: boolean,
+    ids?: string | string[],
+    noautofilterids?: boolean,
     customtoken?: string
   ) => {
     return getUsers(this.symbol, logins, ids, noautofilterids, customtoken);

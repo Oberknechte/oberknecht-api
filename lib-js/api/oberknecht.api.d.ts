@@ -29,7 +29,7 @@ export declare class oberknechtAPI {
     deleteMessage: (broadcaster_id: string, message_id: string, customtoken?: string) => Promise<void>;
     delete: (broadcaster_id: string, message_id: string, customtoken?: string) => Promise<void>;
     clearChat: (broadcaster_id: string, customtoken?: string) => Promise<void>;
-    getUsers: (logins: string | string[], ids: string | string[], noautofilterids: boolean, customtoken?: string) => Promise<import("../types/endpoints/_getUsers").getUsersResolveType>;
+    getUsers: (logins: string | string[], ids?: string | string[], noautofilterids?: boolean, customtoken?: string) => Promise<import("../types/endpoints/_getUsers").getUsersResolveType>;
     shoutout: (from_broadcaster_id: string, to_broadcaster_id: string, customtoken?: string) => Promise<void>;
     timeout: (broadcaster_id: string, target_user_id: string, duration: string, reason?: string, customtoken?: string) => Promise<import("../types/endpoints/ban").banResponse>;
     unban: (broadcaster_id: string, target_user_id: string, customtoken?: string) => Promise<void>;

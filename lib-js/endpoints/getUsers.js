@@ -12,9 +12,7 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
             return reject(Error(`sym and customtoken are undefined`));
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map((a) => (0, oberknecht_utils_1.cleanChannelName)(a));
-        let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false)
-            .map((a) => String(a)?.toLowerCase())
-            .filter((a) => oberknecht_utils_1.regex.numregex().test(a));
+        let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false).filter((a) => typeof a === "number" || oberknecht_utils_1.regex.numregex().test(a.toString()));
         if (customtoken ?? undefined) {
             await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
@@ -43,12 +41,14 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
             let chunkIDs = chunk.filter((a) => ids_.includes(a));
             return new Promise((resolve2, reject2) => {
                 let urlPath = ["twitch", "users"];
-                let url = `${urls_1.urls._url(...urlPath)}${(0, oberknecht_utils_1.joinUrlQuery)("login", chunkLogins, true)}${(0, oberknecht_utils_1.joinUrlQuery)("id", chunkIDs, chunkLogins.length == 0 ? true : false)}`;
-                if (__1.i.apiclientData[sym]._options?.use3rdparty?.getUsers)
+                let url = `${urls_1.urls._url(...urlPath)}${(0, oberknecht_utils_1.joinUrlQuery)(["login", "id"], [chunkLogins, chunkIDs], true)}`;
+                if (__1.i.apiclientData[sym]._options?.use3rdparty?.getUsers) {
                     urlPath = ["ivrfitwitch", "users"];
-                url = `${urls_1.urls._url(...urlPath)}${chunkLogins.length > 0 ? `?login=${chunkLogins}` : ""}${chunkIDs.length > 0
-                    ? `${chunkLogins.length > 0 ? "&" : "?"}id=${chunkIDs}`
-                    : ""}`;
+                    url = `${urls_1.urls._url(...urlPath)}${chunkLogins.length > 0 ? `?login=${chunkLogins}` : ""}${chunkIDs.length > 0
+                        ? `${chunkLogins.length > 0 ? "&" : "?"}id=${chunkIDs}`
+                        : ""}`;
+                }
+                console.log(url);
                 (0, oberknecht_request_1.request)(url, {
                     method: urls_1.urls._method(...urlPath),
                     headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),

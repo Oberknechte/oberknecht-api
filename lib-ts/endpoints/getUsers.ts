@@ -26,9 +26,9 @@ export async function getUsers(
 
     let clientid = i.apiclientData[sym]?._options?.clientid;
     let logins_ = convertToArray(logins, false).map((a) => cleanChannelName(a));
-    let ids_ = convertToArray(ids, false)
-      .map((a) => String(a)?.toLowerCase())
-      .filter((a) => regex.numregex().test(a));
+    let ids_ = convertToArray(ids, false).filter(
+      (a) => typeof a === "number" || regex.numregex().test(a.toString())
+    );
 
     if (customtoken ?? undefined) {
       await _validatetoken(undefined, customtoken)
@@ -69,23 +69,22 @@ export async function getUsers(
         return new Promise<void>((resolve2, reject2) => {
           let urlPath = ["twitch", "users"];
           let url = `${urls._url(...urlPath)}${joinUrlQuery(
-            "login",
-            chunkLogins,
+            ["login", "id"],
+            [chunkLogins, chunkIDs],
             true
-          )}${joinUrlQuery(
-            "id",
-            chunkIDs,
-            chunkLogins.length == 0 ? true : false
           )}`;
-          if (i.apiclientData[sym]._options?.use3rdparty?.getUsers)
+          if (i.apiclientData[sym]._options?.use3rdparty?.getUsers) {
             urlPath = ["ivrfitwitch", "users"];
-          url = `${urls._url(...urlPath)}${
-            chunkLogins.length > 0 ? `?login=${chunkLogins}` : ""
-          }${
-            chunkIDs.length > 0
-              ? `${chunkLogins.length > 0 ? "&" : "?"}id=${chunkIDs}`
-              : ""
-          }`;
+            url = `${urls._url(...urlPath)}${
+              chunkLogins.length > 0 ? `?login=${chunkLogins}` : ""
+            }${
+              chunkIDs.length > 0
+                ? `${chunkLogins.length > 0 ? "&" : "?"}id=${chunkIDs}`
+                : ""
+            }`;
+          }
+
+          console.log(url);
 
           request(
             url,

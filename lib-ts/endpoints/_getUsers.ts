@@ -28,7 +28,7 @@ export async function _getUsers(
       let idsinlogins = logins_.filter((a) => i.regex.numregex().test(a));
       if (idsinlogins.length > 0) {
         ids_ = [...ids_, ...idsinlogins];
-        idsinlogins.forEach((a) => logins_.splice(logins_.indexOf(a)));
+        logins_ = logins_.filter(a => !i.regex.numregex().test(a));
       }
     }
 
