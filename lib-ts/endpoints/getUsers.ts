@@ -42,7 +42,7 @@ export async function getUsers(
       let idsinlogins = logins_.filter((a) => regex.numregex().test(a));
       if (idsinlogins.length > 0) {
         ids_ = [...ids_, ...idsinlogins];
-        idsinlogins.forEach((a) => logins_.splice(logins_.indexOf(a)));
+        logins_ = logins_.filter((a) => !regex.numregex().test(a));
       }
     }
 

@@ -24,7 +24,7 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
             let idsinlogins = logins_.filter((a) => oberknecht_utils_1.regex.numregex().test(a));
             if (idsinlogins.length > 0) {
                 ids_ = [...ids_, ...idsinlogins];
-                idsinlogins.forEach((a) => logins_.splice(logins_.indexOf(a)));
+                logins_ = logins_.filter((a) => !oberknecht_utils_1.regex.numregex().test(a));
             }
         }
         let loginsInvalid = logins_.filter((a) => !oberknecht_utils_1.regex.twitch.usernamereg().test(a));
