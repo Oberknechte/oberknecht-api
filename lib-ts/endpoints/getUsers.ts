@@ -84,8 +84,6 @@ export async function getUsers(
             }`;
           }
 
-          console.log(url);
-
           request(
             url,
             {

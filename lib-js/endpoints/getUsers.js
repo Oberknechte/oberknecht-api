@@ -48,7 +48,6 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
                         ? `${chunkLogins.length > 0 ? "&" : "?"}id=${chunkIDs}`
                         : ""}`;
                 }
-                console.log(url);
                 (0, oberknecht_request_1.request)(url, {
                     method: urls_1.urls._method(...urlPath),
                     headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
