@@ -89,7 +89,7 @@ export class oberknechtAPI {
     options.startPath = path.resolve(process.cwd(), options.startPath ?? "./");
     options.saveIDsPath = path.resolve(
       options.startPath,
-      options.saveIDsPath ?? "./userids"
+      options.saveIDsPath ?? "./data/oberknecht-api/userids"
     );
     options.debug = options.debug ?? 1;
 
@@ -99,13 +99,13 @@ export class oberknechtAPI {
       let userssplitter = (data.jsonsplitters.users = this.userssplitter = new jsonsplitter(
         {
           debug: options.debug,
-          startpath: options.startPath,
+          startpath: options.saveIDsPath,
           max_keys_in_file: 2000,
         }
       ));
 
       if (
-        !fs.existsSync(options.startPath) ||
+        !fs.existsSync(options.saveIDsPath) ||
         Object.keys(userssplitter._mainpaths).length === 0
       ) {
         this.userssplitterpromise = userssplitter.createSync({

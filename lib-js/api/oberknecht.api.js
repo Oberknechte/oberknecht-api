@@ -74,7 +74,7 @@ class oberknechtAPI {
             throw Error(`token is undefined`);
         let data = (index_1.i.apiclientData[this.symbol] = {});
         options.startPath = path_1.default.resolve(process.cwd(), options.startPath ?? "./");
-        options.saveIDsPath = path_1.default.resolve(options.startPath, options.saveIDsPath ?? "./userids");
+        options.saveIDsPath = path_1.default.resolve(options.startPath, options.saveIDsPath ?? "./data/oberknecht-api/userids");
         options.debug = options.debug ?? 1;
         this._options = data._options = options;
         if (options.saveIDs) {
@@ -82,10 +82,10 @@ class oberknechtAPI {
                 data.jsonsplitters = {};
             let userssplitter = (data.jsonsplitters.users = this.userssplitter = new jsonsplitter_1.jsonsplitter({
                 debug: options.debug,
-                startpath: options.startPath,
+                startpath: options.saveIDsPath,
                 max_keys_in_file: 2000,
             }));
-            if (!fs_1.default.existsSync(options.startPath) ||
+            if (!fs_1.default.existsSync(options.saveIDsPath) ||
                 Object.keys(userssplitter._mainpaths).length === 0) {
                 this.userssplitterpromise = userssplitter.createSync({
                     logins: {},
