@@ -10,8 +10,8 @@ export async function ban(
   sym: string,
   broadcaster_id: string | undefined,
   target_user_id: string,
-  duration?: string,
   reason?: string,
+  duration?: string,
   customtoken?: string
 ) {
   return new Promise<banResponse>(async (resolve, reject) => {

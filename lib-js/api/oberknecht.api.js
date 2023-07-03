@@ -136,7 +136,7 @@ class oberknechtAPI {
         return (0, _getuser_1._getuser)(this.symbol, user);
     };
     ban = (broadcaster_id, target_user_id, reason, customtoken) => {
-        return (0, ban_1.ban)(this.symbol, broadcaster_id, target_user_id, reason, customtoken);
+        return (0, ban_1.ban)(this.symbol, broadcaster_id, target_user_id, reason, undefined, customtoken);
     };
     deleteMessage = (broadcaster_id, message_id, customtoken) => {
         return (0, deleteMessage_1.deleteMessage)(this.symbol, broadcaster_id, message_id, customtoken);
@@ -152,7 +152,7 @@ class oberknechtAPI {
         return (0, shoutout_1.shoutout)(this.symbol, from_broadcaster_id, to_broadcaster_id, customtoken);
     };
     timeout = (broadcaster_id, target_user_id, duration, reason, customtoken) => {
-        return (0, ban_2.ban)(this.symbol, broadcaster_id, target_user_id, duration, reason, customtoken);
+        return (0, ban_2.ban)(this.symbol, broadcaster_id, target_user_id, reason, duration, customtoken);
     };
     unban = (broadcaster_id, target_user_id, customtoken) => {
         return (0, unban_1.unban)(this.symbol, broadcaster_id, target_user_id, customtoken);

@@ -7,7 +7,7 @@ const _getuser_1 = require("../operations/_getuser");
 const _validatetoken_1 = require("./_validatetoken");
 const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
-async function ban(sym, broadcaster_id, target_user_id, duration, reason, customtoken) {
+async function ban(sym, broadcaster_id, target_user_id, reason, duration, customtoken) {
     return new Promise(async (resolve, reject) => {
         if (!(sym ?? undefined) && !(customtoken ?? undefined))
             return reject(Error("sym and customtoken is undefined"));

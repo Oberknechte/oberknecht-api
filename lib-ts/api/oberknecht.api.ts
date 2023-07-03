@@ -182,7 +182,7 @@ export class oberknechtAPI {
   ban = (
     broadcaster_id: string,
     target_user_id: string,
-    reason,
+    reason: string,
     customtoken?: string
   ) => {
     return ban(
@@ -190,6 +190,7 @@ export class oberknechtAPI {
       broadcaster_id,
       target_user_id,
       reason,
+      undefined,
       customtoken
     );
   };
@@ -235,8 +236,8 @@ export class oberknechtAPI {
       this.symbol,
       broadcaster_id,
       target_user_id,
-      duration,
       reason,
+      duration,
       customtoken
     );
   };
