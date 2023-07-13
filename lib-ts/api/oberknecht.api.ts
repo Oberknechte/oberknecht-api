@@ -83,29 +83,34 @@ export class oberknechtAPI {
   _options: oberknechtAPIOptionsType;
 
   constructor(options: oberknechtAPIOptionsType) {
-    if (options.skipCreation) return;
-    if (!options?.token) throw Error(`token is undefined`);
-    let data = (i.apiclientData[this.symbol] = {} as Record<string, any>);
-    options.startPath = path.resolve(process.cwd(), options.startPath ?? "./");
-    options.saveIDsPath = path.resolve(
-      options.startPath,
-      options.saveIDsPath ?? "./data/oberknecht-api/userids"
-    );
-    options.debug = options.debug ?? 1;
+    let _options: oberknechtAPIOptionsType = options ?? {};
 
-    this._options = data._options = options;
-    if (options.saveIDs) {
+    if (_options.skipCreation) return;
+    // if (!options?.token) throw Error(`token is undefined`);
+    let data = (i.apiclientData[this.symbol] = {} as Record<string, any>);
+    _options.startPath = path.resolve(
+      process.cwd(),
+      _options.startPath ?? "./"
+    );
+    _options.saveIDsPath = path.resolve(
+      _options.startPath,
+      _options.saveIDsPath ?? "./data/oberknecht-api/userids"
+    );
+    _options.debug = _options.debug ?? 1;
+
+    this._options = data._options = _options;
+    if (_options.saveIDs) {
       if (!data.jsonsplitters) data.jsonsplitters = {};
       let userssplitter = (data.jsonsplitters.users = this.userssplitter = new jsonsplitter(
         {
-          debug: options.debug,
-          startpath: options.saveIDsPath,
+          debug: _options.debug,
+          startpath: _options.saveIDsPath,
           max_keys_in_file: 2000,
         }
       ));
 
       if (
-        !fs.existsSync(options.saveIDsPath) ||
+        !fs.existsSync(_options.saveIDsPath) ||
         Object.keys(userssplitter._mainpaths).length === 0
       ) {
         this.userssplitterpromise = userssplitter.createSync({
@@ -120,33 +125,38 @@ export class oberknechtAPI {
       _log(
         1,
         `${_stackname("Oberknecht-API")[3]} Initialized \n\t> Startpath: ${
-          options.startPath
+          _options.startPath
         }`
       );
   }
 
   async verify() {
-    return new Promise<void>(async (resolve) => {
+    return new Promise<void>(async (resolve, reject) => {
       if (this.userssplitterpromise) await this.userssplitterpromise;
 
-      await _validatetoken(this._options.token).then((t) => {
-        this.verified = true;
-        i.apiclientData[this.symbol]._options = {
-          ...i.apiclientData[this.symbol]._options,
-          clientid: t.client_id,
-          userid: t.user_id,
-          login: t.login,
-          token_scopes: t.scopes,
-        };
+      if (this._options.token)
+        await _validatetoken(this._options.token)
+          .then((t) => {
+            this.verified = true;
+            i.apiclientData[this.symbol]._options = {
+              ...i.apiclientData[this.symbol]._options,
+              clientid: t.client_id,
+              userid: t.user_id,
+              login: t.login,
+              token_scopes: t.scopes,
+            };
 
-        if (isdebug(this.symbol, 2))
-          _log(
-            1,
-            `${_stackname("Oberknecht-API")[3]} Logged in as ${t.login} (${
-              t.user_id
-            })`
-          );
-      });
+            if (isdebug(this.symbol, 2))
+              _log(
+                1,
+                `${_stackname("Oberknecht-API")[3]} Logged in as ${t.login} (${
+                  t.user_id
+                })`
+              );
+          })
+          .catch((e) => {
+            return reject(e);
+          });
 
       resolve();
     });

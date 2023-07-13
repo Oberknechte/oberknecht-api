@@ -68,24 +68,24 @@ class oberknechtAPI {
     userssplitterpromise;
     _options;
     constructor(options) {
-        if (options.skipCreation)
+        let _options = options ?? {};
+        if (_options.skipCreation)
             return;
-        if (!options?.token)
-            throw Error(`token is undefined`);
+        // if (!options?.token) throw Error(`token is undefined`);
         let data = (index_1.i.apiclientData[this.symbol] = {});
-        options.startPath = path_1.default.resolve(process.cwd(), options.startPath ?? "./");
-        options.saveIDsPath = path_1.default.resolve(options.startPath, options.saveIDsPath ?? "./data/oberknecht-api/userids");
-        options.debug = options.debug ?? 1;
-        this._options = data._options = options;
-        if (options.saveIDs) {
+        _options.startPath = path_1.default.resolve(process.cwd(), _options.startPath ?? "./");
+        _options.saveIDsPath = path_1.default.resolve(_options.startPath, _options.saveIDsPath ?? "./data/oberknecht-api/userids");
+        _options.debug = _options.debug ?? 1;
+        this._options = data._options = _options;
+        if (_options.saveIDs) {
             if (!data.jsonsplitters)
                 data.jsonsplitters = {};
             let userssplitter = (data.jsonsplitters.users = this.userssplitter = new jsonsplitter_1.jsonsplitter({
-                debug: options.debug,
-                startpath: options.saveIDsPath,
+                debug: _options.debug,
+                startpath: _options.saveIDsPath,
                 max_keys_in_file: 2000,
             }));
-            if (!fs_1.default.existsSync(options.saveIDsPath) ||
+            if (!fs_1.default.existsSync(_options.saveIDsPath) ||
                 Object.keys(userssplitter._mainpaths).length === 0) {
                 this.userssplitterpromise = userssplitter.createSync({
                     logins: {},
@@ -95,24 +95,29 @@ class oberknechtAPI {
             }
         }
         if ((0, isdebug_1.isdebug)(this.symbol, 2))
-            (0, _log_1._log)(1, `${(0, _stackname_1._stackname)("Oberknecht-API")[3]} Initialized \n\t> Startpath: ${options.startPath}`);
+            (0, _log_1._log)(1, `${(0, _stackname_1._stackname)("Oberknecht-API")[3]} Initialized \n\t> Startpath: ${_options.startPath}`);
     }
     async verify() {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
             if (this.userssplitterpromise)
                 await this.userssplitterpromise;
-            await (0, _validatetoken_1._validatetoken)(this._options.token).then((t) => {
-                this.verified = true;
-                index_1.i.apiclientData[this.symbol]._options = {
-                    ...index_1.i.apiclientData[this.symbol]._options,
-                    clientid: t.client_id,
-                    userid: t.user_id,
-                    login: t.login,
-                    token_scopes: t.scopes,
-                };
-                if ((0, isdebug_1.isdebug)(this.symbol, 2))
-                    (0, _log_1._log)(1, `${(0, _stackname_1._stackname)("Oberknecht-API")[3]} Logged in as ${t.login} (${t.user_id})`);
-            });
+            if (this._options.token)
+                await (0, _validatetoken_1._validatetoken)(this._options.token)
+                    .then((t) => {
+                    this.verified = true;
+                    index_1.i.apiclientData[this.symbol]._options = {
+                        ...index_1.i.apiclientData[this.symbol]._options,
+                        clientid: t.client_id,
+                        userid: t.user_id,
+                        login: t.login,
+                        token_scopes: t.scopes,
+                    };
+                    if ((0, isdebug_1.isdebug)(this.symbol, 2))
+                        (0, _log_1._log)(1, `${(0, _stackname_1._stackname)("Oberknecht-API")[3]} Logged in as ${t.login} (${t.user_id})`);
+                })
+                    .catch((e) => {
+                    return reject(e);
+                });
             resolve();
         });
     }
