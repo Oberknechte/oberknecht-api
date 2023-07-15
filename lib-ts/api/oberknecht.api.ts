@@ -76,6 +76,9 @@ export class oberknechtAPI {
   static get symbol() {
     return this.symbol;
   }
+  get clientData() {
+    return i.apiclientData[this.symbol];
+  }
 
   verified = false;
   userssplitter: jsonsplitter;

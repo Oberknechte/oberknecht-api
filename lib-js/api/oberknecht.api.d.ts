@@ -15,6 +15,7 @@ export declare class oberknechtAPI {
     get options(): any;
     static get options(): oberknechtAPIOptionsType;
     static get symbol(): any;
+    get clientData(): any;
     verified: boolean;
     userssplitter: jsonsplitter;
     userssplitterpromise: any;

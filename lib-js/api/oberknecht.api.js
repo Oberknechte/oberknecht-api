@@ -63,6 +63,9 @@ class oberknechtAPI {
     static get symbol() {
         return this.symbol;
     }
+    get clientData() {
+        return index_1.i.apiclientData[this.symbol];
+    }
     verified = false;
     userssplitter;
     userssplitterpromise;

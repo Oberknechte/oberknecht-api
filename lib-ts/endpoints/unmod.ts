@@ -29,6 +29,9 @@ export async function unmod(
         .catch();
     }
 
+    if (!broadcaster_id_)
+      broadcaster_id_ = i.apiclientData[sym]?._options?.userid;
+
     if (
       !i.regex.numregex().test(broadcaster_id_) &&
       i.regex.twitch.usernamereg().test(broadcaster_id_)

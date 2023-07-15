@@ -25,6 +25,8 @@ async function unmod(sym, broadcaster_id, user_id, customtoken) {
             })
                 .catch();
         }
+        if (!broadcaster_id_)
+            broadcaster_id_ = __1.i.apiclientData[sym]?._options?.userid;
         if (!__1.i.regex.numregex().test(broadcaster_id_) &&
             __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
             await (0, _getuser_1._getuser)(sym, broadcaster_id_)
