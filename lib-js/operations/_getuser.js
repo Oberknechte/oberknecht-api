@@ -13,20 +13,20 @@ async function _getuser(sym, user) {
             __1.i.apiclientData[sym].cache.twitch = {};
         if (!__1.i.apiclientData[sym].cache.twitch.userids)
             __1.i.apiclientData[sym].cache.twitch.userids = { logins: {}, ids: {} };
-        let clientDataCacheTwitchUserids = __1.i.apiclientData[sym].cache.twitch.userids;
-        if (clientDataCacheTwitchUserids.logins[user]) {
-            return resolve(clientDataCacheTwitchUserids.logins[user]);
-        }
-        else if (clientDataCacheTwitchUserids.ids[user]) {
-            return resolve(clientDataCacheTwitchUserids.ids[user]);
-        }
+        // let clientDataCacheTwitchUserids =
+        //   i.apiclientData[sym].cache.twitch.userids;
+        // if (clientDataCacheTwitchUserids.logins[user]) {
+        //   return resolve(clientDataCacheTwitchUserids.logins[user]);
+        // } else if (clientDataCacheTwitchUserids.ids[user]) {
+        //   return resolve(clientDataCacheTwitchUserids.ids[user]);
+        // }
         (0, _getUsers_1._getUsers)(sym, user)
             .then((u) => {
             if (Object.keys(u.details).length == 0)
                 return reject(Error("API didn't return any data on user"));
             let ch = u.details[Object.keys(u.details)[0]];
-            clientDataCacheTwitchUserids.logins[ch.login] = ch.id;
-            clientDataCacheTwitchUserids.ids[ch.id] = ch.login;
+            // clientDataCacheTwitchUserids.logins[ch.login] = ch.id;
+            // clientDataCacheTwitchUserids.ids[ch.id] = ch.login;
             return resolve([ch.login, ch.id, ch]);
             // return resolve(class {
             //     static _raw = ch;
