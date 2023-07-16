@@ -19,7 +19,7 @@ async function updateColor(sym, color, customtoken) {
                 clientid = a.client_id;
                 userid = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "updateColor")}?user_id=${userid}&color=${color}`, {
             method: urls_1.urls._method("twitch", "updateColor"),

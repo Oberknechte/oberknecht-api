@@ -19,12 +19,12 @@ export async function getChannels(
     let broadcaster_ids_ = convertToArray(broadcaster_ids, false);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           if (broadcaster_ids_.length === 0) broadcaster_ids_.push(a.user_id);
         })
-        .catch();
+        .catch(reject);
     } else {
       if (broadcaster_ids_.length === 0)
         broadcaster_ids_.push(i.apiclientData[sym]?._options?.userid);
@@ -42,7 +42,7 @@ export async function getChannels(
         .then((broadcasters) => {
           broadcaster_ids_.push(...Object.keys(broadcasters.ids));
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

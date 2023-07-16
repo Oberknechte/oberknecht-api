@@ -22,12 +22,12 @@ export async function whisper(
     let to_user_id_ = cleanChannelName(to_user_id);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           from_user_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -38,7 +38,7 @@ export async function whisper(
         .then((u) => {
           to_user_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     let reqbody = {

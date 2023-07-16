@@ -16,13 +16,13 @@ async function getColor(sym, userID, customtoken) {
         let userLogins_ = userID_.filter((a) => !__1.i.regex.numregex().test(a) && __1.i.regex.twitch.usernamereg().test(a));
         userID_ = userID_.filter((a) => __1.i.regex.numregex().test(a));
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
                 if (userID_.length === 0)
                     userID_.push(a.user_id);
             })
-                .catch();
+                .catch(reject);
         }
         else {
             if (userID_.length === 0)
@@ -33,7 +33,7 @@ async function getColor(sym, userID, customtoken) {
                 .then((u) => {
                 userID_.push(...Object.keys(u.ids));
             })
-                .catch();
+                .catch(reject);
         }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getColor")}${(0, oberknecht_utils_1.joinUrlQuery)("user_id", userID_, true)}`, {
             method: urls_1.urls._method("twitch", "getColor"),

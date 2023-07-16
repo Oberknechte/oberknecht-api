@@ -27,11 +27,11 @@ export async function getGames(
     ids_ = ids_.filter((a) => i.regex.numregex().test(a));
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

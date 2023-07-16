@@ -13,15 +13,15 @@ export async function mod(sym: string, user_id: string, customtoken?: string) {
 
     let clientid = i.apiclientData[sym]?._options?.clientid;
     let broadcaster_id_ = i.apiclientData[sym]?._options?.userid;
-    let user_id_ = cleanChannelName(recreate(user_id));
+    let user_id_ = cleanChannelName(user_id);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           broadcaster_id_ = a.user_id;
           clientid = a.client_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -32,7 +32,7 @@ export async function mod(sym: string, user_id: string, customtoken?: string) {
         .then((u) => {
           user_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

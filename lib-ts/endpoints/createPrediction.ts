@@ -27,12 +27,12 @@ export async function createPrediction(
     let broadcaster_id_ = i.apiclientData[sym]?._options?.userid;
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           broadcaster_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     let body = {

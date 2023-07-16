@@ -16,11 +16,11 @@ async function addEventsubSubscription(sym, type, version, condition, transport,
             version = "1";
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
             })
-                .catch();
+                .catch(reject);
         }
         let body = {
             type: type,

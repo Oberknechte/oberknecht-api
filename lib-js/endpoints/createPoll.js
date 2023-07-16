@@ -16,12 +16,12 @@ async function createPoll(sym, title, choices /* Min. 2, Max. 5 */, duration /* 
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         let broadcaster_id_ = __1.i.apiclientData[sym]?._options?.userid;
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
                 broadcaster_id_ = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         let body = {
             broadcaster_id: broadcaster_id_,

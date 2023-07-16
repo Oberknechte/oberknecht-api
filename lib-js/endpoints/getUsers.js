@@ -18,7 +18,7 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
                 .then((a) => {
                 clientid = a.client_id;
             })
-                .catch();
+                .catch(reject);
         }
         if (!(noautofilterids ?? false)) {
             let idsinlogins = logins_.filter((a) => oberknecht_utils_1.regex.numregex().test(a));

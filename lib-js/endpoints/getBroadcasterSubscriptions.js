@@ -14,12 +14,12 @@ async function getBroadcasterSubscriptions(sym, customtoken, user_id, first, aft
         let broadcaster_id_ = __1.i.apiclientData[sym]?._options?.userid;
         let user_id_ = (0, oberknecht_utils_1.convertToArray)(user_id, false);
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
                 broadcaster_id_ = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getBroadcasterSubscriptions")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id", "user_id", "first", "after", "before"], [broadcaster_id_, user_id_, first, after, before], true)}`, {
             method: urls_1.urls._method("twitch", "getBroadcasterSubscriptions"),

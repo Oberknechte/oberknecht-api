@@ -28,13 +28,13 @@ export async function shoutout(
     let to_broadcaster_id_ = cleanChannelName(to_broadcaster_id);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           moderator_id = a.user_id;
           clientid = a.client_id;
           if (!from_broadcaster_id_) from_broadcaster_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -45,7 +45,7 @@ export async function shoutout(
         .then((u) => {
           from_broadcaster_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -56,7 +56,7 @@ export async function shoutout(
         .then((u) => {
           to_broadcaster_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     from_broadcaster_id_ =

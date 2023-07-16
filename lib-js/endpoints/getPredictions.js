@@ -14,12 +14,12 @@ async function getPredictions(sym, ids, first, after, customtoken) {
         let broadcaster_id = __1.i.apiclientData[sym]?._options?.userid;
         let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false);
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
                 broadcaster_id = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getPredictions")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id", "id", "first", "after"], [broadcaster_id, ids, first, after], true)}`, {
             method: urls_1.urls._method("twitch", "getPredictions"),

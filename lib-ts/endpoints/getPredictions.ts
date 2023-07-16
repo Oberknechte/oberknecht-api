@@ -22,12 +22,12 @@ export async function getPredictions(
     let ids_ = convertToArray(ids, false);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           broadcaster_id = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

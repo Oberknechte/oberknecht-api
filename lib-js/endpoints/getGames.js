@@ -19,11 +19,11 @@ async function getGames(sym, ids, names, igdbIDs, customtoken) {
         names_.push(...ids_.filter((a) => !__1.i.regex.numregex().test(a)));
         ids_ = ids_.filter((a) => __1.i.regex.numregex().test(a));
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
             })
-                .catch();
+                .catch(reject);
         }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getGames")}${(0, oberknecht_utils_1.joinUrlQuery)(["id", "name", "igdb_id"], [ids_, names_.map((a) => encodeURI(a)), igdbIDs_], true)}`, {
             method: urls_1.urls._method("twitch", "getGames"),

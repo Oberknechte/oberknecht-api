@@ -20,12 +20,12 @@ export async function getPolls(
     let broadcaster_id = i.apiclientData[sym]?._options?.userid;
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           broadcaster_id = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

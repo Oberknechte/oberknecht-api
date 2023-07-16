@@ -14,11 +14,11 @@ async function deleteEventsubSubscription(sym, id, customtoken) {
             return reject(Error(`id is undefined`));
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
             })
-                .catch();
+                .catch(reject);
         }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "deleteEventsubSubscription")}${(0, oberknecht_utils_1.joinUrlQuery)("id", id, true)}`, {
             method: urls_1.urls._method("twitch", "deleteEventsubSubscription"),

@@ -13,11 +13,11 @@ async function getStreams(sym, filters, customtoken) {
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         let filters_ = (0, oberknecht_utils_1.recreate)(filters ?? {});
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
             })
-                .catch();
+                .catch(reject);
         }
         let reqqueryparams = "";
         Object.keys(filters_)?.forEach((filter) => {

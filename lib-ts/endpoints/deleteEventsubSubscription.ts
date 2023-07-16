@@ -17,11 +17,11 @@ export async function deleteEventsubSubscription(
     let clientid = i.apiclientData[sym]?._options?.clientid;
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

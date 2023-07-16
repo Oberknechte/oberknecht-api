@@ -23,12 +23,12 @@ export async function updateChannel(
     let channelData_ = recreate(channelData);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           broadcaster_id = a.user_id;
           clientid = a.client_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (channelData.game_id && !i.regex.numregex().test(channelData.game_id)) {
@@ -36,7 +36,7 @@ export async function updateChannel(
         .then((dat) => {
           if (dat.data?.[0]?.id) channelData_.game_id = dat.data[0]?.id;
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

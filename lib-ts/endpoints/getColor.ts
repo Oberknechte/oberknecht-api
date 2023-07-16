@@ -27,12 +27,12 @@ export async function getColor(
     userID_ = userID_.filter((a) => i.regex.numregex().test(a));
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           if (userID_.length === 0) userID_.push(a.user_id);
         })
-        .catch();
+        .catch(reject);
     } else {
       if (userID_.length === 0)
         userID_.push(i.apiclientData[sym]?._options?.userid);
@@ -43,7 +43,7 @@ export async function getColor(
         .then((u) => {
           userID_.push(...Object.keys(u.ids));
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

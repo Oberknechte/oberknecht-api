@@ -13,12 +13,12 @@ async function getPolls(sym, id, first, after, customtoken) {
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         let broadcaster_id = __1.i.apiclientData[sym]?._options?.userid;
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
                 broadcaster_id = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getPolls")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id", "id", "first", "after"], [broadcaster_id, id, first, after], true)}`, {
             method: urls_1.urls._method("twitch", "getPolls"),

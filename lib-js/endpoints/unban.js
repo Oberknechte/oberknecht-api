@@ -25,7 +25,7 @@ async function unban(sym, broadcaster_id, user_id, customtoken) {
                 if (!broadcaster_id_)
                     broadcaster_id_ = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         if (!__1.i.regex.numregex().test(broadcaster_id_) &&
             __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
@@ -33,7 +33,7 @@ async function unban(sym, broadcaster_id, user_id, customtoken) {
                 .then((u) => {
                 broadcaster_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         if (!__1.i.regex.numregex().test(user_id_) &&
             __1.i.regex.twitch.usernamereg().test(user_id_)) {
@@ -41,7 +41,7 @@ async function unban(sym, broadcaster_id, user_id, customtoken) {
                 .then((u) => {
                 user_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         broadcaster_id_ = broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "unban")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}&user_id=${user_id_}`, {

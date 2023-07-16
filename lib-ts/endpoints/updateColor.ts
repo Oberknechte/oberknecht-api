@@ -24,7 +24,7 @@ export async function updateColor(
           clientid = a.client_id;
           userid = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

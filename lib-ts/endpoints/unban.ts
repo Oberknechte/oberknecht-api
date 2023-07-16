@@ -29,7 +29,7 @@ export async function unban(
           clientid = a.client_id;
           if (!broadcaster_id_) broadcaster_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -40,7 +40,7 @@ export async function unban(
         .then((u) => {
           broadcaster_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -51,7 +51,7 @@ export async function unban(
         .then((u) => {
           user_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     broadcaster_id_ = broadcaster_id_ ?? i.apiclientData[sym]?._options?.userid;

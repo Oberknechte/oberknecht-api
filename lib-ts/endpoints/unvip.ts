@@ -22,12 +22,12 @@ export async function unvip(
     let user_id_ = cleanChannelName(user_id);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           if (!broadcaster_id_) broadcaster_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -38,7 +38,7 @@ export async function unvip(
         .then((u) => {
           broadcaster_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -49,7 +49,7 @@ export async function unvip(
         .then((u) => {
           user_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     broadcaster_id_ = broadcaster_id_ ?? i.apiclientData[sym]?._options?.userid;

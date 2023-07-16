@@ -21,16 +21,15 @@ export async function unmod(
     let user_id_ = cleanChannelName(user_id);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           if (!broadcaster_id_) broadcaster_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
-    if (!broadcaster_id_)
-      broadcaster_id_ = i.apiclientData[sym]?._options?.userid;
+    broadcaster_id_ = broadcaster_id_ ?? i.apiclientData[sym]?._options?.userid;
 
     if (
       !i.regex.numregex().test(broadcaster_id_) &&
@@ -40,7 +39,7 @@ export async function unmod(
         .then((u) => {
           broadcaster_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -51,10 +50,8 @@ export async function unmod(
         .then((u) => {
           user_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
-
-    broadcaster_id_ = broadcaster_id_ ?? i.apiclientData[sym]?._options?.userid;
 
     request(
       `${urls._url(

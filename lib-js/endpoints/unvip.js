@@ -17,13 +17,13 @@ async function unvip(sym, broadcaster_id, user_id, customtoken) {
         let broadcaster_id_ = (0, oberknecht_utils_1.cleanChannelName)(broadcaster_id);
         let user_id_ = (0, oberknecht_utils_1.cleanChannelName)(user_id);
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
                 if (!broadcaster_id_)
                     broadcaster_id_ = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         if (!__1.i.regex.numregex().test(broadcaster_id_) &&
             __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
@@ -31,7 +31,7 @@ async function unvip(sym, broadcaster_id, user_id, customtoken) {
                 .then((u) => {
                 broadcaster_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         if (!__1.i.regex.numregex().test(user_id_) &&
             __1.i.regex.twitch.usernamereg().test(user_id_)) {
@@ -39,7 +39,7 @@ async function unvip(sym, broadcaster_id, user_id, customtoken) {
                 .then((u) => {
                 user_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         broadcaster_id_ = broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "unvip")}?broadcaster_id=${broadcaster_id_}&user_id=${user_id_}`, {

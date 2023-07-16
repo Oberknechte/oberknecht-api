@@ -19,14 +19,14 @@ async function shoutout(sym, from_broadcaster_id, to_broadcaster_id, customtoken
         let from_broadcaster_id_ = (0, oberknecht_utils_1.cleanChannelName)(from_broadcaster_id);
         let to_broadcaster_id_ = (0, oberknecht_utils_1.cleanChannelName)(to_broadcaster_id);
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 moderator_id = a.user_id;
                 clientid = a.client_id;
                 if (!from_broadcaster_id_)
                     from_broadcaster_id_ = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         if (!__1.i.regex.numregex().test(from_broadcaster_id_) &&
             __1.i.regex.twitch.usernamereg().test(from_broadcaster_id_)) {
@@ -34,7 +34,7 @@ async function shoutout(sym, from_broadcaster_id, to_broadcaster_id, customtoken
                 .then((u) => {
                 from_broadcaster_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         if (!__1.i.regex.numregex().test(to_broadcaster_id_) &&
             __1.i.regex.twitch.usernamereg().test(to_broadcaster_id_)) {
@@ -42,7 +42,7 @@ async function shoutout(sym, from_broadcaster_id, to_broadcaster_id, customtoken
                 .then((u) => {
                 to_broadcaster_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         from_broadcaster_id_ =
             from_broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;

@@ -16,12 +16,12 @@ export async function vip(sym: string, user_id: string, customtoken?: string) {
     let user_id_ = cleanChannelName(user_id);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           broadcaster_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -32,7 +32,7 @@ export async function vip(sym: string, user_id: string, customtoken?: string) {
         .then((u) => {
           user_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     request(

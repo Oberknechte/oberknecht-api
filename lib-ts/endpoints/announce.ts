@@ -26,13 +26,13 @@ export async function announce(
     let broadcaster_id_ = cleanChannelName(broadcaster_id);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           moderator_id = a.user_id;
           clientid = a.client_id;
           if (!broadcaster_id_) broadcaster_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -43,7 +43,7 @@ export async function announce(
         .then((u) => {
           broadcaster_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     broadcaster_id_ = broadcaster_id_ ?? i.apiclientData[sym]?._options?.userid;

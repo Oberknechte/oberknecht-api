@@ -23,12 +23,12 @@ export async function getBroadcasterSubscriptions(
       let user_id_ = convertToArray(user_id, false);
 
       if (customtoken ?? undefined) {
-        await _validatetoken(sym, customtoken)
+        await _validatetoken(undefined, customtoken)
           .then((a) => {
             clientid = a.client_id;
             broadcaster_id_ = a.user_id;
           })
-          .catch();
+          .catch(reject);
       }
 
       request(

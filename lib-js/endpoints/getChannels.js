@@ -14,13 +14,13 @@ async function getChannels(sym, broadcaster_ids, customtoken) {
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         let broadcaster_ids_ = (0, oberknecht_utils_1.convertToArray)(broadcaster_ids, false);
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 clientid = a.client_id;
                 if (broadcaster_ids_.length === 0)
                     broadcaster_ids_.push(a.user_id);
             })
-                .catch();
+                .catch(reject);
         }
         else {
             if (broadcaster_ids_.length === 0)
@@ -33,7 +33,7 @@ async function getChannels(sym, broadcaster_ids, customtoken) {
                 .then((broadcasters) => {
                 broadcaster_ids_.push(...Object.keys(broadcasters.ids));
             })
-                .catch();
+                .catch(reject);
         }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getChannels")}${(0, oberknecht_utils_1.joinUrlQuery)("broadcaster_id", broadcaster_ids_, true)}`, {
             method: urls_1.urls._method("twitch", "getChannels"),

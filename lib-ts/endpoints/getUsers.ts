@@ -35,7 +35,7 @@ export async function getUsers(
         .then((a) => {
           clientid = a.client_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (!(noautofilterids ?? false)) {

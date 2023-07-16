@@ -18,14 +18,14 @@ async function ban(sym, broadcaster_id, target_user_id, reason, duration, custom
         let moderator_id = __1.i.apiclientData[sym]?._options?.userid;
         let clientid = __1.i.apiclientData[sym]?._options?.clientid;
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 moderator_id = a.user_id;
                 clientid = a.client_id;
                 if (!broadcaster_id_)
                     broadcaster_id_ = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         if (!__1.i.regex.numregex().test(broadcaster_id_) &&
             __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
@@ -33,7 +33,7 @@ async function ban(sym, broadcaster_id, target_user_id, reason, duration, custom
                 .then((u) => {
                 broadcaster_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         broadcaster_id_ = broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;
         if (!__1.i.regex.numregex().test(target_user_id_)) {
@@ -41,7 +41,7 @@ async function ban(sym, broadcaster_id, target_user_id, reason, duration, custom
                 .then((u) => {
                 target_user_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         let reqbody = {
             data: {

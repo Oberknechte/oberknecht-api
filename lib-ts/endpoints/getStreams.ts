@@ -19,11 +19,11 @@ export async function getStreams(
     let filters_: getStreamsFiltersType = recreate(filters ?? {});
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     let reqqueryparams = "";

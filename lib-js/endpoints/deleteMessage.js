@@ -15,14 +15,14 @@ async function deleteMessage(sym, broadcaster_id, message_id, customtoken) {
         let moderator_id = __1.i.apiclientData[sym]?._options?.userid;
         let broadcaster_id_ = (0, oberknecht_utils_1.cleanChannelName)(broadcaster_id);
         if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(sym, customtoken)
+            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
                 .then((a) => {
                 moderator_id = a.user_id;
                 clientid = a.client_id;
                 if (!broadcaster_id_)
                     broadcaster_id_ = a.user_id;
             })
-                .catch();
+                .catch(reject);
         }
         if (!__1.i.regex.numregex().test(broadcaster_id_) &&
             __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
@@ -30,7 +30,7 @@ async function deleteMessage(sym, broadcaster_id, message_id, customtoken) {
                 .then((u) => {
                 broadcaster_id_ = u[1];
             })
-                .catch();
+                .catch(reject);
         }
         broadcaster_id_ = broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "deleteMessage")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}${message_id ? `&message_id=${message_id}` : ""}`, {

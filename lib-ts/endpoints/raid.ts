@@ -28,12 +28,12 @@ export async function raid(
     let to_broadcaster_id_ = cleanChannelName(to_broadcaster_id);
 
     if (customtoken ?? undefined) {
-      await _validatetoken(sym, customtoken)
+      await _validatetoken(undefined, customtoken)
         .then((a) => {
           clientid = a.client_id;
           if (!from_broadcaster_id_) from_broadcaster_id_ = a.user_id;
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -44,7 +44,7 @@ export async function raid(
         .then((u) => {
           from_broadcaster_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     if (
@@ -55,7 +55,7 @@ export async function raid(
         .then((u) => {
           to_broadcaster_id_ = u[1];
         })
-        .catch();
+        .catch(reject);
     }
 
     from_broadcaster_id_ =
