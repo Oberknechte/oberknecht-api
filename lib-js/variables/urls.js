@@ -17,6 +17,9 @@ class urls {
                     customclientid ?? __1.i.apiclientData[sym]?._options?.clientid;
             return r;
         };
+        static revokeToken = {
+            method: "POST",
+        };
         static whisper = {
             endpoint: "/whispers",
             method: "POST",
@@ -170,7 +173,7 @@ class urls {
             (this._(...args)?.endpoint ?? args2.join("/")));
     };
     static _code = (...args2) => {
-        return this._(...args2).code ?? 200;
+        return this._(...args2)?.code ?? 200;
     };
     static _method = (...args2) => {
         return this._(...args2).method ?? "GET";

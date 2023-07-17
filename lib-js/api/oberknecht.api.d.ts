@@ -24,6 +24,7 @@ export declare class oberknechtAPI {
     verify(): Promise<void>;
     destroy(): Promise<void>;
     _validatetoken: (customtoken: string) => Promise<import("../types/endpoints/validateToken").validateTokenResponse>;
+    _revoketoken: (token: string, clientID?: string) => Promise<void>;
     _getUsers: (logins: string | string[] | undefined, ids?: string | string[] | undefined, noautofilterids?: Boolean, customtoken?: string) => Promise<import("../types/_getUsers")._getUsersResponse>;
     _getUser: (user: string) => Promise<[string, string, Object]>;
     ban: (broadcaster_id: string, target_user_id: string, reason: string, customtoken?: string) => Promise<import("../types/endpoints/ban").banResponse>;

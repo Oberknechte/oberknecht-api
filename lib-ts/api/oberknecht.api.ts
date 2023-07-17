@@ -59,6 +59,7 @@ import {
 } from "../types/endpoints/predictions";
 import { endPrediction } from "../endpoints/endPrediction";
 import { getPredictions } from "../endpoints/getPredictions";
+import { _revoketoken } from "../endpoints/_revoketoken";
 let clientSymNum = 0;
 
 export class oberknechtAPI {
@@ -180,6 +181,11 @@ export class oberknechtAPI {
   _validatetoken = (customtoken: string) => {
     return _validatetoken(this.symbol, customtoken);
   };
+
+  _revoketoken = (token: string, clientID?: string) => {
+    return _revoketoken(this.symbol, token, clientID);
+  };
+
   _getUsers = (
     logins: string | string[] | undefined,
     ids?: string | string[] | undefined,

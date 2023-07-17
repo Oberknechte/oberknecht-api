@@ -18,6 +18,10 @@ export class urls {
       return r;
     };
 
+    static revokeToken = {
+      method: "POST",
+    };
+
     static whisper = {
       endpoint: "/whispers",
       method: "POST",
@@ -208,7 +212,7 @@ export class urls {
   };
 
   static _code = (...args2: any) => {
-    return this._(...args2).code ?? 200;
+    return this._(...args2)?.code ?? 200;
   };
 
   static _method = (...args2: any) => {

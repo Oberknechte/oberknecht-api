@@ -48,6 +48,7 @@ const getGames_1 = require("../endpoints/getGames");
 const createPrediction_1 = require("../endpoints/createPrediction");
 const endPrediction_1 = require("../endpoints/endPrediction");
 const getPredictions_1 = require("../endpoints/getPredictions");
+const _revoketoken_1 = require("../endpoints/_revoketoken");
 let clientSymNum = 0;
 class oberknechtAPI {
     #symbol = `oberknechtAPI-${clientSymNum++}`;
@@ -136,6 +137,9 @@ class oberknechtAPI {
     }
     _validatetoken = (customtoken) => {
         return (0, _validatetoken_1._validatetoken)(this.symbol, customtoken);
+    };
+    _revoketoken = (token, clientID) => {
+        return (0, _revoketoken_1._revoketoken)(this.symbol, token, clientID);
     };
     _getUsers = (logins, ids, noautofilterids, customtoken) => {
         return (0, _getUsers_1._getUsers)(this.symbol, logins, ids, noautofilterids, customtoken);

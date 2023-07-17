@@ -6,6 +6,9 @@ export declare class urls {
             "Content-Type": string;
             Authorization: string;
         };
+        revokeToken: {
+            method: string;
+        };
         whisper: {
             endpoint: string;
             method: string;
