@@ -140,6 +140,14 @@ export declare class urls {
             endpoint: string;
             method: string;
         };
+        getClips: {
+            endpoint: string;
+        };
+        createClip: {
+            endpoint: string;
+            method: string;
+            code: number;
+        };
     };
     static ivrfitwitch: {
         new (): {};

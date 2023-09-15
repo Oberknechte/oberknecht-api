@@ -151,6 +151,14 @@ class urls {
             endpoint: "/predictions",
             method: "PATCH",
         };
+        static getClips = {
+            endpoint: "/clips",
+        };
+        static createClip = {
+            endpoint: "/clips",
+            method: "POST",
+            code: 202,
+        };
     };
     static ivrfitwitch = class {
         static _base = "https://api.ivr.fi/v2/twitch";

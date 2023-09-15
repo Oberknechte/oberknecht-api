@@ -1,7 +1,7 @@
 import { i } from "../index";
 import path from "path";
 import fs from "fs";
-import { jsonsplitter } from "@jubewe/jsonsplitter";
+import { jsonsplitter } from "oberknecht-jsonsplitter";
 
 import { isdebug } from "../functions/isdebug";
 import { _log } from "../functions/_log";
@@ -60,6 +60,8 @@ import {
 import { endPrediction } from "../endpoints/endPrediction";
 import { getPredictions } from "../endpoints/getPredictions";
 import { _revoketoken } from "../endpoints/_revoketoken";
+import { getClips } from "../endpoints/getClips";
+import { createClip } from "../endpoints/createClip";
 let clientSymNum = 0;
 
 export class oberknechtAPI {
@@ -575,5 +577,34 @@ export class oberknechtAPI {
       winningOutcomeID,
       customtoken
     );
+  };
+
+  getClips = (
+    broadcaster_id?: string,
+    ids?: string | string[],
+    gameID?: string,
+    startedAt?: string,
+    endedAt?: string,
+    first?: number,
+    before?: string,
+    after?: string,
+    customtoken?: string
+  ) => {
+    return getClips(
+      this.symbol,
+      broadcaster_id,
+      ids,
+      gameID,
+      startedAt,
+      endedAt,
+      first,
+      before,
+      after,
+      customtoken
+    );
+  };
+
+  createClip = (broadcasterID: string, hasDelay?: boolean) => {
+    return createClip(this.symbol, broadcasterID, hasDelay);
   };
 }

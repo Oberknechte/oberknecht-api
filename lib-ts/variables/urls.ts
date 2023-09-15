@@ -184,6 +184,16 @@ export class urls {
       endpoint: "/predictions",
       method: "PATCH",
     };
+
+    static getClips = {
+      endpoint: "/clips",
+    };
+
+    static createClip = {
+      endpoint: "/clips",
+      method: "POST",
+      code: 202,
+    };
   };
 
   static ivrfitwitch = class {

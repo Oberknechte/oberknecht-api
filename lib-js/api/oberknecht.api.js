@@ -7,7 +7,7 @@ exports.oberknechtAPI = void 0;
 const index_1 = require("../index");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
-const jsonsplitter_1 = require("@jubewe/jsonsplitter");
+const oberknecht_jsonsplitter_1 = require("oberknecht-jsonsplitter");
 const isdebug_1 = require("../functions/isdebug");
 const _log_1 = require("../functions/_log");
 const _stackname_1 = require("../functions/_stackname");
@@ -49,6 +49,8 @@ const createPrediction_1 = require("../endpoints/createPrediction");
 const endPrediction_1 = require("../endpoints/endPrediction");
 const getPredictions_1 = require("../endpoints/getPredictions");
 const _revoketoken_1 = require("../endpoints/_revoketoken");
+const getClips_1 = require("../endpoints/getClips");
+const createClip_1 = require("../endpoints/createClip");
 let clientSymNum = 0;
 class oberknechtAPI {
     #symbol = `oberknechtAPI-${clientSymNum++}`;
@@ -84,7 +86,7 @@ class oberknechtAPI {
         if (_options.saveIDs) {
             if (!data.jsonsplitters)
                 data.jsonsplitters = {};
-            let userssplitter = (data.jsonsplitters.users = this.userssplitter = new jsonsplitter_1.jsonsplitter({
+            let userssplitter = (data.jsonsplitters.users = this.userssplitter = new oberknecht_jsonsplitter_1.jsonsplitter({
                 debug: _options.debug,
                 startpath: _options.saveIDsPath,
                 max_keys_in_file: 2000,
@@ -291,6 +293,12 @@ class oberknechtAPI {
     };
     endPrediction = (id, status, winningOutcomeID, customtoken) => {
         return (0, endPrediction_1.endPrediction)(this.symbol, id, status, winningOutcomeID, customtoken);
+    };
+    getClips = (broadcaster_id, ids, gameID, startedAt, endedAt, first, before, after, customtoken) => {
+        return (0, getClips_1.getClips)(this.symbol, broadcaster_id, ids, gameID, startedAt, endedAt, first, before, after, customtoken);
+    };
+    createClip = (broadcasterID, hasDelay) => {
+        return (0, createClip_1.createClip)(this.symbol, broadcasterID, hasDelay);
     };
 }
 exports.oberknechtAPI = oberknechtAPI;

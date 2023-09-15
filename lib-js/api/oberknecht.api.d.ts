@@ -1,4 +1,4 @@
-import { jsonsplitter } from "@jubewe/jsonsplitter";
+import { jsonsplitter } from "oberknecht-jsonsplitter";
 import { colorsType } from "../types/endpoints/color";
 import { announcementColorsType } from "../types/endpoints/annoucement";
 import { eventsubSubscriptionTypesType } from "../types/endpoints/eventsub";
@@ -80,4 +80,6 @@ export declare class oberknechtAPI {
     getPredictions: (ids?: string | string[], first?: number, after?: string, customtoken?: string) => Promise<import("../types/endpoints/predictions").getPredictionResponse>;
     createPrediction: (title: string, outcomes: createPredictionOutcomesType, predictionWindow: number, customtoken?: string) => Promise<import("../types/endpoints/predictions").createPredictionResponse>;
     endPrediction: (id: string, status: endPredictionStatusType, winningOutcomeID?: string, customtoken?: string) => Promise<import("../types/endpoints/predictions").createPredictionResponse>;
+    getClips: (broadcaster_id?: string, ids?: string | string[], gameID?: string, startedAt?: string, endedAt?: string, first?: number, before?: string, after?: string, customtoken?: string) => Promise<import("../types/endpoints/getClips").getClipsResponse>;
+    createClip: (broadcasterID: string, hasDelay?: boolean) => Promise<import("../types/endpoints/createClip").createClipResponse>;
 }
