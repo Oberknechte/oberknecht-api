@@ -49,11 +49,11 @@ export async function getStreams(
 
         if (i.apiclientData[sym]?._options?.saveIDs) {
           dat.data.forEach(async (a) => {
-            await i.apiclientData[sym].jsonsplitters.users.addKey(
+            i.apiclientData[sym].jsonsplitters.users.addKeySync(
               ["logins", a.user_login],
               a.user_id
             );
-            await i.apiclientData[sym].jsonsplitters.users.addKey(
+            i.apiclientData[sym].jsonsplitters.users.addKeySync(
               ["ids", a.user_id],
               a.user_login
             );

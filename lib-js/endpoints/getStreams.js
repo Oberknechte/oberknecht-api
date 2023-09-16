@@ -32,8 +32,8 @@ async function getStreams(sym, filters, customtoken) {
             let dat = JSON.parse(r.body);
             if (__1.i.apiclientData[sym]?._options?.saveIDs) {
                 dat.data.forEach(async (a) => {
-                    await __1.i.apiclientData[sym].jsonsplitters.users.addKey(["logins", a.user_login], a.user_id);
-                    await __1.i.apiclientData[sym].jsonsplitters.users.addKey(["ids", a.user_id], a.user_login);
+                    __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["logins", a.user_login], a.user_id);
+                    __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["ids", a.user_id], a.user_login);
                 });
             }
             return resolve(dat);
