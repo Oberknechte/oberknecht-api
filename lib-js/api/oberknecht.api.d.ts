@@ -33,7 +33,7 @@ export declare class oberknechtAPI {
     clearChat: (broadcaster_id: string, customtoken?: string) => Promise<void>;
     getUsers: (logins: string | string[], ids?: string | string[], noautofilterids?: boolean, customtoken?: string) => Promise<import("../types/endpoints/_getUsers").getUsersResolveType>;
     shoutout: (from_broadcaster_id: string, to_broadcaster_id: string, customtoken?: string) => Promise<void>;
-    timeout: (broadcaster_id: string, target_user_id: string, duration: string, reason?: string, customtoken?: string) => Promise<import("../types/endpoints/ban").banResponse>;
+    timeout: (broadcaster_id: string, target_user_id: string, duration: number, reason?: string, customtoken?: string) => Promise<import("../types/endpoints/ban").banResponse>;
     unban: (broadcaster_id: string, target_user_id: string, customtoken?: string) => Promise<void>;
     untimeout: (broadcaster_id: string, target_user_id: string, customtoken?: string) => Promise<void>;
     whisper: (to_user_id: string, message: string, customtoken: string) => Promise<void>;

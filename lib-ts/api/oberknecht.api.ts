@@ -100,7 +100,7 @@ export class oberknechtAPI {
     );
     _options.saveIDsPath = path.resolve(
       _options.startPath,
-      _options.saveIDsPath ?? "./data/oberknecht-api/userids"
+      _options.saveIDsPath ?? "./userids"
     );
     _options.debug = _options.debug ?? 1;
 
@@ -117,7 +117,7 @@ export class oberknechtAPI {
 
       if (
         !fs.existsSync(_options.saveIDsPath) ||
-        Object.keys(userssplitter._mainpaths).length === 0
+        Object.keys(userssplitter._mainPaths).length === 0
       ) {
         this.userssplitterpromise = userssplitter.createSync({
           logins: {},
@@ -249,7 +249,7 @@ export class oberknechtAPI {
   timeout = (
     broadcaster_id: string,
     target_user_id: string,
-    duration: string,
+    duration: number,
     reason?: string,
     customtoken?: string
   ) => {

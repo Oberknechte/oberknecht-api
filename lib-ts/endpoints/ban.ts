@@ -11,7 +11,7 @@ export async function ban(
   broadcaster_id: string | undefined,
   target_user_id: string,
   reason?: string,
-  duration?: string,
+  duration?: number,
   customtoken?: string
 ) {
   return new Promise<banResponse>(async (resolve, reject) => {
