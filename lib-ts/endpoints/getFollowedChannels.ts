@@ -4,6 +4,7 @@ import { urls } from "../variables/urls";
 import { _validatetoken } from "./_validatetoken";
 import { joinUrlQuery } from "oberknecht-utils";
 import { getFollowedChannelsResponse } from "../types/endpoints/getFollowedChannels";
+import { _getuser } from "../operations/_getuser";
 
 export async function getFollowedChannels(
   sym: string,
@@ -27,7 +28,19 @@ export async function getFollowedChannels(
           userID = a.user_id;
         })
         .catch(reject);
-    };
+    }
+
+    if (
+      broadcasterID &&
+      !i.regex.numregex().test(broadcasterID) &&
+      i.regex.twitch.usernamereg().test(broadcasterID)
+    ) {
+      await _getuser(sym, broadcasterID)
+        .then((u) => {
+          broadcasterID = u[1];
+        })
+        .catch(reject);
+    }
 
     request(
       `${urls._url("twitch", "getFollowedChannels")}${joinUrlQuery(

@@ -6,6 +6,7 @@ const __1 = require("..");
 const urls_1 = require("../variables/urls");
 const _validatetoken_1 = require("./_validatetoken");
 const oberknecht_utils_1 = require("oberknecht-utils");
+const _getuser_1 = require("../operations/_getuser");
 async function getFollowedChannels(sym, userID, broadcasterID, first, after, customtoken) {
     return new Promise(async (resolve, reject) => {
         if (!(sym ?? undefined) && !(customtoken ?? undefined))
@@ -20,7 +21,15 @@ async function getFollowedChannels(sym, userID, broadcasterID, first, after, cus
             })
                 .catch(reject);
         }
-        ;
+        if (broadcasterID &&
+            !__1.i.regex.numregex().test(broadcasterID) &&
+            __1.i.regex.twitch.usernamereg().test(broadcasterID)) {
+            await (0, _getuser_1._getuser)(sym, broadcasterID)
+                .then((u) => {
+                broadcasterID = u[1];
+            })
+                .catch(reject);
+        }
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getFollowedChannels")}${(0, oberknecht_utils_1.joinUrlQuery)(["user_id", "broadcaster_id", "first", "after"], [userID, broadcasterID, first, after], true)}`, {
             method: urls_1.urls._method("twitch", "getFollowedChannels"),
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
