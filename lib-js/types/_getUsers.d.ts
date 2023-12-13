@@ -1,8 +1,8 @@
 import { userEntry } from "./endpoints/_getUsers";
-export type ids = Record<string, string>;
-export type logins = Record<string, string>;
-export type details = Record<string, userEntry>;
-export type _getUsersResponse = {
+export declare type ids = Record<string, string>;
+export declare type logins = Record<string, string>;
+export declare type details = Record<string, userEntry>;
+export declare type _getUsersResponse = {
     ids: ids;
     logins: logins;
     details: details;

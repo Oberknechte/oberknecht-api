@@ -148,6 +148,9 @@ export declare class urls {
             method: string;
             code: number;
         };
+        getFollowedChannels: {
+            endpoint: string;
+        };
     };
     static ivrfitwitch: {
         new (): {};

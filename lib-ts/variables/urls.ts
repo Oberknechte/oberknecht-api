@@ -194,6 +194,10 @@ export class urls {
       method: "POST",
       code: 202,
     };
+
+    static getFollowedChannels = {
+      endpoint: "/channels/followed",
+    };
   };
 
   static ivrfitwitch = class {

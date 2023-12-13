@@ -62,6 +62,7 @@ import { getPredictions } from "../endpoints/getPredictions";
 import { _revoketoken } from "../endpoints/_revoketoken";
 import { getClips } from "../endpoints/getClips";
 import { createClip } from "../endpoints/createClip";
+import { getFollowedChannels } from "../endpoints/getFollowedChannels";
 let clientSymNum = 0;
 
 export class oberknechtAPI {
@@ -96,7 +97,7 @@ export class oberknechtAPI {
     let data = (i.apiclientData[this.symbol] = {} as Record<string, any>);
     _options.startPath = path.resolve(
       process.cwd(),
-      _options.startPath ?? "./"
+      _options.startPath ?? "./data/oberknecht-api"
     );
     _options.saveIDsPath = path.resolve(
       _options.startPath,
@@ -606,5 +607,22 @@ export class oberknechtAPI {
 
   createClip = (broadcasterID: string, hasDelay?: boolean) => {
     return createClip(this.symbol, broadcasterID, hasDelay);
+  };
+
+  getFollowedChannels = (
+    userID?: string,
+    broadcasterID?: string,
+    first?: string,
+    after?: string,
+    customtoken?: string
+  ) => {
+    return getFollowedChannels(
+      this.symbol,
+      userID,
+      broadcasterID,
+      first,
+      after,
+      customtoken
+    );
   };
 }

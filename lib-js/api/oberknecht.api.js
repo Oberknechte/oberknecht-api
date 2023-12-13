@@ -51,6 +51,7 @@ const getPredictions_1 = require("../endpoints/getPredictions");
 const _revoketoken_1 = require("../endpoints/_revoketoken");
 const getClips_1 = require("../endpoints/getClips");
 const createClip_1 = require("../endpoints/createClip");
+const getFollowedChannels_1 = require("../endpoints/getFollowedChannels");
 let clientSymNum = 0;
 class oberknechtAPI {
     #symbol = `oberknechtAPI-${clientSymNum++}`;
@@ -79,7 +80,7 @@ class oberknechtAPI {
             return;
         // if (!options?.token) throw Error(`token is undefined`);
         let data = (index_1.i.apiclientData[this.symbol] = {});
-        _options.startPath = path_1.default.resolve(process.cwd(), _options.startPath ?? "./");
+        _options.startPath = path_1.default.resolve(process.cwd(), _options.startPath ?? "./data/oberknecht-api");
         _options.saveIDsPath = path_1.default.resolve(_options.startPath, _options.saveIDsPath ?? "./userids");
         _options.debug = _options.debug ?? 1;
         this._options = data._options = _options;
@@ -299,6 +300,9 @@ class oberknechtAPI {
     };
     createClip = (broadcasterID, hasDelay) => {
         return (0, createClip_1.createClip)(this.symbol, broadcasterID, hasDelay);
+    };
+    getFollowedChannels = (userID, broadcasterID, first, after, customtoken) => {
+        return (0, getFollowedChannels_1.getFollowedChannels)(this.symbol, userID, broadcasterID, first, after, customtoken);
     };
 }
 exports.oberknechtAPI = oberknechtAPI;

@@ -1,2 +1,2 @@
 export declare const subscriptionTiers: string[];
-export type subscriptionTiersType = typeof subscriptionTiers[number];
+export declare type subscriptionTiersType = typeof subscriptionTiers[number];

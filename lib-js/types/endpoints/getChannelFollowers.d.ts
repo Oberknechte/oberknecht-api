@@ -1,10 +1,10 @@
-export type channelFollowerEntry = {
+export declare type channelFollowerEntry = {
     user_id: string;
     user_name: string;
     user_login: string;
     followed_at: string;
 };
-export type channelFollowersResponse = {
+export declare type channelFollowersResponse = {
     total: number;
     data: Array<channelFollowerEntry>;
     pagination: {

@@ -1,6 +1,6 @@
 export declare const chatSettingsKeys: readonly ["emote_mode", "follower_mode", "follower_mode_duration", "non_moderator_chat_delay", "non_moderator_chat_delay_duration", "slow_mode", "slow_mode_wait_time", "subscriber_mode", "unique_chat_mode"];
-export type chatSettingKeyType = typeof chatSettingsKeys[number];
-export type chatSettingEntry = {
+export declare type chatSettingKeyType = typeof chatSettingsKeys[number];
+export declare type chatSettingEntry = {
     broadcaster_id?: string;
     slow_mode?: boolean;
     slow_mode_wait_time?: null | number;
@@ -12,8 +12,8 @@ export type chatSettingEntry = {
     non_moderator_chat_delay?: boolean;
     non_moderator_chat_delay_duration?: null | number;
 };
-export type chatSettingsResponse = {
+export declare type chatSettingsResponse = {
     data: Array<chatSettingEntry>;
 };
-export type getChatSettingsResponse = chatSettingsResponse;
-export type updateChatSettingsResponse = chatSettingsResponse;
+export declare type getChatSettingsResponse = chatSettingsResponse;
+export declare type updateChatSettingsResponse = chatSettingsResponse;

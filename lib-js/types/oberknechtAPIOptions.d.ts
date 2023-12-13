@@ -1,4 +1,4 @@
-export type oberknechtAPIOptionsType = {
+export declare type oberknechtAPIOptionsType = {
     token?: string;
     debug?: number;
     startPath?: string;
