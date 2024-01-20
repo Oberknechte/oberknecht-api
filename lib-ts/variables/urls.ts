@@ -3,7 +3,11 @@ import { i } from "..";
 export class urls {
   static twitch = class {
     static _base = "https://api.twitch.tv/helix";
-    static _headers = (sym: string, customtoken: any, customclientid: any) => {
+    static _headers = (
+      sym: string,
+      customtoken: any,
+      customclientid: any
+    ): Record<string, any> => {
       let r = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${
@@ -15,6 +19,7 @@ export class urls {
       if (customclientid ?? i.apiclientData[sym]?._options?.clientid)
         r["Client-ID"] =
           customclientid ?? i.apiclientData[sym]?._options?.clientid;
+      // @ts-ignore
       return r;
     };
 

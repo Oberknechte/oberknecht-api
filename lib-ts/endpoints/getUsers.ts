@@ -91,14 +91,12 @@ export async function getUsers(
               headers: urls.twitch._headers(sym, customtoken, clientid),
             },
             (e, r) => {
-              if (e || r.statusCode !== urls._code(...urlPath))
-                return reject2(Error(e ?? r.body));
-
-              let dat = JSON.parse(r.body);
+              if (e || r.status !== urls._code(...urlPath))
+                return reject2(Error(e ?? r.data));
 
               let d = i.apiclientData[sym]._options?.use3rdparty?.getUsers
-                ? dat
-                : dat.data;
+                ? r.data
+                : r.data.data;
 
               d.forEach((a) => {
                 let b = {

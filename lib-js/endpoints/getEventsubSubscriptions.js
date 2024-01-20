@@ -22,9 +22,9 @@ async function getEventsubSubscriptions(sym, customtoken) {
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
             if (e ||
-                r.statusCode !== urls_1.urls._code("twitch", "getEventsubSubscriptions"))
-                return reject(Error(e ?? r.body));
-            return resolve(JSON.parse(r.body));
+                r.status !== urls_1.urls._code("twitch", "getEventsubSubscriptions"))
+                return reject(Error(e ?? r.data));
+            return resolve(r.data);
         });
     });
 }

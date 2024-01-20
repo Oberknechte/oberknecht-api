@@ -66,8 +66,8 @@ export async function announce(
         body: JSON.stringify(reqbody),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "announce"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "announce"))
+          return reject(Error(e ?? r.data));
 
         return resolve();
       }

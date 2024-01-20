@@ -66,8 +66,8 @@ export async function unban(
         headers: urls.twitch._headers(sym, customtoken, clientid),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "unban"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "unban"))
+          return reject(Error(e ?? r.data));
 
         return resolve();
       }

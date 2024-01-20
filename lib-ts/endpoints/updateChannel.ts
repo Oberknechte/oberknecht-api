@@ -50,8 +50,8 @@ export async function updateChannel(
         body: JSON.stringify(channelData_),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "updateChannel"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "updateChannel"))
+          return reject(Error(e ?? r.data));
 
         return resolve();
       }

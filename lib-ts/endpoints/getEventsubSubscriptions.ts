@@ -32,11 +32,11 @@ export async function getEventsubSubscriptions(
         (e, r) => {
           if (
             e ||
-            r.statusCode !== urls._code("twitch", "getEventsubSubscriptions")
+            r.status !== urls._code("twitch", "getEventsubSubscriptions")
           )
-            return reject(Error(e ?? r.body));
+            return reject(Error(e ?? r.data));
 
-          return resolve(JSON.parse(r.body));
+          return resolve(r.data);
         }
       );
     }

@@ -54,10 +54,10 @@ export async function addEventsubSubscription(
         body: JSON.stringify(body),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "eventsubSubscriptions"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "eventsubSubscriptions"))
+          return reject(Error(e ?? r.data));
 
-        return resolve(JSON.parse(r.body));
+        return resolve(r.data);
       }
     );
   });

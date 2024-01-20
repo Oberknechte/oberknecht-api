@@ -50,8 +50,8 @@ async function shoutout(sym, from_broadcaster_id, to_broadcaster_id, customtoken
             method: urls_1.urls._method("twitch", "shoutout"),
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "shoutout"))
-                return reject(Error(e ?? r.body));
+            if (e || r.status !== urls_1.urls._code("twitch", "shoutout"))
+                return reject(Error(e ?? r.data));
             return resolve();
         });
     });

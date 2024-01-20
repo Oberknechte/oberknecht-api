@@ -33,9 +33,9 @@ async function addEventsubSubscription(sym, type, version, condition, transport,
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
             body: JSON.stringify(body),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "eventsubSubscriptions"))
-                return reject(Error(e ?? r.body));
-            return resolve(JSON.parse(r.body));
+            if (e || r.status !== urls_1.urls._code("twitch", "eventsubSubscriptions"))
+                return reject(Error(e ?? r.data));
+            return resolve(r.data);
         });
     });
 }

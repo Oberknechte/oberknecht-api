@@ -2,10 +2,7 @@ export declare class urls {
     static twitch: {
         new (): {};
         _base: string;
-        _headers: (sym: string, customtoken: any, customclientid: any) => {
-            "Content-Type": string;
-            Authorization: string;
-        };
+        _headers: (sym: string, customtoken: any, customclientid: any) => Record<string, any>;
         revokeToken: {
             method: string;
         };

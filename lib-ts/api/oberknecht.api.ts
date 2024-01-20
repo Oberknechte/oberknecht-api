@@ -63,7 +63,20 @@ import { _revoketoken } from "../endpoints/_revoketoken";
 import { getClips } from "../endpoints/getClips";
 import { createClip } from "../endpoints/createClip";
 import { getFollowedChannels } from "../endpoints/getFollowedChannels";
+import { request } from "oberknecht-request";
 let clientSymNum = 0;
+
+request(null, null, null, {
+  returnAfter: true,
+  callbackOptions: {
+    callback: (a) => {},
+  },
+  options: {
+    timeout: 5000,
+  },
+  returnOriginalResponse: true,
+  // delayBetweenRequests: 100,
+});
 
 export class oberknechtAPI {
   readonly #symbol: string = `oberknechtAPI-${clientSymNum++}`;

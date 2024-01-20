@@ -26,10 +26,9 @@ async function getBroadcasterSubscriptions(sym, customtoken, user_id, first, aft
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
             if (e ||
-                r.statusCode !== urls_1.urls._code("twitch", "getBroadcasterSubscriptions"))
-                return reject(Error(e ?? r.body));
-            let dat = JSON.parse(r.body);
-            return resolve(dat);
+                r.status !== urls_1.urls._code("twitch", "getBroadcasterSubscriptions"))
+                return reject(Error(e ?? r.data));
+            return resolve(r.data);
         });
     });
 }

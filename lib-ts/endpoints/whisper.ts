@@ -57,8 +57,8 @@ export async function whisper(
         body: JSON.stringify(reqbody),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "whisper"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "whisper"))
+          return reject(Error(e ?? r.data));
 
         return resolve();
       }

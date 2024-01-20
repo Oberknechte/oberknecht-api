@@ -36,8 +36,8 @@ async function vip(sym, user_id, customtoken) {
             method: urls_1.urls._method("twitch", "vip"),
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "vip"))
-                return reject(Error(e ?? r.body));
+            if (e || r.status !== urls_1.urls._code("twitch", "vip"))
+                return reject(Error(e ?? r.data));
             return resolve();
         });
     });

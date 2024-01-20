@@ -29,10 +29,9 @@ async function getGames(sym, ids, names, igdbIDs, customtoken) {
             method: urls_1.urls._method("twitch", "getGames"),
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "getGames"))
-                return reject(Error(e ?? r.body));
-            let dat = JSON.parse(r.body);
-            return resolve(dat);
+            if (e || r.status !== urls_1.urls._code("twitch", "getGames"))
+                return reject(Error(e ?? r.data));
+            return resolve(r.data);
         });
     });
 }

@@ -44,12 +44,12 @@ export async function getBroadcasterSubscriptions(
         (e, r) => {
           if (
             e ||
-            r.statusCode !== urls._code("twitch", "getBroadcasterSubscriptions")
+            r.status !== urls._code("twitch", "getBroadcasterSubscriptions")
           )
-            return reject(Error(e ?? r.body));
+            return reject(Error(e ?? r.data));
 
-          let dat = JSON.parse(r.body);
-          return resolve(dat);
+          
+          return resolve(r.data);
         }
       );
     }

@@ -47,10 +47,9 @@ async function getClips(sym, broadcaster_id, ids, gameID, startedAt, endedAt, fi
             method: urls_1.urls._method("twitch", "getClips"),
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "getClips"))
-                return reject(Error(e ?? r.body));
-            let dat = JSON.parse(r.body);
-            return resolve(dat);
+            if (e || r.status !== urls_1.urls._code("twitch", "getClips"))
+                return reject(Error(e ?? r.data));
+            return resolve(r.data);
         });
     });
 }

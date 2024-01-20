@@ -101,11 +101,11 @@ export async function updateChatSettings(
         body: JSON.stringify(reqbody),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "updateChatSettings"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "updateChatSettings"))
+          return reject(Error(e ?? r.data));
 
-        let dat = JSON.parse(r.body);
-        return resolve(dat);
+        
+        return resolve(r.data);
       }
     );
   });

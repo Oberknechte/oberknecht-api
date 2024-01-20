@@ -16,10 +16,9 @@ async function _validatetoken(sym, customtoken) {
                 Authorization: `OAuth ${customtoken_ ?? __1.i.apiclientData[sym]?._options?.token}`,
             },
         }, (e, r) => {
-            if (e || r.statusCode !== 200)
-                return reject(Error(e ?? r.body));
-            let dat = JSON.parse(r.body);
-            return resolve(dat);
+            if (e || r.status !== 200)
+                return reject(Error(e ?? r.data));
+            return resolve(r.data);
         });
     });
 }

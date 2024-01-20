@@ -73,8 +73,8 @@ export async function shoutout(
         headers: urls.twitch._headers(sym, customtoken, clientid),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "shoutout"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "shoutout"))
+          return reject(Error(e ?? r.data));
 
         return resolve();
       }

@@ -52,7 +52,19 @@ const _revoketoken_1 = require("../endpoints/_revoketoken");
 const getClips_1 = require("../endpoints/getClips");
 const createClip_1 = require("../endpoints/createClip");
 const getFollowedChannels_1 = require("../endpoints/getFollowedChannels");
+const oberknecht_request_1 = require("oberknecht-request");
 let clientSymNum = 0;
+(0, oberknecht_request_1.request)(null, null, null, {
+    returnAfter: true,
+    callbackOptions: {
+        callback: (a) => { },
+    },
+    options: {
+        timeout: 5000,
+    },
+    returnOriginalResponse: true,
+    // delayBetweenRequests: 100,
+});
 class oberknechtAPI {
     #symbol = `oberknechtAPI-${clientSymNum++}`;
     get symbol() {

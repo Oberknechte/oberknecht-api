@@ -36,8 +36,8 @@ async function mod(sym, user_id, customtoken) {
             method: urls_1.urls._method("twitch", "mod"),
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "mod"))
-                return reject(Error(e ?? r.body));
+            if (e || r.status !== urls_1.urls._code("twitch", "mod"))
+                return reject(Error(e ?? r.data));
             return resolve();
         });
     });

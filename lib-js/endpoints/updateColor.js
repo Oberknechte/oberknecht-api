@@ -25,8 +25,8 @@ async function updateColor(sym, color, customtoken) {
             method: urls_1.urls._method("twitch", "updateColor"),
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "updateColor"))
-                return reject(Error(e ?? r.body));
+            if (e || r.status !== urls_1.urls._code("twitch", "updateColor"))
+                return reject(Error(e ?? r.data));
             return resolve();
         });
     });

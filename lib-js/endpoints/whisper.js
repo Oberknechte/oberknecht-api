@@ -40,8 +40,8 @@ async function whisper(sym, to_user_id, message, customtoken) {
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
             body: JSON.stringify(reqbody),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "whisper"))
-                return reject(Error(e ?? r.body));
+            if (e || r.status !== urls_1.urls._code("twitch", "whisper"))
+                return reject(Error(e ?? r.data));
             return resolve();
         });
     });

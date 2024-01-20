@@ -15,6 +15,7 @@ class urls {
             if (customclientid ?? __1.i.apiclientData[sym]?._options?.clientid)
                 r["Client-ID"] =
                     customclientid ?? __1.i.apiclientData[sym]?._options?.clientid;
+            // @ts-ignore
             return r;
         };
         static revokeToken = {

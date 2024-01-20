@@ -24,10 +24,9 @@ export async function _validatetoken(
         },
       },
       (e, r) => {
-        if (e || r.statusCode !== 200) return reject(Error(e ?? r.body));
+        if (e || r.status !== 200) return reject(Error(e ?? r.data));
 
-        let dat = JSON.parse(r.body);
-        return resolve(dat);
+        return resolve(r.data);
       }
     );
   });

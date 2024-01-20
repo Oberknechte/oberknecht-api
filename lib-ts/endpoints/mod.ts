@@ -45,8 +45,8 @@ export async function mod(sym: string, user_id: string, customtoken?: string) {
         headers: urls.twitch._headers(sym, customtoken, clientid),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "mod"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "mod"))
+          return reject(Error(e ?? r.data));
 
         return resolve();
       }

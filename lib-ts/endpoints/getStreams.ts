@@ -42,13 +42,11 @@ export async function getStreams(
         headers: urls.twitch._headers(sym, customtoken, clientid),
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "getStreams"))
-          return reject(Error(e ?? r.body));
-
-        let dat = JSON.parse(r.body);
+        if (e || r.status !== urls._code("twitch", "getStreams"))
+          return reject(Error(e ?? r.data));
 
         if (i.apiclientData[sym]?._options?.saveIDs) {
-          dat.data.forEach(async (a) => {
+          r.data.data.forEach(async (a) => {
             i.apiclientData[sym].jsonsplitters.users.addKeySync(
               ["logins", a.user_login],
               a.user_id
@@ -60,7 +58,7 @@ export async function getStreams(
           });
         }
 
-        return resolve(dat);
+        return resolve(r.data);
       }
     );
   });

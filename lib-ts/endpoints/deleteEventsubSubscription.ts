@@ -37,9 +37,9 @@ export async function deleteEventsubSubscription(
       (e, r) => {
         if (
           e ||
-          r.statusCode !== urls._code("twitch", "deleteEventsubSubscription")
+          r.status !== urls._code("twitch", "deleteEventsubSubscription")
         )
-          return reject(Error(e ?? r.body));
+          return reject(Error(e ?? r.data));
 
         return resolve();
       }

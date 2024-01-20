@@ -46,8 +46,8 @@ async function announce(sym, broadcaster_id, message, color /** @default color "
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
             body: JSON.stringify(reqbody),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "announce"))
-                return reject(Error(e ?? r.body));
+            if (e || r.status !== urls_1.urls._code("twitch", "announce"))
+                return reject(Error(e ?? r.data));
             return resolve();
         });
     });

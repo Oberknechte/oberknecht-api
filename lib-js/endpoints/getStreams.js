@@ -27,16 +27,15 @@ async function getStreams(sym, filters, customtoken) {
             method: urls_1.urls._method("twitch", "getStreams"),
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "getStreams"))
-                return reject(Error(e ?? r.body));
-            let dat = JSON.parse(r.body);
+            if (e || r.status !== urls_1.urls._code("twitch", "getStreams"))
+                return reject(Error(e ?? r.data));
             if (__1.i.apiclientData[sym]?._options?.saveIDs) {
-                dat.data.forEach(async (a) => {
+                r.data.data.forEach(async (a) => {
                     __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["logins", a.user_login], a.user_id);
                     __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["ids", a.user_id], a.user_login);
                 });
             }
-            return resolve(dat);
+            return resolve(r.data);
         });
     });
 }

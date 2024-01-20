@@ -46,8 +46,8 @@ export async function _revoketoken(
         body: `client_id=${clientID_}&token=${token_}`,
       },
       (e, r) => {
-        if (e || r.statusCode !== urls._code("twitch", "revokeToken"))
-          return reject(Error(e ?? r.body));
+        if (e || r.status !== urls._code("twitch", "revokeToken"))
+          return reject(Error(e ?? r.data));
 
         return resolve2();
       }

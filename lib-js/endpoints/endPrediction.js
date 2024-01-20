@@ -36,10 +36,9 @@ customtoken) {
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
             body: JSON.stringify(body),
         }, (e, r) => {
-            if (e || r.statusCode !== urls_1.urls._code("twitch", "endPrediction"))
-                return reject(Error(e ?? r.body));
-            let dat = JSON.parse(r.body);
-            return resolve(dat);
+            if (e || r.status !== urls_1.urls._code("twitch", "endPrediction"))
+                return reject(Error(e ?? r.data));
+            return resolve(r.data);
         });
     });
 }
