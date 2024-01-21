@@ -640,7 +640,7 @@ export class oberknechtAPI {
     );
   };
 
-  getModeratedChannels = (userID?: string, first?: number, after?: string) => {
-    return getModeratedChannels(this.symbol, userID, first, after);
+  getModeratedChannels = (userID?: string, first?: number, after?: string, customtoken?: string) => {
+    return getModeratedChannels(this.symbol, userID, first, after, customtoken);
   };
 }

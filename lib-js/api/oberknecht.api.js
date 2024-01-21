@@ -317,8 +317,8 @@ class oberknechtAPI {
     getFollowedChannels = (userID, broadcasterID, first, after, customtoken) => {
         return (0, getFollowedChannels_1.getFollowedChannels)(this.symbol, userID, broadcasterID, first, after, customtoken);
     };
-    getModeratedChannels = (userID, first, after) => {
-        return (0, getModeratedChannels_1.getModeratedChannels)(this.symbol, userID, first, after);
+    getModeratedChannels = (userID, first, after, customtoken) => {
+        return (0, getModeratedChannels_1.getModeratedChannels)(this.symbol, userID, first, after, customtoken);
     };
 }
 exports.oberknechtAPI = oberknechtAPI;
