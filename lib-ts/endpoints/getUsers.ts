@@ -92,7 +92,7 @@ export async function getUsers(
             },
             (e, r) => {
               if (e || r.status !== urls._code(...urlPath))
-                return reject2(Error(e ?? r.data));
+                return reject2(Error(e.stack ?? r.data));
 
               let d = i.apiclientData[sym]._options?.use3rdparty?.getUsers
                 ? r.data

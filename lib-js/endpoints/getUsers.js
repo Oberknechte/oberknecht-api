@@ -53,7 +53,7 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
                     headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
                 }, (e, r) => {
                     if (e || r.status !== urls_1.urls._code(...urlPath))
-                        return reject2(Error(e ?? r.data));
+                        return reject2(Error(e.stack ?? r.data));
                     let d = __1.i.apiclientData[sym]._options?.use3rdparty?.getUsers
                         ? r.data
                         : r.data.data;
