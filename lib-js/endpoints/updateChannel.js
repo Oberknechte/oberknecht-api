@@ -38,7 +38,7 @@ async function updateChannel(sym, channelData, customtoken) {
             body: JSON.stringify(channelData_),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "updateChannel"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             return resolve();
         });
     });

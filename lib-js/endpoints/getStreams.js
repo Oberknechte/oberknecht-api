@@ -28,7 +28,7 @@ async function getStreams(sym, filters, customtoken) {
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "getStreams"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             if (__1.i.apiclientData[sym]?._options?.saveIDs) {
                 r.data.data.forEach(async (a) => {
                     __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["logins", a.user_login], a.user_id);

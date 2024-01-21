@@ -38,7 +38,7 @@ async function deleteMessage(sym, broadcaster_id, message_id, customtoken) {
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "deleteMessage"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             return resolve();
         });
     });

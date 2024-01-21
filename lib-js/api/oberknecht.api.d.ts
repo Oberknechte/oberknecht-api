@@ -83,4 +83,5 @@ export declare class oberknechtAPI {
     getClips: (broadcaster_id?: string, ids?: string | string[], gameID?: string, startedAt?: string, endedAt?: string, first?: number, before?: string, after?: string, customtoken?: string) => Promise<import("../types/endpoints/getClips").getClipsResponse>;
     createClip: (broadcasterID: string, hasDelay?: boolean) => Promise<import("../types/endpoints/createClip").createClipResponse>;
     getFollowedChannels: (userID?: string, broadcasterID?: string, first?: string, after?: string, customtoken?: string) => Promise<import("../types/endpoints/getFollowedChannels").getFollowedChannelsResponse>;
+    getModeratedChannels: (userID?: string, first?: number, after?: string) => Promise<import("../types/endpoints/getModeratedChannels").getModeratedChannelsResponse>;
 }

@@ -35,7 +35,7 @@ export async function updateColor(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "updateColor"))
-          return reject(Error(e ?? r.data));
+          return reject(Error(e.stack ?? r.data));
 
         return resolve();
       }

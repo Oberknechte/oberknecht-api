@@ -40,7 +40,7 @@ async function _revoketoken(sym, token, clientID) {
             body: `client_id=${clientID_}&token=${token_}`,
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "revokeToken"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             return resolve2();
         });
     });

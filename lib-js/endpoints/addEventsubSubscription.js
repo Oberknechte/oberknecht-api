@@ -34,7 +34,7 @@ async function addEventsubSubscription(sym, type, version, condition, transport,
             body: JSON.stringify(body),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "eventsubSubscriptions"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             return resolve(r.data);
         });
     });

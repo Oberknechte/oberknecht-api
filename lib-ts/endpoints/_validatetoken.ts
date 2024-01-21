@@ -24,7 +24,7 @@ export async function _validatetoken(
         },
       },
       (e, r) => {
-        if (e || r.status !== 200) return reject(Error(e ?? r.data));
+        if (e || r.status !== 200) return reject(Error(e.stack ?? r.data));
 
         return resolve(r.data);
       }

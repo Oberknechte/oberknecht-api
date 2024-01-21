@@ -34,7 +34,7 @@ export async function getEventsubSubscriptions(
             e ||
             r.status !== urls._code("twitch", "getEventsubSubscriptions")
           )
-            return reject(Error(e ?? r.data));
+            return reject(Error(e.stack ?? r.data));
 
           return resolve(r.data);
         }

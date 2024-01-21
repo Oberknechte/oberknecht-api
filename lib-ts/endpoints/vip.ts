@@ -46,7 +46,7 @@ export async function vip(sym: string, user_id: string, customtoken?: string) {
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "vip"))
-          return reject(Error(e ?? r.data));
+          return reject(Error(e.stack ?? r.data));
 
         return resolve();
       }

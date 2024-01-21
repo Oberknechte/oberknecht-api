@@ -64,6 +64,7 @@ import { getClips } from "../endpoints/getClips";
 import { createClip } from "../endpoints/createClip";
 import { getFollowedChannels } from "../endpoints/getFollowedChannels";
 import { request } from "oberknecht-request";
+import { getModeratedChannels } from "../endpoints/getModeratedChannels";
 let clientSymNum = 0;
 
 request(null, null, null, {
@@ -637,5 +638,9 @@ export class oberknechtAPI {
       after,
       customtoken
     );
+  };
+
+  getModeratedChannels = (userID?: string, first?: number, after?: string) => {
+    return getModeratedChannels(this.symbol, userID, first, after);
   };
 }

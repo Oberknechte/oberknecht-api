@@ -40,7 +40,7 @@ async function getColor(sym, userID, customtoken) {
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "getColor"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             return resolve(r.data);
         });
     });

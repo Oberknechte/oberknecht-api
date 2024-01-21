@@ -163,6 +163,10 @@ class urls {
         static getFollowedChannels = {
             endpoint: "/channels/followed",
         };
+        static getModeratedChannels = {
+            endpoint: "/moderation/channels",
+            scopes: ["user:read:moderated_channels"],
+        };
     };
     static ivrfitwitch = class {
         static _base = "https://api.ivr.fi/v2/twitch";

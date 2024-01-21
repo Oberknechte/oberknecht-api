@@ -23,7 +23,7 @@ async function getEventsubSubscriptions(sym, customtoken) {
         }, (e, r) => {
             if (e ||
                 r.status !== urls_1.urls._code("twitch", "getEventsubSubscriptions"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             return resolve(r.data);
         });
     });

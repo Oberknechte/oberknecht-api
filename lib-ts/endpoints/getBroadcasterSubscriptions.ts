@@ -46,7 +46,7 @@ export async function getBroadcasterSubscriptions(
             e ||
             r.status !== urls._code("twitch", "getBroadcasterSubscriptions")
           )
-            return reject(Error(e ?? r.data));
+            return reject(Error(e.stack ?? r.data));
 
           
           return resolve(r.data);

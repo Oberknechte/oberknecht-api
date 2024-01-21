@@ -26,7 +26,7 @@ async function deleteEventsubSubscription(sym, id, customtoken) {
         }, (e, r) => {
             if (e ||
                 r.status !== urls_1.urls._code("twitch", "deleteEventsubSubscription"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             return resolve();
         });
     });

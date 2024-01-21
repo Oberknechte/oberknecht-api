@@ -53,6 +53,7 @@ const getClips_1 = require("../endpoints/getClips");
 const createClip_1 = require("../endpoints/createClip");
 const getFollowedChannels_1 = require("../endpoints/getFollowedChannels");
 const oberknecht_request_1 = require("oberknecht-request");
+const getModeratedChannels_1 = require("../endpoints/getModeratedChannels");
 let clientSymNum = 0;
 (0, oberknecht_request_1.request)(null, null, null, {
     returnAfter: true,
@@ -315,6 +316,9 @@ class oberknechtAPI {
     };
     getFollowedChannels = (userID, broadcasterID, first, after, customtoken) => {
         return (0, getFollowedChannels_1.getFollowedChannels)(this.symbol, userID, broadcasterID, first, after, customtoken);
+    };
+    getModeratedChannels = (userID, first, after) => {
+        return (0, getModeratedChannels_1.getModeratedChannels)(this.symbol, userID, first, after);
     };
 }
 exports.oberknechtAPI = oberknechtAPI;

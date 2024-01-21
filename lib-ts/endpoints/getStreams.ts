@@ -43,7 +43,7 @@ export async function getStreams(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "getStreams"))
-          return reject(Error(e ?? r.data));
+          return reject(Error(e.stack ?? r.data));
 
         if (i.apiclientData[sym]?._options?.saveIDs) {
           r.data.data.forEach(async (a) => {

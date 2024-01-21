@@ -148,6 +148,10 @@ export declare class urls {
         getFollowedChannels: {
             endpoint: string;
         };
+        getModeratedChannels: {
+            endpoint: string;
+            scopes: string[];
+        };
     };
     static ivrfitwitch: {
         new (): {};

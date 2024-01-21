@@ -72,7 +72,7 @@ export async function raid(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "raid"))
-          return reject(Error(e ?? r.data));
+          return reject(Error(e.stack ?? r.data));
 
         
         return resolve(r.data);

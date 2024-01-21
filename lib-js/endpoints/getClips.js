@@ -48,7 +48,7 @@ async function getClips(sym, broadcaster_id, ids, gameID, startedAt, endedAt, fi
             headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "getClips"))
-                return reject(Error(e ?? r.data));
+                return reject(Error(e.stack ?? r.data));
             return resolve(r.data);
         });
     });
