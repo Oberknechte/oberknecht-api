@@ -12,7 +12,7 @@ export async function _validatetoken<useOldFormatType extends boolean>(
   customToken?: string,
   useOldFormat?: useOldFormatType
 ) {
-  checkThrowMissingParams([sym], ["sym"], true);
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
 
   return new Promise<
     useOldFormatType extends true

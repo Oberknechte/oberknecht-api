@@ -6,7 +6,7 @@ const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
 const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
 async function _validatetoken(sym, customToken, useOldFormat) {
-    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym], ["sym"], true);
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
     return new Promise((resolve, reject) => {
         let customtoken_ = customToken;
         if (sym && !customToken) {
