@@ -1,51 +1,43 @@
 import { request } from "oberknecht-request";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
 import { pollStatusType, endPollResponse } from "../types/endpoints/poll";
-import { i } from "..";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { cleanChannelName } from "oberknecht-utils";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function endPoll(
   sym: string,
   id: string,
   status: pollStatusType,
-  customtoken?: string
+  broadcasterID: undefined,
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+  checkThrowMissingParams([id, status], ["id", "status"]);
+
+  let { clientID, accessToken, userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
+
+  let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
+
   return new Promise<endPollResponse>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
-    if (!(id ?? undefined) || !(status ?? undefined))
-      return reject(Error("id or status is undefined"));
-
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-    let broadcaster_id_ = i.apiclientData[sym]?._options?.userid;
-
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-          broadcaster_id_ = a.user_id;
-        })
-        .catch(reject);
-    }
-
-    let body = {
-      broadcaster_id: broadcaster_id_,
-      id: id,
-      status: status,
-    };
-
     request(
       `${urls._url("twitch", "endPoll")}`,
       {
         method: urls._method("twitch", "endPoll"),
-        headers: urls.twitch._headers(sym, customtoken, clientid),
-        body: JSON.stringify(body),
+        headers: urls.twitch._headers(sym, accessToken, clientID),
+        body: JSON.stringify({
+          broadcaster_id: broadcasterID_,
+          id: id,
+          status: status,
+        }),
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "endPoll"))
           return reject(Error(e.stack ?? r.data));
 
-        
         return resolve(r.data);
       }
     );

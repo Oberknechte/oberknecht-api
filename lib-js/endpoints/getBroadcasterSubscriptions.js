@@ -2,28 +2,25 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBroadcasterSubscriptions = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
-const __1 = require("..");
 const urls_1 = require("../variables/urls");
-const _validatetoken_1 = require("./_validatetoken");
 const oberknecht_utils_1 = require("oberknecht-utils");
-async function getBroadcasterSubscriptions(sym, customtoken, user_id, first, after, before) {
+const checkTwitchUsername_1 = require("../functions/checkTwitchUsername");
+const _getUser_1 = require("./_getUser");
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
+async function getBroadcasterSubscriptions(sym, userID, first, after, before, broadcasterID, customToken) {
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+    let { clientID, accessToken, userID: _userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
+    let userID_ = (0, oberknecht_utils_1.cleanChannelName)(userID);
+    let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? userID;
+    if ((0, checkTwitchUsername_1.checkTwitchUsername)(userID_))
+        await (0, _getUser_1._getUser)(sym, userID_).then((u) => {
+            userID_ = u.id;
+        });
     return new Promise(async (resolve, reject) => {
-        if (!(sym ?? undefined) && !(customtoken ?? undefined))
-            return reject(Error(`sym and customtoken are undefined`));
-        let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        let broadcaster_id_ = __1.i.apiclientData[sym]?._options?.userid;
-        let user_id_ = (0, oberknecht_utils_1.convertToArray)(user_id, false);
-        if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
-                .then((a) => {
-                clientid = a.client_id;
-                broadcaster_id_ = a.user_id;
-            })
-                .catch(reject);
-        }
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getBroadcasterSubscriptions")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id", "user_id", "first", "after", "before"], [broadcaster_id_, user_id_, first, after, before], true)}`, {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "getBroadcasterSubscriptions")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id", "user_id", "first", "after", "before"], [broadcasterID_, userID_, first, after, before], true)}`, {
             method: urls_1.urls._method("twitch", "getBroadcasterSubscriptions"),
-            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+            headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
         }, (e, r) => {
             if (e ||
                 r.status !== urls_1.urls._code("twitch", "getBroadcasterSubscriptions"))

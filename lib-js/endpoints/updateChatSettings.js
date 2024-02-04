@@ -3,11 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateChatSettings = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
-const _getuser_1 = require("../operations/_getuser");
-const _validatetoken_1 = require("./_validatetoken");
-const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
 const chatSettings_1 = require("../types/endpoints/chatSettings");
+const checkTwitchUsername_1 = require("../functions/checkTwitchUsername");
+const _getUser_1 = require("./_getUser");
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
 const ignoredIfFalsy = {
     slow_mode: "slow_mode_wait_time",
     follower_mode: "follower_mode_duration",
@@ -22,53 +23,36 @@ const correctedSettings = {
     },
     // ↑ Sets key slow_mode to false if inputted wait_time is 0 and doesn't append key slow_mode_wait_time on request body
 };
-async function updateChatSettings(sym, broadcaster_id, settings, customtoken) {
-    return new Promise(async (resolve, reject) => {
-        if (!(sym ?? undefined) && !(customtoken ?? undefined))
-            return reject(Error(`sym and customtoken are undefined`));
-        if (!(broadcaster_id ?? undefined) || !(settings ?? undefined))
-            return reject(Error(`broadcaster_id and/or settings is undefined`));
-        let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        let moderator_id = __1.i.apiclientData[sym]?._options?.userid;
-        let broadcaster_id_ = (0, oberknecht_utils_1.cleanChannelName)(broadcaster_id);
-        if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
-                .then((a) => {
-                moderator_id = a.user_id;
-                clientid = a.client_id;
-                if (!broadcaster_id_)
-                    broadcaster_id_ = a.user_id;
-            })
-                .catch(reject);
-        }
-        if (!__1.i.regex.numregex().test(broadcaster_id_) &&
-            __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
-            await (0, _getuser_1._getuser)(sym, broadcaster_id_)
-                .then((u) => {
-                broadcaster_id_ = u[1];
-            })
-                .catch(reject);
-        }
-        broadcaster_id_ = broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;
-        let reqbody = {};
-        Object.keys(settings).forEach((setting) => {
-            let settingValue = settings[setting];
-            if (reqbody[setting] ||
-                !chatSettings_1.chatSettingsKeys.includes(setting) ||
-                (Object.values(ignoredIfFalsy).includes(setting) &&
-                    settings[Object.keys(ignoredIfFalsy)[Object.values(ignoredIfFalsy).indexOf(setting)]] === false))
-                return;
-            let correctedSetting = correctedSettings[setting];
-            if (correctedSetting && correctedSetting.matches.includes(settingValue)) {
-                reqbody[correctedSetting.key] = correctedSetting.value;
-                if (correctedSetting.skip)
-                    return;
-            }
-            reqbody[setting] = settingValue;
+async function updateChatSettings(sym, broadcasterID, settings, customToken) {
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([settings], ["settings"]);
+    let { clientID, accessToken, userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
+    let moderatorID = userID;
+    let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? userID;
+    if ((0, checkTwitchUsername_1.checkTwitchUsername)(broadcasterID_))
+        await (0, _getUser_1._getUser)(sym, broadcasterID_).then((u) => {
+            broadcasterID_ = u.id;
         });
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "updateChatSettings")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}`, {
-            method: urls_1.urls._method("twitch", "createPrediction"),
-            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+    let reqbody = {};
+    Object.keys(settings).forEach((setting) => {
+        let settingValue = settings[setting];
+        if (reqbody[setting] ||
+            !chatSettings_1.chatSettingsKeys.includes(setting) ||
+            (Object.values(ignoredIfFalsy).includes(setting) &&
+                settings[Object.keys(ignoredIfFalsy)[Object.values(ignoredIfFalsy).indexOf(setting)]] === false))
+            return;
+        let correctedSetting = correctedSettings[setting];
+        if (correctedSetting && correctedSetting.matches.includes(settingValue)) {
+            reqbody[correctedSetting.key] = correctedSetting.value;
+            if (correctedSetting.skip)
+                return;
+        }
+        reqbody[setting] = settingValue;
+    });
+    return new Promise(async (resolve, reject) => {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "updateChatSettings")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id", "moderator_id"], [broadcasterID_, moderatorID], true)}`, {
+            method: urls_1.urls._method("twitch", "updateChatSettings"),
+            headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
             body: JSON.stringify(reqbody),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "updateChatSettings"))

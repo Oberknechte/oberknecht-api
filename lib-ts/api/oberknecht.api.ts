@@ -29,8 +29,7 @@ import { updateColor } from "../endpoints/updateColor";
 import { getColor } from "../endpoints/getColor";
 import { raid } from "../endpoints/raid";
 import { getChannelFollowers } from "../endpoints/getChannelFollowers";
-import { cancelRaid } from "../endpoints/cancelraid";
-import { _getuser } from "../operations/_getuser";
+import { cancelRaid } from "../endpoints/cancelRaid";
 
 import { addEventsubSubscription } from "../endpoints/addEventsubSubscription";
 import { getEventsubSubscriptions } from "../endpoints/getEventsubSubscriptions";
@@ -65,6 +64,11 @@ import { createClip } from "../endpoints/createClip";
 import { getFollowedChannels } from "../endpoints/getFollowedChannels";
 import { request } from "oberknecht-request";
 import { getModeratedChannels } from "../endpoints/getModeratedChannels";
+import { _refreshRefreshToken } from "../endpoints/_refreshRefreshToken";
+import { _validateRefreshTokenCode } from "../endpoints/_validateRefreshTokenCode";
+import { validateTokenWR } from "../functions/validateTokenWR";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { _getUser } from "../endpoints/_getUser";
 let clientSymNum = 0;
 
 request(null, null, null, {
@@ -100,6 +104,7 @@ export class oberknechtAPI {
 
   verified = false;
   userssplitter: jsonsplitter;
+  tokenSplitter: jsonsplitter;
   userssplitterpromise;
   _options: oberknechtAPIOptionsType;
 
@@ -142,6 +147,21 @@ export class oberknechtAPI {
       }
     }
 
+    if (!_options.noSaveTokens) {
+      if (!data.jsonsplitters) data.jsonsplitters = {};
+      let tokenSplitter = (data.jsonsplitters.tokenSplitter = this.tokenSplitter = new jsonsplitter(
+        {
+          debug: _options.debug,
+          startpath: "./data/tokens",
+          ...(_options.tokenSplitterOptions ?? {}),
+        }
+      ));
+
+      //   [userID]: {refreshTokens: {[<refreshToken>]: {}}, accessTokens: {[<accessToken>]: {}}}
+      //   [refreshToken]: {<refreshToken>: {accessTokens: [accessToken]: {}}, userID: <userID>}
+      //   [accessToken]: {...accessTokenData, expiresAt: number, refreshToken: <refreshToken>}
+    }
+
     if (isdebug(this.symbol, 2))
       _log(
         1,
@@ -155,24 +175,47 @@ export class oberknechtAPI {
     return new Promise<void>(async (resolve, reject) => {
       if (this.userssplitterpromise) await this.userssplitterpromise;
 
-      if (this._options.token)
-        await _validatetoken(this._options.token)
+      if (this._options.refreshToken) {
+        validateTokenBR(this.symbol, this._options.refreshToken)
           .then((t) => {
             this.verified = true;
             i.apiclientData[this.symbol]._options = {
               ...i.apiclientData[this.symbol]._options,
-              clientid: t.client_id,
-              userid: t.user_id,
-              login: t.login,
+              clientid: t.clientID,
+              userid: t.userID,
+              login: t.userLogin,
               token_scopes: t.scopes,
             };
 
             if (isdebug(this.symbol, 2))
               _log(
                 1,
-                `${_stackname("Oberknecht-API")[3]} Logged in as ${t.login} (${
-                  t.user_id
-                })`
+                `${_stackname("Oberknecht-API")[3]} Logged in as ${
+                  t.userLogin
+                } (${t.userID}) (Via Refresh-Token)`
+              );
+          })
+          .catch(reject);
+      }
+
+      if (this._options.token)
+        await _validatetoken(undefined, this._options.token, false)
+          .then((t) => {
+            this.verified = true;
+            i.apiclientData[this.symbol]._options = {
+              ...i.apiclientData[this.symbol]._options,
+              clientid: t.clientID,
+              userid: t.userID,
+              login: t.userLogin,
+              token_scopes: t.scopes,
+            };
+
+            if (isdebug(this.symbol, 2))
+              _log(
+                1,
+                `${_stackname("Oberknecht-API")[3]} Logged in as ${
+                  t.userLogin
+                } (${t.userID})`
               );
           })
           .catch((e) => {
@@ -195,8 +238,36 @@ export class oberknechtAPI {
     });
   }
 
-  _validatetoken = (customtoken: string) => {
-    return _validatetoken(this.symbol, customtoken);
+  _validatetoken = (customToken: string) => {
+    return _validatetoken(this.symbol, customToken);
+  };
+
+  _validateRefreshTokenCode = (
+    refreshToken: string,
+    clientID: string,
+    clientSecret: string,
+    redirectURL: string
+  ) => {
+    return _validateRefreshTokenCode(
+      this.symbol,
+      refreshToken,
+      clientID,
+      clientSecret,
+      redirectURL
+    );
+  };
+
+  _refreshRefreshToken = (
+    refreshToken: string,
+    clientID: string,
+    clientSecret: string
+  ) => {
+    return _refreshRefreshToken(
+      this.symbol,
+      refreshToken,
+      clientID,
+      clientSecret
+    );
   };
 
   _revoketoken = (token: string, clientID?: string) => {
@@ -207,285 +278,271 @@ export class oberknechtAPI {
     logins: string | string[] | undefined,
     ids?: string | string[] | undefined,
     noautofilterids?: Boolean,
-    customtoken?: string
+    customToken?: string
   ) => {
-    return _getUsers(this.symbol, logins, ids, noautofilterids, customtoken);
+    return _getUsers(this.symbol, logins, ids, noautofilterids, customToken);
   };
   _getUser = (user: string) => {
-    return _getuser(this.symbol, user);
+    return _getUser(this.symbol, user);
   };
 
   ban = (
-    broadcaster_id: string,
-    target_user_id: string,
+    broadcasterID: string,
+    targetUserID: string,
     reason: string,
-    customtoken?: string
+    customToken?: string
   ) => {
     return ban(
       this.symbol,
-      broadcaster_id,
-      target_user_id,
+      broadcasterID,
+      targetUserID,
       reason,
       undefined,
-      customtoken
+      customToken
     );
   };
   deleteMessage = (
-    broadcaster_id: string,
-    message_id: string,
-    customtoken?: string
+    broadcasterID: string,
+    messageID: string,
+    customToken?: string
   ) => {
-    return deleteMessage(this.symbol, broadcaster_id, message_id, customtoken);
+    return deleteMessage(this.symbol, broadcasterID, messageID, customToken);
   };
   delete = this.deleteMessage;
-  clearChat = (broadcaster_id: string, customtoken?: string) => {
-    return deleteMessage(this.symbol, broadcaster_id, undefined, customtoken);
+  clearChat = (broadcasterID: string, customToken?: string) => {
+    return deleteMessage(this.symbol, broadcasterID, undefined, customToken);
   };
   getUsers = (
     logins: string | string[],
     ids?: string | string[],
     noautofilterids?: boolean,
-    customtoken?: string
+    customToken?: string
   ) => {
-    return getUsers(this.symbol, logins, ids, noautofilterids, customtoken);
+    return getUsers(this.symbol, logins, ids, noautofilterids, customToken);
   };
   shoutout = (
-    from_broadcaster_id: string,
-    to_broadcaster_id: string,
-    customtoken?: string
+    fromBroadcasterID: string,
+    toBroadcasterID: string,
+    customToken?: string
   ) => {
     return shoutout(
       this.symbol,
-      from_broadcaster_id,
-      to_broadcaster_id,
-      customtoken
+      fromBroadcasterID,
+      toBroadcasterID,
+      customToken
     );
   };
   timeout = (
-    broadcaster_id: string,
-    target_user_id: string,
+    broadcasterID: string,
+    targetUserID: string,
     duration: number,
     reason?: string,
-    customtoken?: string
+    customToken?: string
   ) => {
     return timeout(
       this.symbol,
-      broadcaster_id,
-      target_user_id,
+      broadcasterID,
+      targetUserID,
       reason,
       duration,
-      customtoken
+      customToken
     );
   };
   unban = (
-    broadcaster_id: string,
-    target_user_id: string,
-    customtoken?: string
+    broadcasterID: string,
+    targetUserID: string,
+    customToken?: string
   ) => {
-    return unban(this.symbol, broadcaster_id, target_user_id, customtoken);
+    return unban(this.symbol, broadcasterID, targetUserID, customToken);
   };
   untimeout = this.unban;
-  whisper = (to_user_id: string, message: string, customtoken: string) => {
-    return whisper(this.symbol, to_user_id, message, customtoken);
+  whisper = (toUserID: string, message: string, customToken: string) => {
+    return whisper(this.symbol, toUserID, message, customToken);
   };
 
   announce = (
-    broadcaster_id: string,
+    broadcasterID: string,
     message: string,
     color: announcementColorsType,
-    customtoken?: string
+    customToken?: string
   ) => {
-    return announce(this.symbol, broadcaster_id, message, color, customtoken);
+    return announce(this.symbol, broadcasterID, message, color, customToken);
   };
   updateChatSettings = (
-    broadcaster_id: string,
+    broadcasterID: string,
     settings: chatSettingEntry,
-    customtoken?: string
+    customToken?: string
   ) => {
     return updateChatSettings(
       this.symbol,
-      broadcaster_id,
+      broadcasterID,
       settings,
-      customtoken
+      customToken
     );
   };
 
-  slow = (broadcaster_id: string, wait_time: number, customtoken?: string) => {
+  slow = (broadcasterID: string, waitTime: number, customToken?: string) => {
     return updateSingleChatSetting.slow(
       this.symbol,
-      broadcaster_id,
-      wait_time,
-      customtoken
+      broadcasterID,
+      waitTime,
+      customToken
     );
   };
-  slowOff = (broadcaster_id: string, customtoken?: string) => {
+  slowOff = (broadcasterID: string, customToken?: string) => {
     return updateSingleChatSetting.slowOff(
       this.symbol,
-      broadcaster_id,
-      customtoken
+      broadcasterID,
+      customToken
     );
   };
 
   followers = (
-    broadcaster_id: string,
+    broadcasterID: string,
     duration?: number,
-    customtoken?: string
+    customToken?: string
   ) => {
     return updateSingleChatSetting.followers(
       this.symbol,
-      broadcaster_id,
+      broadcasterID,
       duration,
-      customtoken
+      customToken
     );
   };
-  followersOff = (broadcaster_id: string, customtoken?: string) => {
+  followersOff = (broadcasterID: string, customToken?: string) => {
     return updateSingleChatSetting.followersOff(
       this.symbol,
-      broadcaster_id,
-      customtoken
+      broadcasterID,
+      customToken
     );
   };
 
-  subscribers = (broadcaster_id: string, customtoken?: string) => {
+  subscribers = (broadcasterID: string, customToken?: string) => {
     return updateSingleChatSetting.subscribers(
       this.symbol,
-      broadcaster_id,
-      customtoken
+      broadcasterID,
+      customToken
     );
   };
-  subscribersOff = (broadcaster_id: string, customtoken?: string) => {
+  subscribersOff = (broadcasterID: string, customToken?: string) => {
     return updateSingleChatSetting.subscribersOff(
       this.symbol,
-      broadcaster_id,
-      customtoken
+      broadcasterID,
+      customToken
     );
   };
 
-  emote = (broadcaster_id: string, customtoken?: string) => {
+  emote = (broadcasterID: string, customToken?: string) => {
     return updateSingleChatSetting.emote(
       this.symbol,
-      broadcaster_id,
-      customtoken
+      broadcasterID,
+      customToken
     );
   };
   emoteOnly = this.emote;
-  emoteOff = (broadcaster_id: string, customtoken?: string) => {
+  emoteOff = (broadcasterID: string, customToken?: string) => {
     return updateSingleChatSetting.emoteOff(
       this.symbol,
-      broadcaster_id,
-      customtoken
+      broadcasterID,
+      customToken
     );
   };
   emoteOnlyOff = this.emoteOff;
 
-  r9k = (broadcaster_id: string, customtoken?: string) => {
-    return updateSingleChatSetting.r9k(
-      this.symbol,
-      broadcaster_id,
-      customtoken
-    );
+  r9k = (broadcasterID: string, customToken?: string) => {
+    return updateSingleChatSetting.r9k(this.symbol, broadcasterID, customToken);
   };
   uniqueChat = this.r9k;
-  r9kOff = (broadcaster_id: string, customtoken?: string) => {
+  r9kOff = (broadcasterID: string, customToken?: string) => {
     return updateSingleChatSetting.r9kOff(
       this.symbol,
-      broadcaster_id,
-      customtoken
+      broadcasterID,
+      customToken
     );
   };
   uniqueChatOff = this.r9kOff;
 
   chatdelay = (
-    broadcaster_id: string,
+    broadcasterID: string,
     duration: 2 | 4 | 6,
-    customtoken?: string
+    customToken?: string
   ) => {
     return updateSingleChatSetting.chatdelay(
       this.symbol,
-      broadcaster_id,
+      broadcasterID,
       duration,
-      customtoken
+      customToken
     );
   };
-  chatdelayOff = (broadcaster_id: string, customtoken?: string) => {
+  chatdelayOff = (broadcasterID: string, customToken?: string) => {
     return updateSingleChatSetting.chatdelayOff(
       this.symbol,
-      broadcaster_id,
-      customtoken
+      broadcasterID,
+      customToken
     );
   };
 
-  getChatSettings = (broadcaster_id: string, customtoken?: string) => {
-    return getChatSettings(this.symbol, broadcaster_id, customtoken);
+  getChatSettings = (broadcasterID: string, customToken?: string) => {
+    return getChatSettings(this.symbol, broadcasterID, customToken);
   };
-  getStreams = (filters: getStreamsFiltersType, customtoken?: string) => {
-    return getStreams(this.symbol, filters, customtoken);
+  getStreams = (filters: getStreamsFiltersType, customToken?: string) => {
+    return getStreams(this.symbol, filters, customToken);
   };
 
-  mod = (user_id: string, customtoken?: string) => {
-    return mod(this.symbol, user_id, customtoken);
+  mod = (userID: string, broadcasterID?: undefined, customToken?: string) => {
+    return mod(this.symbol, userID, broadcasterID, customToken);
   };
   unmod = (
-    broadcaster_id: string | undefined,
-    user_id: string,
-    customtoken?: string
+    broadcasterID: string | undefined,
+    userID: string,
+    customToken?: string
   ) => {
-    return unmod(this.symbol, broadcaster_id, user_id, customtoken);
+    return unmod(this.symbol, broadcasterID, userID, customToken);
   };
 
-  vip = (to_user_id: string, customtoken?: string) => {
-    return vip(this.symbol, to_user_id, customtoken);
+  vip = (toUserID: string, broadcasterID?: undefined, customToken?: string) => {
+    return vip(this.symbol, toUserID, broadcasterID, customToken);
   };
   unvip = (
-    broadcaster_id: string | undefined,
-    user_id: string,
-    customtoken?: string
+    broadcasterID: string | undefined,
+    userID: string,
+    customToken?: string
   ) => {
-    return unvip(this.symbol, broadcaster_id, user_id, customtoken);
+    return unvip(this.symbol, broadcasterID, userID, customToken);
   };
 
-  updateColor = (color: colorsType, customtoken?: string) => {
-    return updateColor(this.symbol, color, customtoken);
+  updateColor = (color: colorsType, customToken?: string) => {
+    return updateColor(this.symbol, color, customToken);
   };
-  getColor = (userids: string | string[], customtoken?: string) => {
-    return getColor(this.symbol, userids, customtoken);
+  getColor = (userIDs: string | string[], customToken?: string) => {
+    return getColor(this.symbol, userIDs, customToken);
   };
 
   raid = (
-    from_broadcaster_id: string | undefined,
-    to_broadcaster_id: string,
-    customtoken?: string
+    fromBroadcasterID: string | undefined,
+    toBroadcasterID: string,
+    customToken?: string
   ) => {
-    return raid(
-      this.symbol,
-      from_broadcaster_id,
-      to_broadcaster_id,
-      customtoken
-    );
+    return raid(this.symbol, fromBroadcasterID, toBroadcasterID, customToken);
   };
-  cancelraid = (broadcaster_id: string | undefined, customtoken?: string) => {
-    return cancelRaid(this.symbol, broadcaster_id, customtoken);
+  cancelraid = (broadcasterID: string | undefined, customToken?: string) => {
+    return cancelRaid(this.symbol, broadcasterID, customToken);
   };
   unraid = this.cancelraid;
 
   getChannelFollowers = (
-    broadcaster_id?: string,
-    user_id?: string,
-    customtoken?: string
+    broadcasterID?: string,
+    userID?: string,
+    customToken?: string
   ) => {
-    return getChannelFollowers(
-      this.symbol,
-      broadcaster_id,
-      user_id,
-      customtoken
-    );
+    return getChannelFollowers(this.symbol, broadcasterID, userID, customToken);
   };
   addEventsubSubscription = (
     type: eventsubSubscriptionTypesType,
     version: eventsubSubscriptionVersionType,
     condition: any,
     transport: any,
-    customtoken?: string
+    customToken?: string
   ) => {
     return addEventsubSubscription(
       this.symbol,
@@ -493,48 +550,55 @@ export class oberknechtAPI {
       version,
       condition,
       transport,
-      customtoken
+      customToken
     );
   };
-  getEventsubSubscriptions = (customtoken?: string) => {
-    return getEventsubSubscriptions(this.symbol, customtoken);
+  getEventsubSubscriptions = (customToken?: string) => {
+    return getEventsubSubscriptions(this.symbol, customToken);
   };
-  deleteEventsubSubscription = (id: string, customtoken?: string) => {
-    return deleteEventsubSubscription(this.symbol, id, customtoken);
+  deleteEventsubSubscription = (id: string, customToken?: string) => {
+    return deleteEventsubSubscription(this.symbol, id, customToken);
   };
 
   getGames = (
     ids?: string | string[],
     names?: string | string[],
     igdbIDs?: string | string[],
-    customtoken?: string
+    customToken?: string
   ) => {
-    return getGames(this.symbol, ids, names, igdbIDs, customtoken);
+    return getGames(this.symbol, ids, names, igdbIDs, customToken);
   };
   getBroadcasterSubscriptions = (
-    customtoken: string,
-    user_id?: string,
+    userID?: string,
     first?: string,
     after?: string,
-    before?: string
+    before?: string,
+    broadcasterID?: undefined,
+    customToken?: string
   ) => {
     return getBroadcasterSubscriptions(
       this.symbol,
-      customtoken,
-      user_id,
+      userID,
       first,
       after,
-      before
+      before,
+      broadcasterID,
+      customToken
     );
   };
-  getChannels = (broadcaster_ids: string | string[], customtoken?: string) => {
-    return getChannels(this.symbol, broadcaster_ids, customtoken);
+  getChannels = (broadcasterIDs: string | string[], customToken?: string) => {
+    return getChannels(this.symbol, broadcasterIDs, customToken);
   };
-  updateChannel = (channelData: channelDataType, customtoken?: string) => {
-    return updateChannel(this.symbol, channelData, customtoken);
+  updateChannel = (channelData: channelDataType, customToken?: string) => {
+    return updateChannel(this.symbol, channelData, undefined, customToken);
   };
-  getPolls = (id?: string, first?: number, after?: string) => {
-    return getPolls(this.symbol, id, first, after, after);
+  getPolls = (
+    id?: string,
+    first?: number,
+    after?: string,
+    customToken?: string
+  ) => {
+    return getPolls(this.symbol, id, first, after, undefined, customToken);
   };
   createPoll = (
     title: string,
@@ -542,7 +606,7 @@ export class oberknechtAPI {
     duration: number,
     channelPointsVotingEnabled?: boolean,
     channelPointsPerVote?: number,
-    customtoken?: string
+    customToken?: string
   ) => {
     return createPoll(
       this.symbol,
@@ -551,51 +615,61 @@ export class oberknechtAPI {
       duration,
       channelPointsVotingEnabled,
       channelPointsPerVote,
-      customtoken
+      undefined,
+      customToken
     );
   };
-  endPoll = (id: string, status: pollStatusType, customtoken?: string) => {
-    return endPoll(this.symbol, id, status, customtoken);
+  endPoll = (id: string, status: pollStatusType, customToken?: string) => {
+    return endPoll(this.symbol, id, status, undefined, customToken);
   };
   getPredictions = (
     ids?: string | string[],
     first?: number,
     after?: string,
-    customtoken?: string
+    customToken?: string
   ) => {
-    return getPredictions(this.symbol, ids, first, after, customtoken);
+    return getPredictions(
+      this.symbol,
+      ids,
+      first,
+      after,
+      undefined,
+      customToken
+    );
   };
   createPrediction = (
     title: string,
     outcomes: createPredictionOutcomesType,
     predictionWindow: number,
-    customtoken?: string
+    customToken?: string
   ) => {
     return createPrediction(
       this.symbol,
       title,
       outcomes,
       predictionWindow,
-      customtoken
+      undefined,
+      customToken
     );
   };
   endPrediction = (
     id: string,
     status: endPredictionStatusType,
     winningOutcomeID?: string,
-    customtoken?: string
+    customToken?: string
   ) => {
     return endPrediction(
       this.symbol,
       id,
       status,
       winningOutcomeID,
-      customtoken
+      undefined,
+      customToken
     );
   };
 
   getClips = (
-    broadcaster_id?: string,
+    broadcasterID?: string,
     ids?: string | string[],
     gameID?: string,
     startedAt?: string,
@@ -603,11 +677,11 @@ export class oberknechtAPI {
     first?: number,
     before?: string,
     after?: string,
-    customtoken?: string
+    customToken?: string
   ) => {
     return getClips(
       this.symbol,
-      broadcaster_id,
+      broadcasterID,
       ids,
       gameID,
       startedAt,
@@ -615,7 +689,7 @@ export class oberknechtAPI {
       first,
       before,
       after,
-      customtoken
+      customToken
     );
   };
 
@@ -624,23 +698,34 @@ export class oberknechtAPI {
   };
 
   getFollowedChannels = (
-    userID?: string,
     broadcasterID?: string,
     first?: string,
     after?: string,
-    customtoken?: string
+    userID?: undefined,
+    customToken?: string
   ) => {
     return getFollowedChannels(
       this.symbol,
-      userID,
       broadcasterID,
       first,
       after,
-      customtoken
+      userID,
+      customToken
     );
   };
 
-  getModeratedChannels = (userID?: string, first?: number, after?: string, customtoken?: string) => {
-    return getModeratedChannels(this.symbol, userID, first, after, customtoken);
+  getModeratedChannels = (
+    first?: number,
+    after?: string,
+    userID?: undefined,
+    customToken?: string
+  ) => {
+    return getModeratedChannels(
+      this.symbol,
+      first,
+      after,
+      userID,
+      customToken
+    );
   };
 }

@@ -1,33 +1,27 @@
 import { request } from "oberknecht-request";
-import { i } from "..";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
 import { getEventsubSubscriptionsResponse } from "../types/endpoints/eventsub";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function getEventsubSubscriptions(
   sym: string,
-  customtoken?: string
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+
+  let { clientID, accessToken, userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
+
   return new Promise<getEventsubSubscriptionsResponse>(
     async (resolve, reject) => {
-      if (!(sym ?? undefined) && !(customtoken ?? undefined))
-        return reject(Error(`sym and customtoken are undefined`));
-
-      let clientid = i.apiclientData[sym]?._options?.clientid;
-
-      if (customtoken ?? undefined) {
-        await _validatetoken(undefined, customtoken)
-          .then((a) => {
-            clientid = a.client_id;
-          })
-          .catch(reject);
-      }
-
       request(
         `${urls._url("twitch", "getEventsubSubscriptions")}`,
         {
           method: urls._method("twitch", "getEventsubSubscriptions"),
-          headers: urls.twitch._headers(sym, customtoken, clientid),
+          headers: urls.twitch._headers(sym, accessToken, clientID),
         },
         (e, r) => {
           if (

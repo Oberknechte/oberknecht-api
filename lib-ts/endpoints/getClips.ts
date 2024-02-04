@@ -1,14 +1,20 @@
 import { request } from "oberknecht-request";
-import { i } from "..";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
-import { convertToArray, joinUrlQuery, regex } from "oberknecht-utils";
-import { _getuser } from "../operations/_getuser";
+import {
+  cleanChannelName,
+  convertToArray,
+  joinUrlQuery,
+  regex,
+} from "oberknecht-utils";
 import { getClipsResponse } from "../types/endpoints/getClips";
+import { checkTwitchUsername } from "../functions/checkTwitchUsername";
+import { _getUser } from "./_getUser";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function getClips(
   sym: string,
-  broadcaster_id?: string,
+  broadcasterID?: string,
   ids?: string | string[],
   gameID?: string,
   startedAt?: string,
@@ -16,38 +22,32 @@ export async function getClips(
   first?: number,
   before?: string,
   after?: string,
-  customtoken?: string
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+
+  let ids_ = convertToArray(ids, false);
+
+  ids_ = ids_.map((a) =>
+    a.replace(
+      /^(https?:\/\/)*(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b\/(\w+\/clip\/)*/,
+      ""
+    )
+  );
+
+  let { clientID, accessToken, userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
+
+  let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
+
+  if (checkTwitchUsername(broadcasterID_))
+    await _getUser(sym, broadcasterID_).then((u) => {
+      broadcasterID_ = u.id;
+    });
+
   return new Promise<getClipsResponse>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
-
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-    let broadcaster_id_ =
-      broadcaster_id ?? i.apiclientData[sym]?._options?.userid;
-    let ids_ = convertToArray(ids, false);
-
-    ids_ = ids_.map((a) =>
-      a.replace(
-        /^(https?:\/\/)*(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b\/(\w+\/clip\/)*/,
-        ""
-      )
-    );
-
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-        })
-        .catch(reject);
-    }
-
-    if (!regex.numregex().test(broadcaster_id_)) {
-      await _getuser(sym, broadcaster_id_).then((u) => {
-        broadcaster_id_ = u[1];
-      });
-    }
-
     request(
       `${urls._url("twitch", "getClips")}${joinUrlQuery(
         [
@@ -60,7 +60,7 @@ export async function getClips(
           "after",
         ],
         [
-          broadcaster_id,
+          broadcasterID,
           gameID,
           startedAt,
           endedAt,
@@ -68,18 +68,16 @@ export async function getClips(
           before,
           after,
         ],
-        true,
-        false
+        true
       )}${ids_.length === 0 ? "" : joinUrlQuery("id", ids_, false, false)}`,
       {
         method: urls._method("twitch", "getClips"),
-        headers: urls.twitch._headers(sym, customtoken, clientid),
+        headers: urls.twitch._headers(sym, accessToken, clientID),
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "getClips"))
           return reject(Error(e.stack ?? r.data));
 
-        
         return resolve(r.data);
       }
     );

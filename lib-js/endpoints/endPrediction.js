@@ -3,38 +3,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.endPrediction = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
-const _validatetoken_1 = require("./_validatetoken");
-const __1 = require("..");
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const oberknecht_utils_1 = require("oberknecht-utils");
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
 async function endPrediction(sym, id, status, winningOutcomeID, 
 /* ↑ Required if status = "RESOLVED" */
-customtoken) {
+broadcasterID, customToken) {
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([id, status], ["id", "status"]);
+    let { clientID, accessToken, userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
+    let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? userID;
     return new Promise(async (resolve, reject) => {
-        if (!(sym ?? undefined) && !(customtoken ?? undefined))
-            return reject(Error(`sym and customtoken are undefined`));
-        if (!(id ?? undefined) || !(status ?? undefined))
-            return reject(Error("id or status is undefined"));
-        let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        let broadcaster_id_ = __1.i.apiclientData[sym]?._options?.userid;
-        if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
-                .then((a) => {
-                clientid = a.client_id;
-                broadcaster_id_ = a.user_id;
-            })
-                .catch(reject);
-        }
-        let body = {
-            broadcaster_id: broadcaster_id_,
-            id: id,
-            status: status,
-            ...(winningOutcomeID ?? undefined
-                ? { winning_outcome_id: winningOutcomeID }
-                : {}),
-        };
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "endPrediction")}`, {
             method: urls_1.urls._method("twitch", "endPrediction"),
-            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
-            body: JSON.stringify(body),
+            headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
+            body: JSON.stringify({
+                broadcaster_id: broadcasterID_,
+                id: id,
+                status: status,
+                ...(!(0, oberknecht_utils_1.isNullUndefined)(winningOutcomeID)
+                    ? { winning_outcome_id: winningOutcomeID }
+                    : {}),
+            }),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "endPrediction"))
                 return reject(Error(e.stack ?? r.data));

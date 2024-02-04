@@ -1,7 +1,6 @@
 import { request } from "oberknecht-request";
 import { i } from "..";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
 import {
   cleanChannelName,
   convertToArray,
@@ -9,43 +8,36 @@ import {
 } from "oberknecht-utils";
 import { getColorResponse } from "../types/endpoints/color";
 import { _getUsers } from "./_getUsers";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function getColor(
   sym: string,
   userID: string | string[],
-  customtoken?: string
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+
+  let userID_ = convertToArray(userID, false).map((a) => cleanChannelName(a));
+  let userLogins_ = userID_.filter(
+    (a) => !i.regex.numregex().test(a) && i.regex.twitch.usernamereg().test(a)
+  );
+  userID_ = userID_.filter((a) => i.regex.numregex().test(a));
+
+  let { clientID, accessToken, userID: _userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
+
+  if (userLogins_.length > 0) {
+    await _getUsers(sym, userLogins_).then((u) => {
+      userID_.push(...Object.keys(u.ids));
+    });
+  }
+
+  if (userID_.length === 0) userID_.push(_userID);
+
   return new Promise<getColorResponse>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
-
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-    let userID_ = convertToArray(userID, false).map((a) => cleanChannelName(a));
-    let userLogins_ = userID_.filter(
-      (a) => !i.regex.numregex().test(a) && i.regex.twitch.usernamereg().test(a)
-    );
-    userID_ = userID_.filter((a) => i.regex.numregex().test(a));
-
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-          if (userID_.length === 0) userID_.push(a.user_id);
-        })
-        .catch(reject);
-    } else {
-      if (userID_.length === 0)
-        userID_.push(i.apiclientData[sym]?._options?.userid);
-    }
-
-    if (userLogins_.length > 0) {
-      await _getUsers(sym, userLogins_)
-        .then((u) => {
-          userID_.push(...Object.keys(u.ids));
-        })
-        .catch(reject);
-    }
-
     request(
       `${urls._url("twitch", "getColor")}${joinUrlQuery(
         "user_id",
@@ -54,13 +46,12 @@ export async function getColor(
       )}`,
       {
         method: urls._method("twitch", "getColor"),
-        headers: urls.twitch._headers(sym, customtoken, clientid),
+        headers: urls.twitch._headers(sym, accessToken, clientID),
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "getColor"))
           return reject(Error(e.stack ?? r.data));
 
-        
         return resolve(r.data);
       }
     );

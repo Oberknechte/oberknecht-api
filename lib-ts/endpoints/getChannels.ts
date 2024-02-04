@@ -1,50 +1,39 @@
 import { request } from "oberknecht-request";
 import { i } from "..";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
 import { _getUsers } from "../endpoints/_getUsers";
 import { convertToArray, joinUrlQuery } from "oberknecht-utils";
 import { getChannelsResponse } from "../types/endpoints/getChannels";
+import { checkTwitchUsername } from "../functions/checkTwitchUsername";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function getChannels(
   sym: string,
   broadcaster_ids?: string | string[],
-  customtoken?: string
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+
+  let broadcaster_ids_ = convertToArray(broadcaster_ids, false);
+
+  let { clientID, accessToken, userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
+
+  let broadcaster_logins = broadcaster_ids_.filter((a) =>
+    checkTwitchUsername(a)
+  );
+  broadcaster_ids_ = broadcaster_ids_.filter((a) => i.regex.numregex().test(a));
+
+  if (broadcaster_logins.length > 0) {
+    await _getUsers(sym, broadcaster_logins).then((broadcasters) => {
+      broadcaster_ids_.push(...Object.keys(broadcasters.ids));
+    });
+  }
+
   return new Promise<getChannelsResponse>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
-
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-    let broadcaster_ids_ = convertToArray(broadcaster_ids, false);
-
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-          if (broadcaster_ids_.length === 0) broadcaster_ids_.push(a.user_id);
-        })
-        .catch(reject);
-    } else {
-      if (broadcaster_ids_.length === 0)
-        broadcaster_ids_.push(i.apiclientData[sym]?._options?.userid);
-    }
-
-    let broadcaster_logins = broadcaster_ids_.filter(
-      (a) => !i.regex.numregex().test(a) && i.regex.twitch.usernamereg().test(a)
-    );
-    broadcaster_ids_ = broadcaster_ids_.filter((a) =>
-      i.regex.numregex().test(a)
-    );
-
-    if (broadcaster_logins.length > 0) {
-      await _getUsers(sym, broadcaster_logins)
-        .then((broadcasters) => {
-          broadcaster_ids_.push(...Object.keys(broadcasters.ids));
-        })
-        .catch(reject);
-    }
-
     request(
       `${urls._url("twitch", "getChannels")}${joinUrlQuery(
         "broadcaster_id",
@@ -53,13 +42,12 @@ export async function getChannels(
       )}`,
       {
         method: urls._method("twitch", "getChannels"),
-        headers: urls.twitch._headers(sym, customtoken, clientid),
+        headers: urls.twitch._headers(sym, accessToken, clientID),
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "getChannels"))
           return reject(Error(e.stack ?? r.data));
 
-        
         return resolve(r.data);
       }
     );

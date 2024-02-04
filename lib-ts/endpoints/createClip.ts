@@ -1,55 +1,49 @@
 import { request } from "oberknecht-request";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
-import { i } from "..";
-import { joinUrlQuery, regex } from "oberknecht-utils";
+import { cleanChannelName, joinUrlQuery } from "oberknecht-utils";
 import { _getuser } from "../operations/_getuser";
 import { createClipResponse } from "../types/endpoints/createClip";
+import { checkTwitchUsername } from "../functions/checkTwitchUsername";
+import { _getUser } from "./_getUser";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function createClip(
   sym: string,
-  broadcasterID: string,
+  broadcasterID?: string,
   hasDelay?: boolean,
-  customtoken?: string
+  customToken?: string
 ) {
   return new Promise<createClipResponse>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
+    checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
 
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-    let broadcasterID_ =
-      broadcasterID ?? i.apiclientData[sym]?._options?.userid;
+    let { clientID, accessToken, userID } = await validateTokenBR(
+      sym,
+      customToken
+    );
 
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-          broadcasterID_ = a.user_id;
-        })
-        .catch(reject);
-    }
+    let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
 
-    if (!regex.numregex().test(broadcasterID_)) {
-      await _getuser(sym, broadcasterID_).then((u) => {
-        broadcasterID_ = u[1];
+    if (checkTwitchUsername(broadcasterID_)) {
+      await _getUser(sym, broadcasterID_).then((u) => {
+        broadcasterID_ = u.id;
       });
     }
 
     request(
       `${urls._url("twitch", "createClip")}${joinUrlQuery(
         ["broadcaster_id", "has_delay"],
-        [broadcasterID_, hasDelay],
+        [broadcasterID_, hasDelay.toString()],
         true
       )}`,
       {
         method: urls._method("twitch", "createClip"),
-        headers: urls.twitch._headers(sym, customtoken, clientid),
+        headers: urls.twitch._headers(sym, accessToken, clientID),
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "createClip"))
           return reject(Error(e.stack ?? r.data));
 
-        
         return resolve(r.data);
       }
     );

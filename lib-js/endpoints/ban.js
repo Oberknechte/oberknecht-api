@@ -3,59 +3,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ban = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
-const _getuser_1 = require("../operations/_getuser");
-const _validatetoken_1 = require("./_validatetoken");
-const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
-async function ban(sym, broadcaster_id, target_user_id, reason, duration, customtoken) {
+const _getUser_1 = require("./_getUser");
+const checkTwitchUsername_1 = require("../functions/checkTwitchUsername");
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
+async function ban(sym, broadcasterID, targetUserID, reason, duration, customToken) {
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([targetUserID], ["targetUserID"]);
+    let targetUserID_ = (0, oberknecht_utils_1.cleanChannelName)(targetUserID);
+    let { clientID, accessToken, userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
+    let moderatorID = userID;
+    let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? userID;
+    if ((0, checkTwitchUsername_1.checkTwitchUsername)(broadcasterID_))
+        await (0, _getUser_1._getUser)(sym, broadcasterID_).then((u) => {
+            broadcasterID_ = u.id;
+        });
+    if ((0, checkTwitchUsername_1.checkTwitchUsername)(targetUserID_))
+        await (0, _getUser_1._getUser)(sym, targetUserID_).then((u) => {
+            targetUserID_ = u.id;
+        });
     return new Promise(async (resolve, reject) => {
-        if (!(sym ?? undefined) && !(customtoken ?? undefined))
-            return reject(Error("sym and customtoken is undefined"));
-        if (!(target_user_id ?? undefined))
-            return reject(Error(`target_user_id is undefined`));
-        let broadcaster_id_ = (0, oberknecht_utils_1.cleanChannelName)(broadcaster_id);
-        let target_user_id_ = (0, oberknecht_utils_1.cleanChannelName)(target_user_id);
-        let moderator_id = __1.i.apiclientData[sym]?._options?.userid;
-        let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
-                .then((a) => {
-                moderator_id = a.user_id;
-                clientid = a.client_id;
-                if (!broadcaster_id_)
-                    broadcaster_id_ = a.user_id;
-            })
-                .catch(reject);
-        }
-        if (!__1.i.regex.numregex().test(broadcaster_id_) &&
-            __1.i.regex.twitch.usernamereg().test(broadcaster_id_)) {
-            await (0, _getuser_1._getuser)(sym, broadcaster_id_)
-                .then((u) => {
-                broadcaster_id_ = u[1];
-            })
-                .catch(reject);
-        }
-        broadcaster_id_ = broadcaster_id_ ?? __1.i.apiclientData[sym]?._options?.userid;
-        if (!__1.i.regex.numregex().test(target_user_id_)) {
-            await (0, _getuser_1._getuser)(sym, target_user_id_)
-                .then((u) => {
-                target_user_id_ = u[1];
-            })
-                .catch(reject);
-        }
-        let reqbody = {
-            data: {
-                user_id: target_user_id_,
-            },
-        };
-        if (reason ?? undefined)
-            reqbody.data.reason = reason.substring(0, 500);
-        if (duration ?? undefined)
-            reqbody.data.duration = duration;
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "bans")}?broadcaster_id=${broadcaster_id_}&moderator_id=${moderator_id}`, {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "bans")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id", "moderator_id"], [broadcasterID_, moderatorID], true)}`, {
             method: urls_1.urls._method("twitch", "bans"),
-            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
-            body: JSON.stringify(reqbody),
+            headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
+            body: JSON.stringify({
+                data: {
+                    user_id: targetUserID_,
+                    ...(reason ? { reason: reason.slice(0, 500) } : {}),
+                    ...(duration ? { duration: duration } : {}),
+                },
+            }),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "bans"))
                 return reject(Error(e.stack ?? r.data));

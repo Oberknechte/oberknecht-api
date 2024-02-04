@@ -1,6 +1,5 @@
 import { request } from "oberknecht-request";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
 import { i } from "..";
 import {
   chunkArray,
@@ -12,56 +11,50 @@ import {
   regex,
 } from "oberknecht-utils";
 import { getUsersResolveType } from "../types/endpoints/_getUsers";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function getUsers(
   sym: string,
   logins?: string | string[],
   ids?: string | string[],
   noautofilterids?: Boolean /* Prevent filtering of number entries (ids) in logins */,
-  customtoken?: string
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+
+  let logins_ = convertToArray(logins, false).map((a) => cleanChannelName(a));
+  let ids_ = convertToArray(ids, false).filter(
+    (a) => typeof a === "number" || regex.numregex().test(a.toString())
+  );
+
+  let { clientID, accessToken } = await validateTokenBR(sym, customToken);
+
+  if (!(noautofilterids ?? false)) {
+    let idsinlogins = logins_.filter((a) => regex.numregex().test(a));
+    if (idsinlogins.length > 0) {
+      ids_ = [...ids_, ...idsinlogins];
+      logins_ = logins_.filter((a) => !regex.numregex().test(a));
+    }
+  }
+
+  let loginsInvalid = logins_.filter(
+    (a) => !regex.twitch.usernamereg().test(a)
+  );
+  logins_ = logins_.filter((a) => regex.twitch.usernamereg().test(a));
+
+  let chunks = chunkArray(
+    [...logins_, ...ids_],
+    i.apiclientData[sym]._options.use3rdparty?.getUsers ? 50 : 100
+  );
+  let ret: getUsersResolveType = {
+    logins: {},
+    ids: {},
+    details: {},
+    loginsInvalid: loginsInvalid,
+  };
+
   return new Promise<getUsersResolveType>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
-
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-    let logins_ = convertToArray(logins, false).map((a) => cleanChannelName(a));
-    let ids_ = convertToArray(ids, false).filter(
-      (a) => typeof a === "number" || regex.numregex().test(a.toString())
-    );
-
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-        })
-        .catch(reject);
-    }
-
-    if (!(noautofilterids ?? false)) {
-      let idsinlogins = logins_.filter((a) => regex.numregex().test(a));
-      if (idsinlogins.length > 0) {
-        ids_ = [...ids_, ...idsinlogins];
-        logins_ = logins_.filter((a) => !regex.numregex().test(a));
-      }
-    }
-
-    let loginsInvalid = logins_.filter(
-      (a) => !regex.twitch.usernamereg().test(a)
-    );
-    logins_ = logins_.filter((a) => regex.twitch.usernamereg().test(a));
-
-    let chunks = chunkArray(
-      [...logins_, ...ids_],
-      i.apiclientData[sym]._options.use3rdparty?.getUsers ? 50 : 100
-    );
-    let ret: getUsersResolveType = {
-      logins: {},
-      ids: {},
-      details: {},
-      loginsInvalid: loginsInvalid,
-    };
-
     await Promise.all(
       chunks.map((chunk: string[]) => {
         let chunkLogins = chunk.filter((a) => logins_.includes(a));
@@ -88,7 +81,7 @@ export async function getUsers(
             url,
             {
               method: urls._method(...urlPath),
-              headers: urls.twitch._headers(sym, customtoken, clientid),
+              headers: urls.twitch._headers(sym, accessToken, clientID),
             },
             (e, r) => {
               if (e || r.status !== urls._code(...urlPath))

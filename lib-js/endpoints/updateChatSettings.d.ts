@@ -1,2 +1,2 @@
 import { chatSettingEntry } from "../types/endpoints/chatSettings";
-export declare function updateChatSettings(sym: string, broadcaster_id: string | undefined, settings: chatSettingEntry, customtoken?: string): Promise<import("../types/endpoints/chatSettings").chatSettingsResponse>;
+export declare function updateChatSettings(sym: string, broadcasterID: string | undefined, settings: chatSettingEntry, customToken?: string): Promise<import("../types/endpoints/chatSettings").chatSettingsResponse>;

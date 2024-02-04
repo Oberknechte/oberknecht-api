@@ -1,11 +1,12 @@
 import { request } from "oberknecht-request";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
-import { i } from "..";
 import {
   endPredictionResponse,
   endPredictionStatusType,
 } from "../types/endpoints/predictions";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { cleanChannelName, isNullUndefined } from "oberknecht-utils";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function endPrediction(
   sym: string,
@@ -13,47 +14,38 @@ export async function endPrediction(
   status: endPredictionStatusType,
   winningOutcomeID?: string,
   /* ↑ Required if status = "RESOLVED" */
-  customtoken?: string
+  broadcasterID?: undefined,
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+  checkThrowMissingParams([id, status], ["id", "status"]);
+
+  let { clientID, accessToken, userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
+
+  let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
+
   return new Promise<endPredictionResponse>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
-    if (!(id ?? undefined) || !(status ?? undefined))
-      return reject(Error("id or status is undefined"));
-
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-    let broadcaster_id_ = i.apiclientData[sym]?._options?.userid;
-
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-          broadcaster_id_ = a.user_id;
-        })
-        .catch(reject);
-    }
-
-    let body = {
-      broadcaster_id: broadcaster_id_,
-      id: id,
-      status: status,
-      ...(winningOutcomeID ?? undefined
-        ? { winning_outcome_id: winningOutcomeID }
-        : {}),
-    };
-
     request(
       `${urls._url("twitch", "endPrediction")}`,
       {
         method: urls._method("twitch", "endPrediction"),
-        headers: urls.twitch._headers(sym, customtoken, clientid),
-        body: JSON.stringify(body),
+        headers: urls.twitch._headers(sym, accessToken, clientID),
+        body: JSON.stringify({
+          broadcaster_id: broadcasterID_,
+          id: id,
+          status: status,
+          ...(!isNullUndefined(winningOutcomeID)
+            ? { winning_outcome_id: winningOutcomeID }
+            : {}),
+        }),
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "endPrediction"))
           return reject(Error(e.stack ?? r.data));
 
-        
         return resolve(r.data);
       }
     );

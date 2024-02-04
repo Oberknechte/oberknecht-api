@@ -1,2 +1,2 @@
 import { channelFollowersResponse } from "../types/endpoints/getChannelFollowers";
-export declare function getChannelFollowers(sym: string, broadcaster_id: string, user_id?: string, customtoken?: string): Promise<channelFollowersResponse>;
+export declare function getChannelFollowers(sym: string, broadcasterID: string, userID?: string, customToken?: string): Promise<channelFollowersResponse>;

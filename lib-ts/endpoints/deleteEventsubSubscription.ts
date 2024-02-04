@@ -1,29 +1,22 @@
 import { request } from "oberknecht-request";
-import { i } from "..";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
 import { joinUrlQuery } from "oberknecht-utils";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function deleteEventsubSubscription(
   sym: string,
   id: string,
-  customtoken?: string
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+  checkThrowMissingParams([id], ["id"]);
+
+  let { clientID, accessToken, userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
   return new Promise<void>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
-    if (!(id ?? undefined)) return reject(Error(`id is undefined`));
-
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-        })
-        .catch(reject);
-    }
-
     request(
       `${urls._url("twitch", "deleteEventsubSubscription")}${joinUrlQuery(
         "id",
@@ -32,7 +25,7 @@ export async function deleteEventsubSubscription(
       )}`,
       {
         method: urls._method("twitch", "deleteEventsubSubscription"),
-        headers: urls.twitch._headers(sym, customtoken, clientid),
+        headers: urls.twitch._headers(sym, accessToken, clientID),
       },
       (e, r) => {
         if (

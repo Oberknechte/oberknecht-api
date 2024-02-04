@@ -2,41 +2,34 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addEventsubSubscription = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
-const __1 = require("..");
 const urls_1 = require("../variables/urls");
-const _validatetoken_1 = require("./_validatetoken");
-async function addEventsubSubscription(sym, type, version, condition, transport, customtoken) {
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
+async function addEventsubSubscription(sym, type, version, condition, transport, customToken) {
     return new Promise(async (resolve, reject) => {
-        if ((!(sym ?? undefined) && !(customtoken ?? undefined)) ||
-            !(type ?? undefined) ||
-            !(condition ?? undefined) ||
-            !(transport ?? undefined))
-            return reject(Error(`sym and customtoken or type, condition and transport is undefined`));
+        (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+        (0, checkThrowMissingParams_1.checkThrowMissingParams)([type, condition, transport], ["type", "condition", "transport"]);
         if (!(version ?? undefined))
             version = "1";
-        let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
-                .then((a) => {
-                clientid = a.client_id;
-            })
-                .catch(reject);
-        }
-        let body = {
-            type: type,
-            version: version,
-            condition: condition,
-            transport: transport,
-        };
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "eventsubSubscriptions")}`, {
-            method: urls_1.urls._method("twitch", "eventsubSubscriptions"),
-            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
-            body: JSON.stringify(body),
-        }, (e, r) => {
-            if (e || r.status !== urls_1.urls._code("twitch", "eventsubSubscriptions"))
-                return reject(Error(e.stack ?? r.data));
-            return resolve(r.data);
-        });
+        (0, validateTokenBR_1.validateTokenBR)(sym, customToken)
+            .then((t) => {
+            let { clientID, accessToken } = t;
+            (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "eventsubSubscriptions")}`, {
+                method: urls_1.urls._method("twitch", "eventsubSubscriptions"),
+                headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
+                body: JSON.stringify({
+                    type: type,
+                    version: version,
+                    condition: condition,
+                    transport: transport,
+                }),
+            }, (e, r) => {
+                if (e || r.status !== urls_1.urls._code("twitch", "eventsubSubscriptions"))
+                    return reject(Error(e.stack ?? r.data));
+                return resolve(r.data);
+            });
+        })
+            .catch(reject);
     });
 }
 exports.addEventsubSubscription = addEventsubSubscription;

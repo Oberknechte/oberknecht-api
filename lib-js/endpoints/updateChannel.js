@@ -3,38 +3,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateChannel = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
-const _validatetoken_1 = require("./_validatetoken");
 const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
 const getGames_1 = require("./getGames");
-async function updateChannel(sym, channelData, customtoken) {
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
+async function updateChannel(sym, channelData, broadcasterID, customToken) {
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([channelData], ["channelData"]);
+    let channelData_ = (0, oberknecht_utils_1.recreate)(channelData);
+    let { clientID, accessToken, userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
+    let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? userID;
+    if (channelData.game_id && !__1.i.regex.numregex().test(channelData.game_id))
+        await (0, getGames_1.getGames)(sym, [], channelData.game_id).then((dat) => {
+            if (dat.data?.[0]?.id)
+                channelData_.game_id = dat.data[0]?.id;
+        });
     return new Promise(async (resolve, reject) => {
-        if (!(sym ?? undefined) && !(customtoken ?? undefined))
-            return reject(Error(`sym and customtoken are undefined`));
-        if (!(channelData ?? undefined))
-            return reject(Error(`channelData is undefined`));
-        let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        let broadcaster_id = __1.i.apiclientData[sym]?._options?.userid;
-        let channelData_ = (0, oberknecht_utils_1.recreate)(channelData);
-        if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
-                .then((a) => {
-                broadcaster_id = a.user_id;
-                clientid = a.client_id;
-            })
-                .catch(reject);
-        }
-        if (channelData.game_id && !__1.i.regex.numregex().test(channelData.game_id)) {
-            await (0, getGames_1.getGames)(sym, [], channelData.game_id)
-                .then((dat) => {
-                if (dat.data?.[0]?.id)
-                    channelData_.game_id = dat.data[0]?.id;
-            })
-                .catch(reject);
-        }
-        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "updateChannel")}?broadcaster_id=${broadcaster_id}`, {
+        (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "updateChannel")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id"], [broadcasterID_], true)}`, {
             method: urls_1.urls._method("twitch", "updateChannel"),
-            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+            headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
             body: JSON.stringify(channelData_),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "updateChannel"))

@@ -2,38 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPrediction = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
-const __1 = require("..");
 const urls_1 = require("../variables/urls");
-const _validatetoken_1 = require("./_validatetoken");
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const oberknecht_utils_1 = require("oberknecht-utils");
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
 async function createPrediction(sym, title, outcomes, predictionWindow, 
 /* ↑ in seconds */
 /** @default predictionWindow 60 */
-customtoken) {
+broadcasterID, customToken) {
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([title, outcomes], ["title", "outcomes"]);
+    let { clientID, accessToken, userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
+    let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? userID;
+    let predictionWindow_ = predictionWindow ?? 60;
     return new Promise(async (resolve, reject) => {
-        if (!(sym ?? undefined) && !(customtoken ?? undefined))
-            return reject(Error(`sym and customtoken are undefined`));
-        if (!(title ?? undefined) || !(outcomes ?? undefined))
-            return reject(Error(`title, outcomes or prediction_window is undefined`));
-        let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        let broadcaster_id_ = __1.i.apiclientData[sym]?._options?.userid;
-        if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
-                .then((a) => {
-                clientid = a.client_id;
-                broadcaster_id_ = a.user_id;
-            })
-                .catch(reject);
-        }
-        let body = {
-            broadcaster_id: broadcaster_id_,
-            title: title,
-            outcomes: outcomes,
-            prediction_window: predictionWindow ?? 60,
-        };
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "createPrediction")}`, {
             method: urls_1.urls._method("twitch", "createPrediction"),
-            headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
-            body: JSON.stringify(body),
+            headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
+            body: JSON.stringify({
+                broadcaster_id: broadcasterID_,
+                title: title,
+                outcomes: outcomes,
+                prediction_window: predictionWindow_,
+            }),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "createPrediction"))
                 return reject(Error(e.stack ?? r.data));

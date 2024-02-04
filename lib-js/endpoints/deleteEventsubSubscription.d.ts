@@ -1,1 +1,1 @@
-export declare function deleteEventsubSubscription(sym: string, id: string, customtoken?: string): Promise<void>;
+export declare function deleteEventsubSubscription(sym: string, id: string, customToken?: string): Promise<void>;

@@ -3,39 +3,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUsers = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
-const _validatetoken_1 = require("./_validatetoken");
 const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
-async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering of number entries (ids) in logins */, customtoken) {
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
+async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering of number entries (ids) in logins */, customToken) {
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+    let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map((a) => (0, oberknecht_utils_1.cleanChannelName)(a));
+    let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false).filter((a) => typeof a === "number" || oberknecht_utils_1.regex.numregex().test(a.toString()));
+    let { clientID, accessToken } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
+    if (!(noautofilterids ?? false)) {
+        let idsinlogins = logins_.filter((a) => oberknecht_utils_1.regex.numregex().test(a));
+        if (idsinlogins.length > 0) {
+            ids_ = [...ids_, ...idsinlogins];
+            logins_ = logins_.filter((a) => !oberknecht_utils_1.regex.numregex().test(a));
+        }
+    }
+    let loginsInvalid = logins_.filter((a) => !oberknecht_utils_1.regex.twitch.usernamereg().test(a));
+    logins_ = logins_.filter((a) => oberknecht_utils_1.regex.twitch.usernamereg().test(a));
+    let chunks = (0, oberknecht_utils_1.chunkArray)([...logins_, ...ids_], __1.i.apiclientData[sym]._options.use3rdparty?.getUsers ? 50 : 100);
+    let ret = {
+        logins: {},
+        ids: {},
+        details: {},
+        loginsInvalid: loginsInvalid,
+    };
     return new Promise(async (resolve, reject) => {
-        if (!(sym ?? undefined) && !(customtoken ?? undefined))
-            return reject(Error(`sym and customtoken are undefined`));
-        let clientid = __1.i.apiclientData[sym]?._options?.clientid;
-        let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map((a) => (0, oberknecht_utils_1.cleanChannelName)(a));
-        let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false).filter((a) => typeof a === "number" || oberknecht_utils_1.regex.numregex().test(a.toString()));
-        if (customtoken ?? undefined) {
-            await (0, _validatetoken_1._validatetoken)(undefined, customtoken)
-                .then((a) => {
-                clientid = a.client_id;
-            })
-                .catch(reject);
-        }
-        if (!(noautofilterids ?? false)) {
-            let idsinlogins = logins_.filter((a) => oberknecht_utils_1.regex.numregex().test(a));
-            if (idsinlogins.length > 0) {
-                ids_ = [...ids_, ...idsinlogins];
-                logins_ = logins_.filter((a) => !oberknecht_utils_1.regex.numregex().test(a));
-            }
-        }
-        let loginsInvalid = logins_.filter((a) => !oberknecht_utils_1.regex.twitch.usernamereg().test(a));
-        logins_ = logins_.filter((a) => oberknecht_utils_1.regex.twitch.usernamereg().test(a));
-        let chunks = (0, oberknecht_utils_1.chunkArray)([...logins_, ...ids_], __1.i.apiclientData[sym]._options.use3rdparty?.getUsers ? 50 : 100);
-        let ret = {
-            logins: {},
-            ids: {},
-            details: {},
-            loginsInvalid: loginsInvalid,
-        };
         await Promise.all(chunks.map((chunk) => {
             let chunkLogins = chunk.filter((a) => logins_.includes(a));
             let chunkIDs = chunk.filter((a) => ids_.includes(a));
@@ -50,7 +43,7 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
                 }
                 (0, oberknecht_request_1.request)(url, {
                     method: urls_1.urls._method(...urlPath),
-                    headers: urls_1.urls.twitch._headers(sym, customtoken, clientid),
+                    headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
                 }, (e, r) => {
                     if (e || r.status !== urls_1.urls._code(...urlPath))
                         return reject2(Error(e.stack ?? r.data));

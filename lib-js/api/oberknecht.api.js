@@ -33,8 +33,7 @@ const updateColor_1 = require("../endpoints/updateColor");
 const getColor_1 = require("../endpoints/getColor");
 const raid_1 = require("../endpoints/raid");
 const getChannelFollowers_1 = require("../endpoints/getChannelFollowers");
-const cancelraid_1 = require("../endpoints/cancelraid");
-const _getuser_1 = require("../operations/_getuser");
+const cancelRaid_1 = require("../endpoints/cancelRaid");
 const addEventsubSubscription_1 = require("../endpoints/addEventsubSubscription");
 const getEventsubSubscriptions_1 = require("../endpoints/getEventsubSubscriptions");
 const deleteEventsubSubscription_1 = require("../endpoints/deleteEventsubSubscription");
@@ -54,6 +53,10 @@ const createClip_1 = require("../endpoints/createClip");
 const getFollowedChannels_1 = require("../endpoints/getFollowedChannels");
 const oberknecht_request_1 = require("oberknecht-request");
 const getModeratedChannels_1 = require("../endpoints/getModeratedChannels");
+const _refreshRefreshToken_1 = require("../endpoints/_refreshRefreshToken");
+const _validateRefreshTokenCode_1 = require("../endpoints/_validateRefreshTokenCode");
+const validateTokenBR_1 = require("../functions/validateTokenBR");
+const _getUser_1 = require("../endpoints/_getUser");
 let clientSymNum = 0;
 (0, oberknecht_request_1.request)(null, null, null, {
     returnAfter: true,
@@ -85,6 +88,7 @@ class oberknechtAPI {
     }
     verified = false;
     userssplitter;
+    tokenSplitter;
     userssplitterpromise;
     _options;
     constructor(options) {
@@ -114,6 +118,18 @@ class oberknechtAPI {
                 });
             }
         }
+        if (!_options.noSaveTokens) {
+            if (!data.jsonsplitters)
+                data.jsonsplitters = {};
+            let tokenSplitter = (data.jsonsplitters.tokenSplitter = this.tokenSplitter = new oberknecht_jsonsplitter_1.jsonsplitter({
+                debug: _options.debug,
+                startpath: "./data/tokens",
+                ...(_options.tokenSplitterOptions ?? {}),
+            }));
+            //   [userID]: {refreshTokens: {[<refreshToken>]: {}}, accessTokens: {[<accessToken>]: {}}}
+            //   [refreshToken]: {<refreshToken>: {accessTokens: [accessToken]: {}}, userID: <userID>}
+            //   [accessToken]: {...accessTokenData, expiresAt: number, refreshToken: <refreshToken>}
+        }
         if ((0, isdebug_1.isdebug)(this.symbol, 2))
             (0, _log_1._log)(1, `${(0, _stackname_1._stackname)("Oberknecht-API")[3]} Initialized \n\t> Startpath: ${_options.startPath}`);
     }
@@ -121,19 +137,35 @@ class oberknechtAPI {
         return new Promise(async (resolve, reject) => {
             if (this.userssplitterpromise)
                 await this.userssplitterpromise;
-            if (this._options.token)
-                await (0, _validatetoken_1._validatetoken)(this._options.token)
+            if (this._options.refreshToken) {
+                (0, validateTokenBR_1.validateTokenBR)(this.symbol, this._options.refreshToken)
                     .then((t) => {
                     this.verified = true;
                     index_1.i.apiclientData[this.symbol]._options = {
                         ...index_1.i.apiclientData[this.symbol]._options,
-                        clientid: t.client_id,
-                        userid: t.user_id,
-                        login: t.login,
+                        clientid: t.clientID,
+                        userid: t.userID,
+                        login: t.userLogin,
                         token_scopes: t.scopes,
                     };
                     if ((0, isdebug_1.isdebug)(this.symbol, 2))
-                        (0, _log_1._log)(1, `${(0, _stackname_1._stackname)("Oberknecht-API")[3]} Logged in as ${t.login} (${t.user_id})`);
+                        (0, _log_1._log)(1, `${(0, _stackname_1._stackname)("Oberknecht-API")[3]} Logged in as ${t.userLogin} (${t.userID}) (Via Refresh-Token)`);
+                })
+                    .catch(reject);
+            }
+            if (this._options.token)
+                await (0, _validatetoken_1._validatetoken)(undefined, this._options.token, false)
+                    .then((t) => {
+                    this.verified = true;
+                    index_1.i.apiclientData[this.symbol]._options = {
+                        ...index_1.i.apiclientData[this.symbol]._options,
+                        clientid: t.clientID,
+                        userid: t.userID,
+                        login: t.userLogin,
+                        token_scopes: t.scopes,
+                    };
+                    if ((0, isdebug_1.isdebug)(this.symbol, 2))
+                        (0, _log_1._log)(1, `${(0, _stackname_1._stackname)("Oberknecht-API")[3]} Logged in as ${t.userLogin} (${t.userID})`);
                 })
                     .catch((e) => {
                     return reject(e);
@@ -151,174 +183,180 @@ class oberknechtAPI {
             return resolve();
         });
     }
-    _validatetoken = (customtoken) => {
-        return (0, _validatetoken_1._validatetoken)(this.symbol, customtoken);
+    _validatetoken = (customToken) => {
+        return (0, _validatetoken_1._validatetoken)(this.symbol, customToken);
+    };
+    _validateRefreshTokenCode = (refreshToken, clientID, clientSecret, redirectURL) => {
+        return (0, _validateRefreshTokenCode_1._validateRefreshTokenCode)(this.symbol, refreshToken, clientID, clientSecret, redirectURL);
+    };
+    _refreshRefreshToken = (refreshToken, clientID, clientSecret) => {
+        return (0, _refreshRefreshToken_1._refreshRefreshToken)(this.symbol, refreshToken, clientID, clientSecret);
     };
     _revoketoken = (token, clientID) => {
         return (0, _revoketoken_1._revoketoken)(this.symbol, token, clientID);
     };
-    _getUsers = (logins, ids, noautofilterids, customtoken) => {
-        return (0, _getUsers_1._getUsers)(this.symbol, logins, ids, noautofilterids, customtoken);
+    _getUsers = (logins, ids, noautofilterids, customToken) => {
+        return (0, _getUsers_1._getUsers)(this.symbol, logins, ids, noautofilterids, customToken);
     };
     _getUser = (user) => {
-        return (0, _getuser_1._getuser)(this.symbol, user);
+        return (0, _getUser_1._getUser)(this.symbol, user);
     };
-    ban = (broadcaster_id, target_user_id, reason, customtoken) => {
-        return (0, ban_1.ban)(this.symbol, broadcaster_id, target_user_id, reason, undefined, customtoken);
+    ban = (broadcasterID, targetUserID, reason, customToken) => {
+        return (0, ban_1.ban)(this.symbol, broadcasterID, targetUserID, reason, undefined, customToken);
     };
-    deleteMessage = (broadcaster_id, message_id, customtoken) => {
-        return (0, deleteMessage_1.deleteMessage)(this.symbol, broadcaster_id, message_id, customtoken);
+    deleteMessage = (broadcasterID, messageID, customToken) => {
+        return (0, deleteMessage_1.deleteMessage)(this.symbol, broadcasterID, messageID, customToken);
     };
     delete = this.deleteMessage;
-    clearChat = (broadcaster_id, customtoken) => {
-        return (0, deleteMessage_1.deleteMessage)(this.symbol, broadcaster_id, undefined, customtoken);
+    clearChat = (broadcasterID, customToken) => {
+        return (0, deleteMessage_1.deleteMessage)(this.symbol, broadcasterID, undefined, customToken);
     };
-    getUsers = (logins, ids, noautofilterids, customtoken) => {
-        return (0, getUsers_1.getUsers)(this.symbol, logins, ids, noautofilterids, customtoken);
+    getUsers = (logins, ids, noautofilterids, customToken) => {
+        return (0, getUsers_1.getUsers)(this.symbol, logins, ids, noautofilterids, customToken);
     };
-    shoutout = (from_broadcaster_id, to_broadcaster_id, customtoken) => {
-        return (0, shoutout_1.shoutout)(this.symbol, from_broadcaster_id, to_broadcaster_id, customtoken);
+    shoutout = (fromBroadcasterID, toBroadcasterID, customToken) => {
+        return (0, shoutout_1.shoutout)(this.symbol, fromBroadcasterID, toBroadcasterID, customToken);
     };
-    timeout = (broadcaster_id, target_user_id, duration, reason, customtoken) => {
-        return (0, ban_2.ban)(this.symbol, broadcaster_id, target_user_id, reason, duration, customtoken);
+    timeout = (broadcasterID, targetUserID, duration, reason, customToken) => {
+        return (0, ban_2.ban)(this.symbol, broadcasterID, targetUserID, reason, duration, customToken);
     };
-    unban = (broadcaster_id, target_user_id, customtoken) => {
-        return (0, unban_1.unban)(this.symbol, broadcaster_id, target_user_id, customtoken);
+    unban = (broadcasterID, targetUserID, customToken) => {
+        return (0, unban_1.unban)(this.symbol, broadcasterID, targetUserID, customToken);
     };
     untimeout = this.unban;
-    whisper = (to_user_id, message, customtoken) => {
-        return (0, whisper_1.whisper)(this.symbol, to_user_id, message, customtoken);
+    whisper = (toUserID, message, customToken) => {
+        return (0, whisper_1.whisper)(this.symbol, toUserID, message, customToken);
     };
-    announce = (broadcaster_id, message, color, customtoken) => {
-        return (0, announce_1.announce)(this.symbol, broadcaster_id, message, color, customtoken);
+    announce = (broadcasterID, message, color, customToken) => {
+        return (0, announce_1.announce)(this.symbol, broadcasterID, message, color, customToken);
     };
-    updateChatSettings = (broadcaster_id, settings, customtoken) => {
-        return (0, updateChatSettings_1.updateChatSettings)(this.symbol, broadcaster_id, settings, customtoken);
+    updateChatSettings = (broadcasterID, settings, customToken) => {
+        return (0, updateChatSettings_1.updateChatSettings)(this.symbol, broadcasterID, settings, customToken);
     };
-    slow = (broadcaster_id, wait_time, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.slow(this.symbol, broadcaster_id, wait_time, customtoken);
+    slow = (broadcasterID, waitTime, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.slow(this.symbol, broadcasterID, waitTime, customToken);
     };
-    slowOff = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.slowOff(this.symbol, broadcaster_id, customtoken);
+    slowOff = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.slowOff(this.symbol, broadcasterID, customToken);
     };
-    followers = (broadcaster_id, duration, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.followers(this.symbol, broadcaster_id, duration, customtoken);
+    followers = (broadcasterID, duration, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.followers(this.symbol, broadcasterID, duration, customToken);
     };
-    followersOff = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.followersOff(this.symbol, broadcaster_id, customtoken);
+    followersOff = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.followersOff(this.symbol, broadcasterID, customToken);
     };
-    subscribers = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.subscribers(this.symbol, broadcaster_id, customtoken);
+    subscribers = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.subscribers(this.symbol, broadcasterID, customToken);
     };
-    subscribersOff = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.subscribersOff(this.symbol, broadcaster_id, customtoken);
+    subscribersOff = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.subscribersOff(this.symbol, broadcasterID, customToken);
     };
-    emote = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.emote(this.symbol, broadcaster_id, customtoken);
+    emote = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.emote(this.symbol, broadcasterID, customToken);
     };
     emoteOnly = this.emote;
-    emoteOff = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.emoteOff(this.symbol, broadcaster_id, customtoken);
+    emoteOff = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.emoteOff(this.symbol, broadcasterID, customToken);
     };
     emoteOnlyOff = this.emoteOff;
-    r9k = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.r9k(this.symbol, broadcaster_id, customtoken);
+    r9k = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.r9k(this.symbol, broadcasterID, customToken);
     };
     uniqueChat = this.r9k;
-    r9kOff = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.r9kOff(this.symbol, broadcaster_id, customtoken);
+    r9kOff = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.r9kOff(this.symbol, broadcasterID, customToken);
     };
     uniqueChatOff = this.r9kOff;
-    chatdelay = (broadcaster_id, duration, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.chatdelay(this.symbol, broadcaster_id, duration, customtoken);
+    chatdelay = (broadcasterID, duration, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.chatdelay(this.symbol, broadcasterID, duration, customToken);
     };
-    chatdelayOff = (broadcaster_id, customtoken) => {
-        return updateSingleChatSetting_1.updateSingleChatSetting.chatdelayOff(this.symbol, broadcaster_id, customtoken);
+    chatdelayOff = (broadcasterID, customToken) => {
+        return updateSingleChatSetting_1.updateSingleChatSetting.chatdelayOff(this.symbol, broadcasterID, customToken);
     };
-    getChatSettings = (broadcaster_id, customtoken) => {
-        return (0, getChatSettings_1.getChatSettings)(this.symbol, broadcaster_id, customtoken);
+    getChatSettings = (broadcasterID, customToken) => {
+        return (0, getChatSettings_1.getChatSettings)(this.symbol, broadcasterID, customToken);
     };
-    getStreams = (filters, customtoken) => {
-        return (0, getStreams_1.getStreams)(this.symbol, filters, customtoken);
+    getStreams = (filters, customToken) => {
+        return (0, getStreams_1.getStreams)(this.symbol, filters, customToken);
     };
-    mod = (user_id, customtoken) => {
-        return (0, mod_1.mod)(this.symbol, user_id, customtoken);
+    mod = (userID, broadcasterID, customToken) => {
+        return (0, mod_1.mod)(this.symbol, userID, broadcasterID, customToken);
     };
-    unmod = (broadcaster_id, user_id, customtoken) => {
-        return (0, unmod_1.unmod)(this.symbol, broadcaster_id, user_id, customtoken);
+    unmod = (broadcasterID, userID, customToken) => {
+        return (0, unmod_1.unmod)(this.symbol, broadcasterID, userID, customToken);
     };
-    vip = (to_user_id, customtoken) => {
-        return (0, vip_1.vip)(this.symbol, to_user_id, customtoken);
+    vip = (toUserID, broadcasterID, customToken) => {
+        return (0, vip_1.vip)(this.symbol, toUserID, broadcasterID, customToken);
     };
-    unvip = (broadcaster_id, user_id, customtoken) => {
-        return (0, unvip_1.unvip)(this.symbol, broadcaster_id, user_id, customtoken);
+    unvip = (broadcasterID, userID, customToken) => {
+        return (0, unvip_1.unvip)(this.symbol, broadcasterID, userID, customToken);
     };
-    updateColor = (color, customtoken) => {
-        return (0, updateColor_1.updateColor)(this.symbol, color, customtoken);
+    updateColor = (color, customToken) => {
+        return (0, updateColor_1.updateColor)(this.symbol, color, customToken);
     };
-    getColor = (userids, customtoken) => {
-        return (0, getColor_1.getColor)(this.symbol, userids, customtoken);
+    getColor = (userIDs, customToken) => {
+        return (0, getColor_1.getColor)(this.symbol, userIDs, customToken);
     };
-    raid = (from_broadcaster_id, to_broadcaster_id, customtoken) => {
-        return (0, raid_1.raid)(this.symbol, from_broadcaster_id, to_broadcaster_id, customtoken);
+    raid = (fromBroadcasterID, toBroadcasterID, customToken) => {
+        return (0, raid_1.raid)(this.symbol, fromBroadcasterID, toBroadcasterID, customToken);
     };
-    cancelraid = (broadcaster_id, customtoken) => {
-        return (0, cancelraid_1.cancelRaid)(this.symbol, broadcaster_id, customtoken);
+    cancelraid = (broadcasterID, customToken) => {
+        return (0, cancelRaid_1.cancelRaid)(this.symbol, broadcasterID, customToken);
     };
     unraid = this.cancelraid;
-    getChannelFollowers = (broadcaster_id, user_id, customtoken) => {
-        return (0, getChannelFollowers_1.getChannelFollowers)(this.symbol, broadcaster_id, user_id, customtoken);
+    getChannelFollowers = (broadcasterID, userID, customToken) => {
+        return (0, getChannelFollowers_1.getChannelFollowers)(this.symbol, broadcasterID, userID, customToken);
     };
-    addEventsubSubscription = (type, version, condition, transport, customtoken) => {
-        return (0, addEventsubSubscription_1.addEventsubSubscription)(this.symbol, type, version, condition, transport, customtoken);
+    addEventsubSubscription = (type, version, condition, transport, customToken) => {
+        return (0, addEventsubSubscription_1.addEventsubSubscription)(this.symbol, type, version, condition, transport, customToken);
     };
-    getEventsubSubscriptions = (customtoken) => {
-        return (0, getEventsubSubscriptions_1.getEventsubSubscriptions)(this.symbol, customtoken);
+    getEventsubSubscriptions = (customToken) => {
+        return (0, getEventsubSubscriptions_1.getEventsubSubscriptions)(this.symbol, customToken);
     };
-    deleteEventsubSubscription = (id, customtoken) => {
-        return (0, deleteEventsubSubscription_1.deleteEventsubSubscription)(this.symbol, id, customtoken);
+    deleteEventsubSubscription = (id, customToken) => {
+        return (0, deleteEventsubSubscription_1.deleteEventsubSubscription)(this.symbol, id, customToken);
     };
-    getGames = (ids, names, igdbIDs, customtoken) => {
-        return (0, getGames_1.getGames)(this.symbol, ids, names, igdbIDs, customtoken);
+    getGames = (ids, names, igdbIDs, customToken) => {
+        return (0, getGames_1.getGames)(this.symbol, ids, names, igdbIDs, customToken);
     };
-    getBroadcasterSubscriptions = (customtoken, user_id, first, after, before) => {
-        return (0, getBroadcasterSubscriptions_1.getBroadcasterSubscriptions)(this.symbol, customtoken, user_id, first, after, before);
+    getBroadcasterSubscriptions = (userID, first, after, before, broadcasterID, customToken) => {
+        return (0, getBroadcasterSubscriptions_1.getBroadcasterSubscriptions)(this.symbol, userID, first, after, before, broadcasterID, customToken);
     };
-    getChannels = (broadcaster_ids, customtoken) => {
-        return (0, getChannels_1.getChannels)(this.symbol, broadcaster_ids, customtoken);
+    getChannels = (broadcasterIDs, customToken) => {
+        return (0, getChannels_1.getChannels)(this.symbol, broadcasterIDs, customToken);
     };
-    updateChannel = (channelData, customtoken) => {
-        return (0, updateChannel_1.updateChannel)(this.symbol, channelData, customtoken);
+    updateChannel = (channelData, customToken) => {
+        return (0, updateChannel_1.updateChannel)(this.symbol, channelData, undefined, customToken);
     };
-    getPolls = (id, first, after) => {
-        return (0, getPolls_1.getPolls)(this.symbol, id, first, after, after);
+    getPolls = (id, first, after, customToken) => {
+        return (0, getPolls_1.getPolls)(this.symbol, id, first, after, undefined, customToken);
     };
-    createPoll = (title, choices, duration, channelPointsVotingEnabled, channelPointsPerVote, customtoken) => {
-        return (0, createPoll_1.createPoll)(this.symbol, title, choices, duration, channelPointsVotingEnabled, channelPointsPerVote, customtoken);
+    createPoll = (title, choices, duration, channelPointsVotingEnabled, channelPointsPerVote, customToken) => {
+        return (0, createPoll_1.createPoll)(this.symbol, title, choices, duration, channelPointsVotingEnabled, channelPointsPerVote, undefined, customToken);
     };
-    endPoll = (id, status, customtoken) => {
-        return (0, endPoll_1.endPoll)(this.symbol, id, status, customtoken);
+    endPoll = (id, status, customToken) => {
+        return (0, endPoll_1.endPoll)(this.symbol, id, status, undefined, customToken);
     };
-    getPredictions = (ids, first, after, customtoken) => {
-        return (0, getPredictions_1.getPredictions)(this.symbol, ids, first, after, customtoken);
+    getPredictions = (ids, first, after, customToken) => {
+        return (0, getPredictions_1.getPredictions)(this.symbol, ids, first, after, undefined, customToken);
     };
-    createPrediction = (title, outcomes, predictionWindow, customtoken) => {
-        return (0, createPrediction_1.createPrediction)(this.symbol, title, outcomes, predictionWindow, customtoken);
+    createPrediction = (title, outcomes, predictionWindow, customToken) => {
+        return (0, createPrediction_1.createPrediction)(this.symbol, title, outcomes, predictionWindow, undefined, customToken);
     };
-    endPrediction = (id, status, winningOutcomeID, customtoken) => {
-        return (0, endPrediction_1.endPrediction)(this.symbol, id, status, winningOutcomeID, customtoken);
+    endPrediction = (id, status, winningOutcomeID, customToken) => {
+        return (0, endPrediction_1.endPrediction)(this.symbol, id, status, winningOutcomeID, undefined, customToken);
     };
-    getClips = (broadcaster_id, ids, gameID, startedAt, endedAt, first, before, after, customtoken) => {
-        return (0, getClips_1.getClips)(this.symbol, broadcaster_id, ids, gameID, startedAt, endedAt, first, before, after, customtoken);
+    getClips = (broadcasterID, ids, gameID, startedAt, endedAt, first, before, after, customToken) => {
+        return (0, getClips_1.getClips)(this.symbol, broadcasterID, ids, gameID, startedAt, endedAt, first, before, after, customToken);
     };
     createClip = (broadcasterID, hasDelay) => {
         return (0, createClip_1.createClip)(this.symbol, broadcasterID, hasDelay);
     };
-    getFollowedChannels = (userID, broadcasterID, first, after, customtoken) => {
-        return (0, getFollowedChannels_1.getFollowedChannels)(this.symbol, userID, broadcasterID, first, after, customtoken);
+    getFollowedChannels = (broadcasterID, first, after, userID, customToken) => {
+        return (0, getFollowedChannels_1.getFollowedChannels)(this.symbol, broadcasterID, first, after, userID, customToken);
     };
-    getModeratedChannels = (userID, first, after, customtoken) => {
-        return (0, getModeratedChannels_1.getModeratedChannels)(this.symbol, userID, first, after, customtoken);
+    getModeratedChannels = (first, after, userID, customToken) => {
+        return (0, getModeratedChannels_1.getModeratedChannels)(this.symbol, first, after, userID, customToken);
     };
 }
 exports.oberknechtAPI = oberknechtAPI;

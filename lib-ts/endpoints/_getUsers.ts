@@ -7,28 +7,28 @@ import {
 import { i } from "..";
 import { getUsers } from "./getUsers";
 import { _getUsersResponse } from "../types/_getUsers";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function _getUsers(
   sym: string,
   logins?: string | string[],
   ids?: string | string[],
   noautofilterids?: Boolean /* Prevent filtering of number entries (ids) in logins */,
-  customtoken?: string
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+  checkThrowMissingParams([logins, ids], ["logins", "ids"], true);
   return new Promise<_getUsersResponse>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error("sym and customtoken is undefined"));
-    if (!(logins ?? undefined) && !(ids ?? undefined))
-      return reject(Error("logins and ids is undefined"));
-
-    let logins_ = convertToArray(logins, false).map((a) => cleanChannelName(a));
+    let logins_ = convertToArray(logins, false).map((a) =>
+      String(cleanChannelName(a).toLowerCase())
+    );
     let ids_ = convertToArray(ids, false).map((a) => String(a).toLowerCase());
 
     if (!noautofilterids) {
       let idsinlogins = logins_.filter((a) => i.regex.numregex().test(a));
       if (idsinlogins.length > 0) {
         ids_ = [...ids_, ...idsinlogins];
-        logins_ = logins_.filter(a => !i.regex.numregex().test(a));
+        logins_ = logins_.filter((a) => !i.regex.numregex().test(a));
       }
     }
 
@@ -105,12 +105,12 @@ export async function _getUsers(
             (a) => (r.details[a] = users.details[a])
           );
         })
-        .catch();
+        .catch((e) => {});
     }
 
     if (logins_.length === 0 && ids_.length === 0) return resolve(r);
 
-    getUsers(sym, logins_, ids_, noautofilterids, customtoken)
+    getUsers(sym, logins_, ids_, noautofilterids, customToken)
       .then(async (dat) => {
         Object.keys(dat.details).forEach((a) => {
           let b = dat.details[a];

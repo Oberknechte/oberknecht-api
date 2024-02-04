@@ -1,45 +1,47 @@
 import { request } from "oberknecht-request";
-import { i } from "..";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
-import { joinUrlQuery, convertToArray } from "oberknecht-utils";
+import { cleanChannelName, joinUrlQuery } from "oberknecht-utils";
 import { getBroadcasterSubscriptionsResponse } from "../types/endpoints/getBroadcasterSubscriptions";
+import { checkTwitchUsername } from "../functions/checkTwitchUsername";
+import { _getUser } from "./_getUser";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function getBroadcasterSubscriptions(
   sym: string,
-  customtoken?: string,
-  user_id?: string,
+  userID?: string,
   first?: string,
   after?: string,
-  before?: string
+  before?: string,
+  broadcasterID?: string,
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+
+  let { clientID, accessToken, userID: _userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
+
+  let userID_ = cleanChannelName(userID);
+  let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
+
+  if (checkTwitchUsername(userID_))
+    await _getUser(sym, userID_).then((u) => {
+      userID_ = u.id;
+    });
+
   return new Promise<getBroadcasterSubscriptionsResponse>(
     async (resolve, reject) => {
-      if (!(sym ?? undefined) && !(customtoken ?? undefined))
-        return reject(Error(`sym and customtoken are undefined`));
-
-      let clientid = i.apiclientData[sym]?._options?.clientid;
-      let broadcaster_id_ = i.apiclientData[sym]?._options?.userid;
-      let user_id_ = convertToArray(user_id, false);
-
-      if (customtoken ?? undefined) {
-        await _validatetoken(undefined, customtoken)
-          .then((a) => {
-            clientid = a.client_id;
-            broadcaster_id_ = a.user_id;
-          })
-          .catch(reject);
-      }
-
       request(
         `${urls._url("twitch", "getBroadcasterSubscriptions")}${joinUrlQuery(
           ["broadcaster_id", "user_id", "first", "after", "before"],
-          [broadcaster_id_, user_id_, first, after, before],
+          [broadcasterID_, userID_, first, after, before],
           true
         )}`,
         {
           method: urls._method("twitch", "getBroadcasterSubscriptions"),
-          headers: urls.twitch._headers(sym, customtoken, clientid),
+          headers: urls.twitch._headers(sym, accessToken, clientID),
         },
         (e, r) => {
           if (
@@ -48,7 +50,6 @@ export async function getBroadcasterSubscriptions(
           )
             return reject(Error(e.stack ?? r.data));
 
-          
           return resolve(r.data);
         }
       );

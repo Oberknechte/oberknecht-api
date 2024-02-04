@@ -4,19 +4,18 @@ exports._getUsers = void 0;
 const oberknecht_utils_1 = require("oberknecht-utils");
 const __1 = require("..");
 const getUsers_1 = require("./getUsers");
-async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering of number entries (ids) in logins */, customtoken) {
+const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
+async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering of number entries (ids) in logins */, customToken) {
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([logins, ids], ["logins", "ids"], true);
     return new Promise(async (resolve, reject) => {
-        if (!(sym ?? undefined) && !(customtoken ?? undefined))
-            return reject(Error("sym and customtoken is undefined"));
-        if (!(logins ?? undefined) && !(ids ?? undefined))
-            return reject(Error("logins and ids is undefined"));
-        let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map((a) => (0, oberknecht_utils_1.cleanChannelName)(a));
+        let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map((a) => String((0, oberknecht_utils_1.cleanChannelName)(a).toLowerCase()));
         let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false).map((a) => String(a).toLowerCase());
         if (!noautofilterids) {
             let idsinlogins = logins_.filter((a) => __1.i.regex.numregex().test(a));
             if (idsinlogins.length > 0) {
                 ids_ = [...ids_, ...idsinlogins];
-                logins_ = logins_.filter(a => !__1.i.regex.numregex().test(a));
+                logins_ = logins_.filter((a) => !__1.i.regex.numregex().test(a));
             }
         }
         let r = {
@@ -81,11 +80,11 @@ async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering 
                 .then((users) => {
                 Object.keys(users.details).forEach((a) => (r.details[a] = users.details[a]));
             })
-                .catch();
+                .catch((e) => { });
         }
         if (logins_.length === 0 && ids_.length === 0)
             return resolve(r);
-        (0, getUsers_1.getUsers)(sym, logins_, ids_, noautofilterids, customtoken)
+        (0, getUsers_1.getUsers)(sym, logins_, ids_, noautofilterids, customToken)
             .then(async (dat) => {
             Object.keys(dat.details).forEach((a) => {
                 let b = dat.details[a];

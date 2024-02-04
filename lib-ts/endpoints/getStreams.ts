@@ -1,45 +1,41 @@
 import { request } from "oberknecht-request";
 import { i } from "..";
 import { urls } from "../variables/urls";
-import { _validatetoken } from "./_validatetoken";
 import { joinUrlQuery, recreate } from "oberknecht-utils";
 import { getStreamsFiltersType } from "../types/endpoints/getStreams";
 import { getStreamsResponse } from "../types/endpoints/getStreams";
+import { validateTokenBR } from "../functions/validateTokenBR";
+import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function getStreams(
   sym: string,
   filters?: getStreamsFiltersType,
-  customtoken?: string
+  customToken?: string
 ) {
+  checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
+
+  let filters_: getStreamsFiltersType = recreate(filters ?? {});
+
+  let { clientID, accessToken, userID } = await validateTokenBR(
+    sym,
+    customToken
+  );
+
+  let reqqueryparams = "";
+  Object.keys(filters_)?.forEach((filter) => {
+    reqqueryparams += joinUrlQuery(
+      filter,
+      filters_[filter],
+      reqqueryparams.length === 0 ? true : false
+    );
+  });
+
   return new Promise<getStreamsResponse>(async (resolve, reject) => {
-    if (!(sym ?? undefined) && !(customtoken ?? undefined))
-      return reject(Error(`sym and customtoken are undefined`));
-
-    let clientid = i.apiclientData[sym]?._options?.clientid;
-    let filters_: getStreamsFiltersType = recreate(filters ?? {});
-
-    if (customtoken ?? undefined) {
-      await _validatetoken(undefined, customtoken)
-        .then((a) => {
-          clientid = a.client_id;
-        })
-        .catch(reject);
-    }
-
-    let reqqueryparams = "";
-    Object.keys(filters_)?.forEach((filter) => {
-      reqqueryparams += joinUrlQuery(
-        filter,
-        filters_[filter],
-        reqqueryparams.length === 0 ? true : false
-      );
-    });
-
     request(
       `${urls._url("twitch", "getStreams")}${reqqueryparams}`,
       {
         method: urls._method("twitch", "getStreams"),
-        headers: urls.twitch._headers(sym, customtoken, clientid),
+        headers: urls.twitch._headers(sym, accessToken, clientID),
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "getStreams"))
