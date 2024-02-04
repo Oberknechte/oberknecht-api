@@ -24,7 +24,7 @@ export declare class oberknechtAPI {
     constructor(options: oberknechtAPIOptionsType);
     verify(): Promise<void>;
     destroy(): Promise<void>;
-    _validatetoken: (customToken: string) => Promise<import("../types/endpoints/validateToken").validateTokenResponseOld | import("../types/endpoints/validateToken").validateTokenResponse>;
+    _validatetoken: (customToken: string, useOldFormat?: boolean) => Promise<import("../types/endpoints/validateToken").validateTokenResponseOld | import("../types/endpoints/validateToken").validateTokenResponse>;
     _validateRefreshTokenCode: (refreshToken: string, clientID: string, clientSecret: string, redirectURL: string) => Promise<import("../types/endpoints/validateRefreshTokenCode").validateRefreshTokenCodeResponse>;
     _refreshRefreshToken: (refreshToken: string, clientID: string, clientSecret: string) => Promise<import("../types/endpoints/refreshRefreshToken").refreshRefreshTokenResponse>;
     _revoketoken: (token: string, clientID?: string) => Promise<void>;

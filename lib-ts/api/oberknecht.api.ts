@@ -238,8 +238,8 @@ export class oberknechtAPI {
     });
   }
 
-  _validatetoken = (customToken: string) => {
-    return _validatetoken(this.symbol, customToken);
+  _validatetoken = (customToken: string, useOldFormat?: boolean) => {
+    return _validatetoken(this.symbol, customToken, useOldFormat);
   };
 
   _validateRefreshTokenCode = (
@@ -720,12 +720,6 @@ export class oberknechtAPI {
     userID?: undefined,
     customToken?: string
   ) => {
-    return getModeratedChannels(
-      this.symbol,
-      first,
-      after,
-      userID,
-      customToken
-    );
+    return getModeratedChannels(this.symbol, first, after, userID, customToken);
   };
 }

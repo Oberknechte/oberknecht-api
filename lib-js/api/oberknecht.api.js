@@ -183,8 +183,8 @@ class oberknechtAPI {
             return resolve();
         });
     }
-    _validatetoken = (customToken) => {
-        return (0, _validatetoken_1._validatetoken)(this.symbol, customToken);
+    _validatetoken = (customToken, useOldFormat) => {
+        return (0, _validatetoken_1._validatetoken)(this.symbol, customToken, useOldFormat);
     };
     _validateRefreshTokenCode = (refreshToken, clientID, clientSecret, redirectURL) => {
         return (0, _validateRefreshTokenCode_1._validateRefreshTokenCode)(this.symbol, refreshToken, clientID, clientSecret, redirectURL);
