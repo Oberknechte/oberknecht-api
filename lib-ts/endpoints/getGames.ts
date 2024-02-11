@@ -14,7 +14,7 @@ export async function getGames(
   customToken?: string
 ) {
   checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
-  checkThrowMissingParams([ids, names, igdbIDs], ["ids", "names", "igdbIDs"]);
+  checkThrowMissingParams([ids, names, igdbIDs], ["ids", "names", "igdbIDs"], true);
 
   let ids_ = convertToArray(ids, false);
   let names_ = convertToArray(names, false);

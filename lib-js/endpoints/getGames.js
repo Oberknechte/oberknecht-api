@@ -9,7 +9,7 @@ const validateTokenBR_1 = require("../functions/validateTokenBR");
 const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
 async function getGames(sym, ids, names, igdbIDs, customToken) {
     (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
-    (0, checkThrowMissingParams_1.checkThrowMissingParams)([ids, names, igdbIDs], ["ids", "names", "igdbIDs"]);
+    (0, checkThrowMissingParams_1.checkThrowMissingParams)([ids, names, igdbIDs], ["ids", "names", "igdbIDs"], true);
     let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false);
     let names_ = (0, oberknecht_utils_1.convertToArray)(names, false);
     let igdbIDs_ = (0, oberknecht_utils_1.convertToArray)(igdbIDs, false);
