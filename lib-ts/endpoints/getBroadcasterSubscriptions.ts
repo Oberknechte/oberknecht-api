@@ -24,7 +24,7 @@ export async function getBroadcasterSubscriptions(
   );
 
   let userID_ = cleanChannelName(userID);
-  let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
+  let broadcasterID_ = cleanChannelName(broadcasterID) ?? _userID;
 
   if (checkTwitchUsername(userID_))
     await _getUser(sym, userID_).then((u) => {
