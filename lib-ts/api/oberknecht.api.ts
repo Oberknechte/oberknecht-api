@@ -176,7 +176,7 @@ export class oberknechtAPI {
       if (this.userssplitterpromise) await this.userssplitterpromise;
 
       if (this._options.refreshToken) {
-        validateTokenBR(this.symbol, this._options.refreshToken)
+        await validateTokenBR(this.symbol)
           .then((t) => {
             this.verified = true;
             i.apiclientData[this.symbol]._options = {

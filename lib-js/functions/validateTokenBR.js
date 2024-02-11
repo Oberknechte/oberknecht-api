@@ -13,7 +13,8 @@ function validateTokenBR(sym, accessOrRefreshToken) {
         let accessToken;
         if (accessOrRefreshToken) {
             if (tokenSplitter.getKeySync(["refreshToken", accessOrRefreshToken]))
-                accessToken = (0, getValidAccessTokenForRT_1.getValidAccessTokenForRT)(sym, accessOrRefreshToken)?.accessToken;
+                accessToken = (0, getValidAccessTokenForRT_1.getValidAccessTokenForRT)(sym, accessOrRefreshToken)
+                    ?.accessToken;
             else
                 accessToken = accessOrRefreshToken;
         }
@@ -36,7 +37,10 @@ function validateTokenBR(sym, accessOrRefreshToken) {
                     ...r,
                 });
             })
-                .catch(reject);
+                .catch((e) => {
+                if (!e.message.includes("code 401"))
+                    reject(e);
+            });
         if (tokenData.expiresAt && tokenData.expiresAt > Date.now())
             return resolve({
                 ...tokenData,

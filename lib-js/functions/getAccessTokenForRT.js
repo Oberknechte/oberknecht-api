@@ -18,8 +18,11 @@ function getAccessTokenForRT(sym, refreshToken) {
             "refreshToken",
             refreshToken,
         ]);
-        if (refreshTokenData)
-            return resolve((0, getValidAccessTokenForRT_1.getValidAccessTokenForRT)(sym, refreshToken));
+        if (refreshTokenData) {
+            let validAccessToken = (0, getValidAccessTokenForRT_1.getValidAccessTokenForRT)(sym, refreshToken);
+            if (validAccessToken)
+                return resolve(validAccessToken);
+        }
         (0, _refreshRefreshToken_1._refreshRefreshToken)(sym, refreshToken).then(resolve).catch(reject);
     });
 }

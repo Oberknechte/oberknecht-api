@@ -21,7 +21,8 @@ export function validateTokenBR(sym: string, accessOrRefreshToken?: string) {
 
     if (accessOrRefreshToken) {
       if (tokenSplitter.getKeySync(["refreshToken", accessOrRefreshToken]))
-        accessToken = getValidAccessTokenForRT(sym, accessOrRefreshToken)?.accessToken;
+        accessToken = getValidAccessTokenForRT(sym, accessOrRefreshToken)
+          ?.accessToken;
       else accessToken = accessOrRefreshToken;
     } else {
       if (i.apiclientData[sym]._options.refreshToken)
@@ -43,7 +44,9 @@ export function validateTokenBR(sym: string, accessOrRefreshToken?: string) {
             ...r,
           });
         })
-        .catch(reject);
+        .catch((e) => {
+          if (!e.message.includes("code 401")) reject(e);
+        });
 
     if (tokenData.expiresAt && tokenData.expiresAt > Date.now())
       return resolve({

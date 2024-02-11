@@ -31,8 +31,10 @@ export function getAccessTokenForRT(sym: string, refreshToken?: string) {
       refreshToken,
     ]);
 
-    if (refreshTokenData)
-      return resolve(getValidAccessTokenForRT(sym, refreshToken));
+    if (refreshTokenData) {
+      let validAccessToken = getValidAccessTokenForRT(sym, refreshToken);
+      if (validAccessToken) return resolve(validAccessToken);
+    }
 
     _refreshRefreshToken(sym, refreshToken).then(resolve).catch(reject);
   });

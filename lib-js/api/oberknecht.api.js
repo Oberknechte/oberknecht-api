@@ -138,7 +138,7 @@ class oberknechtAPI {
             if (this.userssplitterpromise)
                 await this.userssplitterpromise;
             if (this._options.refreshToken) {
-                (0, validateTokenBR_1.validateTokenBR)(this.symbol, this._options.refreshToken)
+                await (0, validateTokenBR_1.validateTokenBR)(this.symbol)
                     .then((t) => {
                     this.verified = true;
                     index_1.i.apiclientData[this.symbol]._options = {
