@@ -21,7 +21,7 @@ export function validateTokenBR(sym: string, accessOrRefreshToken?: string) {
 
     if (accessOrRefreshToken) {
       if (tokenSplitter.getKeySync(["refreshToken", accessOrRefreshToken]))
-        accessToken = getValidAccessTokenForRT(sym, accessOrRefreshToken)
+        accessToken = (await getAccessTokenForRT(sym, accessOrRefreshToken))
           ?.accessToken;
       else accessToken = accessOrRefreshToken;
     } else {

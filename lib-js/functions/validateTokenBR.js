@@ -6,14 +6,13 @@ const __1 = require("..");
 const _validatetoken_1 = require("../endpoints/_validatetoken");
 const _refreshRefreshToken_1 = require("../endpoints/_refreshRefreshToken");
 const getAccessTokenForRT_1 = require("./getAccessTokenForRT");
-const getValidAccessTokenForRT_1 = require("./getValidAccessTokenForRT");
 function validateTokenBR(sym, accessOrRefreshToken) {
     return new Promise(async (resolve, reject) => {
         let tokenSplitter = (0, oberknecht_utils_1.getKeyFromObject)(__1.i.apiclientData[sym], ["jsonsplitters", "tokenSplitter"], false, true);
         let accessToken;
         if (accessOrRefreshToken) {
             if (tokenSplitter.getKeySync(["refreshToken", accessOrRefreshToken]))
-                accessToken = (0, getValidAccessTokenForRT_1.getValidAccessTokenForRT)(sym, accessOrRefreshToken)
+                accessToken = (await (0, getAccessTokenForRT_1.getAccessTokenForRT)(sym, accessOrRefreshToken))
                     ?.accessToken;
             else
                 accessToken = accessOrRefreshToken;
