@@ -186,8 +186,8 @@ class oberknechtAPI {
     _validatetoken = (customToken, useOldFormat) => {
         return (0, _validatetoken_1._validatetoken)(this.symbol, customToken, useOldFormat);
     };
-    _validateRefreshTokenCode = (refreshToken, clientID, clientSecret, redirectURL) => {
-        return (0, _validateRefreshTokenCode_1._validateRefreshTokenCode)(this.symbol, refreshToken, clientID, clientSecret, redirectURL);
+    _validateRefreshTokenCode = (code, redirectURL, clientID, clientSecret) => {
+        return (0, _validateRefreshTokenCode_1._validateRefreshTokenCode)(this.symbol, code, redirectURL, clientID, clientSecret);
     };
     _refreshRefreshToken = (refreshToken, clientID, clientSecret) => {
         return (0, _refreshRefreshToken_1._refreshRefreshToken)(this.symbol, refreshToken, clientID, clientSecret);

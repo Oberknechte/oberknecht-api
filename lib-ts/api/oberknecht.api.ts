@@ -243,17 +243,17 @@ export class oberknechtAPI {
   };
 
   _validateRefreshTokenCode = (
-    refreshToken: string,
-    clientID: string,
-    clientSecret: string,
-    redirectURL: string
+    code: string,
+    redirectURL: string,
+    clientID?: string,
+    clientSecret?: string
   ) => {
     return _validateRefreshTokenCode(
       this.symbol,
-      refreshToken,
+      code,
+      redirectURL,
       clientID,
-      clientSecret,
-      redirectURL
+      clientSecret
     );
   };
 
