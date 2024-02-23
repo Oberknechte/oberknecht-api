@@ -69,6 +69,7 @@ import { _validateRefreshTokenCode } from "../endpoints/_validateRefreshTokenCod
 import { validateTokenWR } from "../functions/validateTokenWR";
 import { validateTokenBR } from "../functions/validateTokenBR";
 import { _getUser } from "../endpoints/_getUser";
+import { getChannelModerators } from "../endpoints/getChannelModerators";
 let clientSymNum = 0;
 
 request(null, null, null, {
@@ -721,5 +722,21 @@ export class oberknechtAPI {
     customToken?: string
   ) => {
     return getModeratedChannels(this.symbol, first, after, userID, customToken);
+  };
+  getChannelModerators = (
+    userID?: string,
+    first?: string,
+    after?: string,
+    broadcasterID?: string,
+    customToken?: string
+  ) => {
+    return getChannelModerators(
+      this.symbol,
+      broadcasterID,
+      userID,
+      first,
+      after,
+      customToken
+    );
   };
 }

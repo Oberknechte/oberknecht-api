@@ -152,6 +152,10 @@ export declare class urls {
             endpoint: string;
             scopes: string[];
         };
+        getChannelModerators: {
+            endpoint: string;
+            scopes: string[];
+        };
     };
     static ivrfitwitch: {
         new (): {};

@@ -57,6 +57,7 @@ const _refreshRefreshToken_1 = require("../endpoints/_refreshRefreshToken");
 const _validateRefreshTokenCode_1 = require("../endpoints/_validateRefreshTokenCode");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
 const _getUser_1 = require("../endpoints/_getUser");
+const getChannelModerators_1 = require("../endpoints/getChannelModerators");
 let clientSymNum = 0;
 (0, oberknecht_request_1.request)(null, null, null, {
     returnAfter: true,
@@ -357,6 +358,9 @@ class oberknechtAPI {
     };
     getModeratedChannels = (first, after, userID, customToken) => {
         return (0, getModeratedChannels_1.getModeratedChannels)(this.symbol, first, after, userID, customToken);
+    };
+    getChannelModerators = (userID, first, after, broadcasterID, customToken) => {
+        return (0, getChannelModerators_1.getChannelModerators)(this.symbol, broadcasterID, userID, first, after, customToken);
     };
 }
 exports.oberknechtAPI = oberknechtAPI;
