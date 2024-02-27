@@ -279,12 +279,20 @@ export class oberknechtAPI {
     logins: string | string[] | undefined,
     ids?: string | string[] | undefined,
     noautofilterids?: Boolean,
-    customToken?: string
+    customToken?: string,
+    refreshCache?: boolean
   ) => {
-    return _getUsers(this.symbol, logins, ids, noautofilterids, customToken);
+    return _getUsers(
+      this.symbol,
+      logins,
+      ids,
+      noautofilterids,
+      customToken,
+      refreshCache
+    );
   };
-  _getUser = (user: string) => {
-    return _getUser(this.symbol, user);
+  _getUser = (user: string, refreshCache?: boolean) => {
+    return _getUser(this.symbol, user, refreshCache);
   };
 
   ban = (

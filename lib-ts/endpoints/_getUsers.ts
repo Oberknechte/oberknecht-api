@@ -14,7 +14,8 @@ export async function _getUsers(
   logins?: string | string[],
   ids?: string | string[],
   noautofilterids?: Boolean /* Prevent filtering of number entries (ids) in logins */,
-  customToken?: string
+  customToken?: string,
+  refreshCache?: boolean
 ) {
   checkThrowMissingParams([sym, customToken], ["sym", "customToken"], true);
   checkThrowMissingParams([logins, ids], ["logins", "ids"], true);
@@ -46,7 +47,7 @@ export async function _getUsers(
     );
     logins_ = logins_.filter((a) => regex.twitch.usernamereg().test(a));
 
-    if (i.apiclientData[sym]?._options?.saveIDs) {
+    if (!refreshCache && i.apiclientData[sym]?._options?.saveIDs) {
       recreate(logins_).forEach((login) => {
         let u = i.apiclientData[sym]?.jsonsplitters?.users?.getKeySync([
           "logins",

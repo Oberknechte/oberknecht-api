@@ -5,7 +5,7 @@ const oberknecht_utils_1 = require("oberknecht-utils");
 const __1 = require("..");
 const getUsers_1 = require("./getUsers");
 const checkThrowMissingParams_1 = require("../functions/checkThrowMissingParams");
-async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering of number entries (ids) in logins */, customToken) {
+async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering of number entries (ids) in logins */, customToken, refreshCache) {
     (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
     (0, checkThrowMissingParams_1.checkThrowMissingParams)([logins, ids], ["logins", "ids"], true);
     return new Promise(async (resolve, reject) => {
@@ -27,7 +27,7 @@ async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering 
         let requestnew = [];
         r.loginsInvalid = logins_.filter((a) => !oberknecht_utils_1.regex.twitch.usernamereg().test(a));
         logins_ = logins_.filter((a) => oberknecht_utils_1.regex.twitch.usernamereg().test(a));
-        if (__1.i.apiclientData[sym]?._options?.saveIDs) {
+        if (!refreshCache && __1.i.apiclientData[sym]?._options?.saveIDs) {
             (0, oberknecht_utils_1.recreate)(logins_).forEach((login) => {
                 let u = __1.i.apiclientData[sym]?.jsonsplitters?.users?.getKeySync([
                     "logins",

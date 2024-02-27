@@ -196,11 +196,11 @@ class oberknechtAPI {
     _revoketoken = (token, clientID) => {
         return (0, _revoketoken_1._revoketoken)(this.symbol, token, clientID);
     };
-    _getUsers = (logins, ids, noautofilterids, customToken) => {
-        return (0, _getUsers_1._getUsers)(this.symbol, logins, ids, noautofilterids, customToken);
+    _getUsers = (logins, ids, noautofilterids, customToken, refreshCache) => {
+        return (0, _getUsers_1._getUsers)(this.symbol, logins, ids, noautofilterids, customToken, refreshCache);
     };
-    _getUser = (user) => {
-        return (0, _getUser_1._getUser)(this.symbol, user);
+    _getUser = (user, refreshCache) => {
+        return (0, _getUser_1._getUser)(this.symbol, user, refreshCache);
     };
     ban = (broadcasterID, targetUserID, reason, customToken) => {
         return (0, ban_1.ban)(this.symbol, broadcasterID, targetUserID, reason, undefined, customToken);
