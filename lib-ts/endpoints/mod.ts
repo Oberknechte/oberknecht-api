@@ -29,6 +29,11 @@ export async function mod(
       userID_ = u.id;
     });
 
+  // if (checkTwitchUsername(broadcasterID_))
+  //   await _getUser(sym, userID_).then((u) => {
+  //     broadcasterID_ = u.id;
+  //   });
+
   return new Promise<void>(async (resolve, reject) => {
     request(
       `${urls._url("twitch", "mod")}${joinUrlQuery(

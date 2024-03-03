@@ -102,9 +102,10 @@ export async function _getUsers(
     if (requestnew.length > 0) {
       await getUsers(sym, [], requestnew, true)
         .then((users) => {
-          Object.keys(users.details).forEach(
-            (a) => (r.details[a] = users.details[a])
-          );
+          Object.keys(users.details).forEach((a) => {
+            if (users.details[a].email) delete users.details[a].email;
+            r.details[a] = users.details[a];
+          });
         })
         .catch((e) => {});
     }
@@ -118,6 +119,7 @@ export async function _getUsers(
 
           r.ids[b.id] = b.login;
           r.logins[b.login] = b.id;
+          if (b.email) delete b.email;
           r.details[b.id] = b;
         });
 

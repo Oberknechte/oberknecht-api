@@ -18,6 +18,10 @@ async function mod(sym, userID, broadcasterID, customToken) {
         await (0, _getUser_1._getUser)(sym, userID_).then((u) => {
             userID_ = u.id;
         });
+    // if (checkTwitchUsername(broadcasterID_))
+    //   await _getUser(sym, userID_).then((u) => {
+    //     broadcasterID_ = u.id;
+    //   });
     return new Promise(async (resolve, reject) => {
         (0, oberknecht_request_1.request)(`${urls_1.urls._url("twitch", "mod")}${(0, oberknecht_utils_1.joinUrlQuery)(["broadcaster_id", "user_id"], [broadcasterID_, userID_], true)}`, {
             method: urls_1.urls._method("twitch", "mod"),
