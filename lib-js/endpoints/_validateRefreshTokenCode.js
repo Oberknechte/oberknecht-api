@@ -28,6 +28,7 @@ async function _validateRefreshTokenCode(sym, code, redirectURL, clientID, clien
             let refreshTokenData = {
                 expiresAt: Date.now() + r.data.expires_in * 1000,
                 clientID: clientID_,
+                scopes: scopes,
             };
             await (0, _validatetoken_1._validatetoken)(sym, accessToken, false)
                 .then((tokenData) => {
@@ -58,7 +59,6 @@ async function _validateRefreshTokenCode(sym, code, redirectURL, clientID, clien
                 tokenSplitter.addKeySync(["refreshToken", refreshToken], {
                     ...refreshTokenData,
                     userID: tokenData.userID,
-                    scopes: accessTokenData.scopes,
                 });
                 tokenSplitter.addKeySync(["refreshToken", refreshToken, "accessTokens", accessToken], {});
                 tokenSplitter.addKeySync(["userID", tokenData.userID, "refreshTokens", refreshToken], {});
