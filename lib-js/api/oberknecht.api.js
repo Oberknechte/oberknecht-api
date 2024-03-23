@@ -58,6 +58,7 @@ const _validateRefreshTokenCode_1 = require("../endpoints/_validateRefreshTokenC
 const validateTokenBR_1 = require("../functions/validateTokenBR");
 const _getUser_1 = require("../endpoints/_getUser");
 const getChannelModerators_1 = require("../endpoints/getChannelModerators");
+const getValidAccessTokenForRT_1 = require("../functions/getValidAccessTokenForRT");
 let clientSymNum = 0;
 (0, oberknecht_request_1.request)(null, null, null, {
     returnAfter: true,
@@ -192,6 +193,12 @@ class oberknechtAPI {
     };
     _refreshRefreshToken = (refreshToken, clientID, clientSecret) => {
         return (0, _refreshRefreshToken_1._refreshRefreshToken)(this.symbol, refreshToken, clientID, clientSecret);
+    };
+    _getDataForRefreshToken = (refreshToken) => {
+        return this.tokenSplitter.getKeySync(["refreshToken", refreshToken]);
+    };
+    _getValidAccessTokenForRT = (refreshToken) => {
+        return (0, getValidAccessTokenForRT_1.getValidAccessTokenForRT)(this.symbol, refreshToken);
     };
     _revoketoken = (token, clientID) => {
         return (0, _revoketoken_1._revoketoken)(this.symbol, token, clientID);

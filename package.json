@@ -1,6 +1,6 @@
 {
   "name": "oberknecht-api",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "A client for easy usage of the Twitch API (Helix)",
   "main": "./export",
   "scripts": {

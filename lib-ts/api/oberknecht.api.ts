@@ -70,6 +70,7 @@ import { validateTokenWR } from "../functions/validateTokenWR";
 import { validateTokenBR } from "../functions/validateTokenBR";
 import { _getUser } from "../endpoints/_getUser";
 import { getChannelModerators } from "../endpoints/getChannelModerators";
+import { getValidAccessTokenForRT } from "../functions/getValidAccessTokenForRT";
 let clientSymNum = 0;
 
 request(null, null, null, {
@@ -269,6 +270,14 @@ export class oberknechtAPI {
       clientID,
       clientSecret
     );
+  };
+
+  _getDataForRefreshToken = (refreshToken: string) => {
+    return this.tokenSplitter.getKeySync(["refreshToken", refreshToken]);
+  };
+
+  _getValidAccessTokenForRT = (refreshToken: string) => {
+    return getValidAccessTokenForRT(this.symbol, refreshToken);
   };
 
   _revoketoken = (token: string, clientID?: string) => {

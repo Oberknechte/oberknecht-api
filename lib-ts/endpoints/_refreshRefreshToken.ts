@@ -1,7 +1,7 @@
 import { request } from "oberknecht-request";
 import { i } from "..";
 import { jsonsplitter } from "oberknecht-jsonsplitter";
-import { getKeyFromObject } from "oberknecht-utils";
+import { getKeyFromObject, isNullUndefined } from "oberknecht-utils";
 import { _validatetoken } from "./_validatetoken";
 import { refreshRefreshTokenResponse } from "../types/endpoints/refreshRefreshToken";
 import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
@@ -12,7 +12,7 @@ export async function _refreshRefreshToken(
   clientID?: string,
   clientSecret?: string
 ) {
-  checkThrowMissingParams([sym,refreshToken], ["sym", "refreshToken"]);
+  checkThrowMissingParams([sym, refreshToken], ["sym", "refreshToken"]);
 
   return new Promise<refreshRefreshTokenResponse>((resolve, reject) => {
     let refreshToken_ = refreshToken;
@@ -93,6 +93,31 @@ export async function _refreshRefreshToken(
               ["accessToken", accessToken],
               accessTokenData
             );
+
+            if (
+              isNullUndefined(
+                tokenSplitter.getKeySync([
+                  "refreshToken",
+                  refreshToken,
+                  "accessTokenNum",
+                ])
+              )
+            )
+              tokenSplitter.addKeySync(
+                ["refreshToken", refreshToken, "accessTokenNum"],
+                Object.keys(
+                  tokenSplitter.getKeySync([
+                    "refreshToken",
+                    refreshToken,
+                    "accessTokens",
+                  ])
+                ).length
+              );
+            else
+              tokenSplitter.editKeyAddSync(
+                ["refreshToken", refreshToken, "accessTokenNum"],
+                1
+              );
 
             return resolve(accessTokenDataR);
           })

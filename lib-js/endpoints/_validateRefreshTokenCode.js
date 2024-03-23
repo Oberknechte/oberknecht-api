@@ -21,7 +21,7 @@ async function _validateRefreshTokenCode(sym, code, redirectURL, clientID, clien
             body: encodeURI(`client_id=${clientID_}&client_secret=${clientSecret_}&code=${code}&grant_type=authorization_code&redirect_uri=${redirectURL}`),
         }, async (e, r) => {
             if (e || r.status !== 200)
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data ?? e));
             let refreshToken = r.data.refresh_token;
             let accessToken = r.data.access_token;
             let refreshTokenData = {
@@ -62,6 +62,18 @@ async function _validateRefreshTokenCode(sym, code, redirectURL, clientID, clien
                 tokenSplitter.addKeySync(["userID", tokenData.userID, "refreshTokens", refreshToken], {});
                 tokenSplitter.addKeySync(["userID", tokenData.userID, "accessTokens", accessToken], {});
                 tokenSplitter.addKeySync(["accessToken", accessToken], accessTokenData);
+                if ((0, oberknecht_utils_1.isNullUndefined)(tokenSplitter.getKeySync([
+                    "refreshToken",
+                    refreshToken,
+                    "accessTokenNum",
+                ])))
+                    tokenSplitter.addKeySync(["refreshToken", refreshToken, "accessTokenNum"], Object.keys(tokenSplitter.getKeySync([
+                        "refreshToken",
+                        refreshToken,
+                        "accessTokens",
+                    ])).length);
+                else
+                    tokenSplitter.editKeyAddSync(["refreshToken", refreshToken, "accessTokenNum"], 1);
                 return resolve(re);
             })
                 .catch((e) => reject(Error("Could not validate access token", { cause: e })));

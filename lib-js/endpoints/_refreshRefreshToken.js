@@ -51,6 +51,18 @@ async function _refreshRefreshToken(sym, refreshToken, clientID, clientSecret) {
                 tokenSplitter.addKeySync(["userID", tokenData.userID, "refreshTokens", refreshToken], {});
                 tokenSplitter.addKeySync(["userID", tokenData.userID, "accessTokens", accessToken], {});
                 tokenSplitter.addKeySync(["accessToken", accessToken], accessTokenData);
+                if ((0, oberknecht_utils_1.isNullUndefined)(tokenSplitter.getKeySync([
+                    "refreshToken",
+                    refreshToken,
+                    "accessTokenNum",
+                ])))
+                    tokenSplitter.addKeySync(["refreshToken", refreshToken, "accessTokenNum"], Object.keys(tokenSplitter.getKeySync([
+                        "refreshToken",
+                        refreshToken,
+                        "accessTokens",
+                    ])).length);
+                else
+                    tokenSplitter.editKeyAddSync(["refreshToken", refreshToken, "accessTokenNum"], 1);
                 return resolve(accessTokenDataR);
             })
                 .catch((e) => reject(Error("Could not validate access token", { cause: e })));

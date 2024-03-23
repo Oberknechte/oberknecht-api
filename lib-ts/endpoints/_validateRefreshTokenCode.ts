@@ -2,7 +2,11 @@ import { request } from "oberknecht-request";
 import { validateRefreshTokenCodeResponse } from "../types/endpoints/validateRefreshTokenCode";
 import { i } from "..";
 import { jsonsplitter } from "oberknecht-jsonsplitter";
-import { filterByKeys, getKeyFromObject } from "oberknecht-utils";
+import {
+  filterByKeys,
+  getKeyFromObject,
+  isNullUndefined,
+} from "oberknecht-utils";
 import { _validatetoken } from "./_validatetoken";
 import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
@@ -37,7 +41,8 @@ export async function _validateRefreshTokenCode(
         ),
       },
       async (e, r) => {
-        if (e || r.status !== 200) return reject(Error(e.stack ?? r.data));
+        if (e || r.status !== 200)
+          return reject(Error(e?.stack ?? r?.data ?? e));
 
         let refreshToken = r.data.refresh_token;
         let accessToken = r.data.access_token;
@@ -110,6 +115,31 @@ export async function _validateRefreshTokenCode(
               ["accessToken", accessToken],
               accessTokenData
             );
+
+            if (
+              isNullUndefined(
+                tokenSplitter.getKeySync([
+                  "refreshToken",
+                  refreshToken,
+                  "accessTokenNum",
+                ])
+              )
+            )
+              tokenSplitter.addKeySync(
+                ["refreshToken", refreshToken, "accessTokenNum"],
+                Object.keys(
+                  tokenSplitter.getKeySync([
+                    "refreshToken",
+                    refreshToken,
+                    "accessTokens",
+                  ])
+                ).length
+              );
+            else
+              tokenSplitter.editKeyAddSync(
+                ["refreshToken", refreshToken, "accessTokenNum"],
+                1
+              );
 
             return resolve(re);
           })

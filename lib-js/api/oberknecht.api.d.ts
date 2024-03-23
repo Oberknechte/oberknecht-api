@@ -27,6 +27,8 @@ export declare class oberknechtAPI {
     _validatetoken: (customToken: string, useOldFormat?: boolean) => Promise<import("../types/endpoints/validateToken").validateTokenResponseOld | import("../types/endpoints/validateToken").validateTokenResponse>;
     _validateRefreshTokenCode: (code: string, redirectURL: string, clientID?: string, clientSecret?: string) => Promise<import("../types/endpoints/validateRefreshTokenCode").validateRefreshTokenCodeResponse>;
     _refreshRefreshToken: (refreshToken: string, clientID: string, clientSecret: string) => Promise<import("../types/endpoints/refreshRefreshToken").refreshRefreshTokenResponse>;
+    _getDataForRefreshToken: (refreshToken: string) => any;
+    _getValidAccessTokenForRT: (refreshToken: string) => import("../types/endpoints/refreshRefreshToken").refreshRefreshTokenResponse;
     _revoketoken: (token: string, clientID?: string) => Promise<void>;
     _getUsers: (logins: string | string[] | undefined, ids?: string | string[] | undefined, noautofilterids?: Boolean, customToken?: string, refreshCache?: boolean) => Promise<import("../types/_getUsers")._getUsersResponse>;
     _getUser: (user: string, refreshCache?: boolean) => Promise<import("../types/endpoints/_getUsers").userEntry>;
