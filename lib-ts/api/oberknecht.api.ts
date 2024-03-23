@@ -284,6 +284,10 @@ export class oberknechtAPI {
     return this.tokenSplitter.getKeySync(["accessToken", accessToken]);
   }
 
+  _validateTokenWR = (accessOrRefreshToken?: string) => {
+    return validateTokenWR(this.symbol, accessOrRefreshToken);
+  }
+
   _revoketoken = (token: string, clientID?: string) => {
     return _revoketoken(this.symbol, token, clientID);
   };
