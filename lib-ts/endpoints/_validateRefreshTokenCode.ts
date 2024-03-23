@@ -46,6 +46,7 @@ export async function _validateRefreshTokenCode(
 
         let refreshToken = r.data.refresh_token;
         let accessToken = r.data.access_token;
+        let scopes = r.data.scope;
 
         let refreshTokenData = {
           expiresAt: Date.now() + r.data.expires_in * 1000,
@@ -94,6 +95,7 @@ export async function _validateRefreshTokenCode(
             tokenSplitter.addKeySync(["refreshToken", refreshToken], {
               ...refreshTokenData,
               userID: tokenData.userID,
+              scopes: accessTokenData.scopes,
             });
 
             tokenSplitter.addKeySync(

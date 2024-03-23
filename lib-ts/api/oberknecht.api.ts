@@ -280,6 +280,10 @@ export class oberknechtAPI {
     return getValidAccessTokenForRT(this.symbol, refreshToken);
   };
 
+  _getDataForAccessToken = (accessToken: string) => {
+    return this.tokenSplitter.getKeySync(["accessToken", accessToken]);
+  }
+
   _revoketoken = (token: string, clientID?: string) => {
     return _revoketoken(this.symbol, token, clientID);
   };
