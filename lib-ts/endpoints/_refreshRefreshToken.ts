@@ -34,7 +34,7 @@ export async function _refreshRefreshToken(
         ),
       },
       async (e, r) => {
-        if (e || r.status !== 200) return reject(Error(e.stack ?? r.data));
+        if (e || r.status !== 200) return reject(Error(e?.stack ?? r?.data));
 
         let accessToken = r.data.access_token;
 

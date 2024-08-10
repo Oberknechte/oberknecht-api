@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPrediction = void 0;
+exports.createPrediction = createPrediction;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -27,9 +27,8 @@ broadcasterID, customToken) {
             }),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "createPrediction"))
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             return resolve(r.data);
         });
     });
 }
-exports.createPrediction = createPrediction;

@@ -1,2 +1,2 @@
 import { validateTokenBRType } from "./validateTokenBR";
-export declare type getAccessTokenForBRType = validateTokenBRType;
+export type getAccessTokenForBRType = validateTokenBRType;

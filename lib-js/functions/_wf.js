@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._wf = void 0;
+exports._wf = _wf;
 const _mainpath_1 = require("../functions/_mainpath");
 const fs_1 = __importDefault(require("fs"));
 function _wf(sym, wfpath, wffile) {
@@ -39,5 +39,4 @@ function _wf(sym, wfpath, wffile) {
     }
     ;
 }
-exports._wf = _wf;
 ;

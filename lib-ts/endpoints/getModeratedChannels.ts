@@ -34,7 +34,7 @@ export async function getModeratedChannels(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "getModeratedChannels"))
-          return reject(Error(e.stack ?? r.data));
+          return reject(Error(e?.stack ?? r?.data));
 
         return resolve(r.data);
       }

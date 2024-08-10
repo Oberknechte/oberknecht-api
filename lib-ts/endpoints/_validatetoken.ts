@@ -36,7 +36,7 @@ export async function _validatetoken<useOldFormatType extends boolean>(
         },
       },
       (e, r) => {
-        if (e || r.status !== 200) return reject(Error(e.stack ?? r.data));
+        if (e || r.status !== 200) return reject(Error(e?.stack ?? r?.data));
 
         let tokenData = r.data;
         let accessTokenData = {

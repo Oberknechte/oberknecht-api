@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._refreshRefreshToken = void 0;
+exports._refreshRefreshToken = _refreshRefreshToken;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -22,7 +22,7 @@ async function _refreshRefreshToken(sym, refreshToken, clientID, clientSecret) {
             body: encodeURI(`grant_type=refresh_token&refresh_token=${refreshToken_}&client_id=${clientID_}&client_secret=${clientSecret_}`),
         }, async (e, r) => {
             if (e || r.status !== 200)
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             let accessToken = r.data.access_token;
             await (0, _validatetoken_1._validatetoken)(sym, accessToken, false)
                 .then((tokenData) => {
@@ -69,4 +69,3 @@ async function _refreshRefreshToken(sym, refreshToken, clientID, clientSecret) {
         });
     });
 }
-exports._refreshRefreshToken = _refreshRefreshToken;

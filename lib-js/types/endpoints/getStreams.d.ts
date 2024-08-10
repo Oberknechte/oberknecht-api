@@ -1,7 +1,7 @@
-export declare type streamLanguagesType = string;
+export type streamLanguagesType = string;
 export declare const streamTypes: string[];
-export declare type streamTypesType = typeof streamTypes[number];
-export declare type getStreamsFiltersType = {
+export type streamTypesType = typeof streamTypes[number];
+export type getStreamsFiltersType = {
     user_id?: string[];
     user_login?: string[];
     game_id?: string[];
@@ -11,7 +11,7 @@ export declare type getStreamsFiltersType = {
     before?: string;
     after?: string;
 };
-export declare type streamEntry = {
+export type streamEntry = {
     id: string;
     user_id: string;
     user_login: string;
@@ -28,7 +28,7 @@ export declare type streamEntry = {
     tag_ids: string[];
     is_mature: boolean;
 };
-export declare type getStreamsResponse = {
+export type getStreamsResponse = {
     data: Array<streamEntry>;
     pagination: {
         cursor: string;

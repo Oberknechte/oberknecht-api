@@ -142,6 +142,7 @@ export class urls {
     static deleteEventsubSubscription = {
       endpoint: "/eventsub/subscriptions",
       method: "DELETE",
+      code: 204,
     };
 
     static getBroadcasterSubscriptions = {
@@ -212,6 +213,17 @@ export class urls {
     static getChannelModerators = {
       endpoint: "/moderation/moderators",
       scopes: ["moderation:read"],
+    };
+
+    static conduits = class {
+      static getConduits = {
+        endpoint: "/eventsub/conduits",
+      };
+
+      static createConduits = {
+        endpoint: "/eventsub/conduits",
+        method: "POST",
+      };
     };
   };
 

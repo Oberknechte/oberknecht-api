@@ -1,23 +1,23 @@
 export declare const userTypes: string[];
-export declare type userTypesType = typeof userTypes[number];
+export type userTypesType = typeof userTypes[number];
 export declare const broadcasterTypes: string[];
-export declare type broadcasterTypesType = typeof broadcasterTypes[number];
-export declare type loginsEntry = {
+export type broadcasterTypesType = typeof broadcasterTypes[number];
+export type loginsEntry = {
     [key: string]: string;
 };
-export declare type idsEntry = {
+export type idsEntry = {
     [key: string]: string;
 };
-export declare type detailsEntry = {
+export type detailsEntry = {
     [key: string]: userEntry;
 };
-export declare type getUsersResolveType = {
+export type getUsersResolveType = {
     logins: loginsEntry;
     ids: idsEntry;
     details: detailsEntry;
     loginsInvalid: string[];
 };
-export declare type userEntry = {
+export type userEntry = {
     id: string;
     login: string;
     display_name: string;
@@ -32,6 +32,6 @@ export declare type userEntry = {
     displayNameParsed: string;
     _lastUpdated: number;
 };
-export declare type getUsersResponse = {
+export type getUsersResponse = {
     data: Array<userEntry>;
 };

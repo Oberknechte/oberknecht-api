@@ -1,12 +1,12 @@
 export declare const pollStatus: readonly ["TERMINATED", "ARCHIVED"];
-export declare type pollStatusType = typeof pollStatus[number];
+export type pollStatusType = typeof pollStatus[number];
 export declare const pollChoiceStatus: readonly ["ACTIVE", "COMPLETED", "TERMINATED", "ARCHIVED", "MODERATED", "INVALID"];
-export declare type pollChoiceStatusType = typeof pollChoiceStatus[number];
-export declare type choiceEntry = {
+export type pollChoiceStatusType = typeof pollChoiceStatus[number];
+export type choiceEntry = {
     title: string;
 };
-export declare type choices = Array<choiceEntry>;
-export declare type pollEntry = {
+export type choices = Array<choiceEntry>;
+export type pollEntry = {
     id: string;
     broadcaster_id: string;
     broadcaster_name: string;
@@ -21,20 +21,20 @@ export declare type pollEntry = {
     duration: number;
     started_at: string;
 };
-export declare type pollResponseChoice = {
+export type pollResponseChoice = {
     id: string;
     title: string;
     votes: number;
     channel_points_votes: number;
     bits_votes: number;
 };
-export declare type endPollResponse = {
+export type endPollResponse = {
     data: Array<pollEntry>;
 };
-export declare type createPollResponse = {
+export type createPollResponse = {
     data: Array<pollEntry>;
 };
-export declare type getPollResponse = {
+export type getPollResponse = {
     data: Array<pollEntry>;
     pagination: {} | {
         cursor: string;

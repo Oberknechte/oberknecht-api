@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getGames = void 0;
+exports.getGames = getGames;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
@@ -22,9 +22,8 @@ async function getGames(sym, ids, names, igdbIDs, customToken) {
             headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "getGames"))
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             return resolve(r.data);
         });
     });
 }
-exports.getGames = getGames;

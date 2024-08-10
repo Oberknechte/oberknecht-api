@@ -36,7 +36,7 @@ export async function endPoll(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "endPoll"))
-          return reject(Error(e.stack ?? r.data));
+          return reject(Error(e?.stack ?? r?.data));
 
         return resolve(r.data);
       }

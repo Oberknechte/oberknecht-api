@@ -1,1 +1,1 @@
-export declare type streamLanguagesType = string;
+export type streamLanguagesType = string;

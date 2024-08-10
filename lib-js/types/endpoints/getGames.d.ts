@@ -1,10 +1,10 @@
-export declare type gameEntry = {
+export type gameEntry = {
     id: string;
     name: string;
     box_art_url: string;
     igdb_id: string;
 };
-export declare type getGamesResponse = {
+export type getGamesResponse = {
     data: Array<gameEntry>;
     pagination: {
         cursor: string;

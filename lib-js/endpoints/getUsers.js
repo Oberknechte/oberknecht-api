@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsers = void 0;
+exports.getUsers = getUsers;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const __1 = require("..");
@@ -77,4 +77,3 @@ async function getUsers(sym, logins, ids, noautofilterids /* Prevent filtering o
         });
     });
 }
-exports.getUsers = getUsers;

@@ -1,5 +1,5 @@
 import { streamLanguagesType } from "./getStreams";
-export declare type channelEntry = {
+export type channelEntry = {
     broadcaster_id: string;
     broadcaster_login: string;
     broadcaster_name: string;
@@ -10,6 +10,6 @@ export declare type channelEntry = {
     delay: number;
     tags: string[];
 };
-export declare type getChannelsResponse = {
+export type getChannelsResponse = {
     data: Array<channelEntry>;
 };

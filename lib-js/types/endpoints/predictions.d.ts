@@ -1,15 +1,15 @@
 export declare const predictionStatus: readonly ["ACTIVE", "CANCELED", "LOCKED", "RESOLVED"];
-export declare type predictionStatusType = typeof predictionStatus[number];
+export type predictionStatusType = typeof predictionStatus[number];
 export declare const endPredictionStatus: readonly ["RESOLVED", "CANCELED", "LOCKED"];
-export declare type endPredictionStatusType = typeof endPredictionStatus[number];
-export declare type predictionPredictorEntry = {
+export type endPredictionStatusType = typeof endPredictionStatus[number];
+export type predictionPredictorEntry = {
     user_id: string;
     user_name: string;
     user_login: string;
     channel_points_used: number;
     channel_points_won: number;
 };
-export declare type predictionOutcomeEntry = {
+export type predictionOutcomeEntry = {
     id: string;
     title: string;
     users: number;
@@ -17,11 +17,11 @@ export declare type predictionOutcomeEntry = {
     top_predictors: null | predictionPredictorEntry;
     color: "BLUE" | "PINK";
 };
-export declare type createPredictionOutcomeEntry = {
+export type createPredictionOutcomeEntry = {
     title: string;
 };
-export declare type createPredictionOutcomesType = Array<createPredictionOutcomeEntry>;
-export declare type predictionEntry = {
+export type createPredictionOutcomesType = Array<createPredictionOutcomeEntry>;
+export type predictionEntry = {
     id: string;
     broadcaster_id: string;
     broadcaster_name: string;
@@ -35,13 +35,13 @@ export declare type predictionEntry = {
     ended_at: null | string;
     locked_at: null | string;
 };
-export declare type getPredictionResponse = {
+export type getPredictionResponse = {
     data: Array<predictionEntry>;
     pagination: {
         cursor?: string;
     };
 };
-export declare type createPredictionResponse = {
+export type createPredictionResponse = {
     data: Array<predictionEntry>;
 };
-export declare type endPredictionResponse = createPredictionResponse;
+export type endPredictionResponse = createPredictionResponse;

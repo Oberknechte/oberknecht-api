@@ -60,6 +60,8 @@ const validateTokenBR_1 = require("../functions/validateTokenBR");
 const _getUser_1 = require("../endpoints/_getUser");
 const getChannelModerators_1 = require("../endpoints/getChannelModerators");
 const getValidAccessTokenForRT_1 = require("../functions/getValidAccessTokenForRT");
+const getConduits_1 = require("../endpoints/conduits/getConduits");
+const createConduits_1 = require("../endpoints/conduits/createConduits");
 let clientSymNum = 0;
 (0, oberknecht_request_1.request)(null, null, null, {
     returnAfter: true,
@@ -375,6 +377,13 @@ class oberknechtAPI {
     };
     getChannelModerators = (userID, first, after, broadcasterID, customToken) => {
         return (0, getChannelModerators_1.getChannelModerators)(this.symbol, broadcasterID, userID, first, after, customToken);
+    };
+    // Conduits
+    getConduits = (customToken) => {
+        return (0, getConduits_1.getConduits)(this.symbol, customToken);
+    };
+    createConduits = (shardCount, customToken) => {
+        return (0, createConduits_1.createConduits)(this.symbol, shardCount, customToken);
     };
 }
 exports.oberknechtAPI = oberknechtAPI;

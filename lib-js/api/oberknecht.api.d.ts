@@ -92,4 +92,6 @@ export declare class oberknechtAPI {
     getFollowedChannels: (broadcasterID?: string, first?: string, after?: string, userID?: undefined, customToken?: string) => Promise<import("../types/endpoints/getFollowedChannels").getFollowedChannelsResponse>;
     getModeratedChannels: (first?: number, after?: string, userID?: undefined, customToken?: string) => Promise<import("../types/endpoints/getModeratedChannels").getModeratedChannelsResponse>;
     getChannelModerators: (userID?: string, first?: string, after?: string, broadcasterID?: string, customToken?: string) => Promise<import("../types/endpoints/getChannelModerators").channelModeratorsResponse>;
+    getConduits: (customToken?: string) => Promise<import("../types/endpoints/conduits/getConduits").getConduitsResponse>;
+    createConduits: (shardCount: number, customToken?: string) => Promise<import("../types/endpoints/conduits/getConduits").getConduitsResponse>;
 }

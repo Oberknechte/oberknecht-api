@@ -100,6 +100,7 @@ export declare class urls {
         deleteEventsubSubscription: {
             endpoint: string;
             method: string;
+            code: number;
         };
         getBroadcasterSubscriptions: {
             endpoint: string;
@@ -155,6 +156,16 @@ export declare class urls {
         getChannelModerators: {
             endpoint: string;
             scopes: string[];
+        };
+        conduits: {
+            new (): {};
+            getConduits: {
+                endpoint: string;
+            };
+            createConduits: {
+                endpoint: string;
+                method: string;
+            };
         };
     };
     static ivrfitwitch: {

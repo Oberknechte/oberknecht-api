@@ -51,7 +51,7 @@ export async function announce(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "announce"))
-          return reject(Error(e.stack ?? r.data));
+          return reject(Error(e?.stack ?? r?.data));
 
         return resolve();
       }
