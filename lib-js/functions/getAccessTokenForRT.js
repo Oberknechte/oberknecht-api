@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAccessTokenForRT = getAccessTokenForRT;
+exports.getAccessTokenForRT = void 0;
 const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
 const _refreshRefreshToken_1 = require("../endpoints/_refreshRefreshToken");
@@ -26,3 +26,4 @@ function getAccessTokenForRT(sym, refreshToken) {
         (0, _refreshRefreshToken_1._refreshRefreshToken)(sym, refreshToken).then(resolve).catch(reject);
     });
 }
+exports.getAccessTokenForRT = getAccessTokenForRT;

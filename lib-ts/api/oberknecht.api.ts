@@ -769,4 +769,42 @@ export class oberknechtAPI {
       customToken
     );
   };
+
+  getGuestStarSession = (broadcasterID?: string, customToken?: string) => {
+    return getGuestStarSession(this.symbol, broadcasterID, customToken);
+  };
+
+  sendGuestStarInvite = (
+    guestID: string,
+    sessionID?: string,
+    broadcasterID?: string,
+    customToken?: string
+  ) => {
+    return sendGuestStarInvite(
+      this.symbol,
+      guestID,
+      sessionID,
+      broadcasterID,
+      customToken
+    );
+  };
+
+  deleteGuestStarSlot = (
+    guestID: string,
+    shouldReinvite: boolean = false,
+    slotID?: string,
+    sessionID?: string,
+    broadcasterID?: string,
+    customToken?: string
+  ) => {
+    return deleteGuestStarSlot(
+      this.symbol,
+      guestID,
+      shouldReinvite,
+      slotID,
+      sessionID,
+      broadcasterID,
+      customToken
+    );
+  };
 }

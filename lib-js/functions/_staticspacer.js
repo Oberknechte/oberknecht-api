@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._staticspacer = _staticspacer;
+exports._staticspacer = void 0;
 function _staticspacer(spacerwidth /* Number of tabs */, spacercontent, spacecolor) {
     let color = (() => {
         if (!spacecolor)
@@ -24,4 +24,5 @@ function _staticspacer(spacerwidth /* Number of tabs */, spacercontent, spacecol
     ;
     return sr;
 }
+exports._staticspacer = _staticspacer;
 ;

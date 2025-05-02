@@ -157,7 +157,16 @@ export declare class urls {
             endpoint: string;
             scopes: string[];
         };
-<<<<<<< HEAD
+        conduits: {
+            new (): {};
+            getConduits: {
+                endpoint: string;
+            };
+            createConduits: {
+                endpoint: string;
+                method: string;
+            };
+        };
         getGuestStarSession: {
             endpoint: string;
             scopes: string[];
@@ -173,17 +182,6 @@ export declare class urls {
             method: string;
             scopes: string[];
             code: number;
-=======
-        conduits: {
-            new (): {};
-            getConduits: {
-                endpoint: string;
-            };
-            createConduits: {
-                endpoint: string;
-                method: string;
-            };
->>>>>>> refs/remotes/origin/master
         };
     };
     static ivrfitwitch: {

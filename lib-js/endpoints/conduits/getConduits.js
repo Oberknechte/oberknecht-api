@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getConduits = getConduits;
+exports.getConduits = void 0;
 const checkThrowMissingParams_1 = require("../../functions/checkThrowMissingParams");
 const urls_1 = require("../../variables/urls");
 const oberknecht_request_1 = require("oberknecht-request");
@@ -23,3 +23,4 @@ async function getConduits(sym, customToken) {
         });
     });
 }
+exports.getConduits = getConduits;

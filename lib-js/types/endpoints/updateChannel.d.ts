@@ -1,4 +1,4 @@
-export type channelData = {
+export declare type channelData = {
     game_id: string;
     broadcaster_language: string;
     title: string;

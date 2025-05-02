@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateTokenBR = validateTokenBR;
+exports.validateTokenBR = void 0;
 const oberknecht_utils_1 = require("oberknecht-utils");
 const __1 = require("..");
 const _validatetoken_1 = require("../endpoints/_validatetoken");
@@ -54,3 +54,4 @@ function validateTokenBR(sym, accessOrRefreshToken) {
         (0, _refreshRefreshToken_1._refreshRefreshToken)(sym, refreshToken).then(resolve).catch(reject);
     });
 }
+exports.validateTokenBR = validateTokenBR;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getGames = getGames;
+exports.getGames = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
@@ -27,3 +27,4 @@ async function getGames(sym, ids, names, igdbIDs, customToken) {
         });
     });
 }
+exports.getGames = getGames;

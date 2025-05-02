@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.announce = announce;
+exports.announce = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -36,3 +36,4 @@ async function announce(sym, broadcasterID, message, color /** @default color "p
         });
     });
 }
+exports.announce = announce;

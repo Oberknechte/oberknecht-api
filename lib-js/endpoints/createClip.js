@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createClip = createClip;
+exports.createClip = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -28,3 +28,4 @@ async function createClip(sym, broadcasterID, hasDelay, customToken) {
         });
     });
 }
+exports.createClip = createClip;

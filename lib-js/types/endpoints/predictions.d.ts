@@ -1,15 +1,15 @@
 export declare const predictionStatus: readonly ["ACTIVE", "CANCELED", "LOCKED", "RESOLVED"];
-export type predictionStatusType = typeof predictionStatus[number];
+export declare type predictionStatusType = typeof predictionStatus[number];
 export declare const endPredictionStatus: readonly ["RESOLVED", "CANCELED", "LOCKED"];
-export type endPredictionStatusType = typeof endPredictionStatus[number];
-export type predictionPredictorEntry = {
+export declare type endPredictionStatusType = typeof endPredictionStatus[number];
+export declare type predictionPredictorEntry = {
     user_id: string;
     user_name: string;
     user_login: string;
     channel_points_used: number;
     channel_points_won: number;
 };
-export type predictionOutcomeEntry = {
+export declare type predictionOutcomeEntry = {
     id: string;
     title: string;
     users: number;
@@ -17,11 +17,11 @@ export type predictionOutcomeEntry = {
     top_predictors: null | predictionPredictorEntry;
     color: "BLUE" | "PINK";
 };
-export type createPredictionOutcomeEntry = {
+export declare type createPredictionOutcomeEntry = {
     title: string;
 };
-export type createPredictionOutcomesType = Array<createPredictionOutcomeEntry>;
-export type predictionEntry = {
+export declare type createPredictionOutcomesType = Array<createPredictionOutcomeEntry>;
+export declare type predictionEntry = {
     id: string;
     broadcaster_id: string;
     broadcaster_name: string;
@@ -35,13 +35,13 @@ export type predictionEntry = {
     ended_at: null | string;
     locked_at: null | string;
 };
-export type getPredictionResponse = {
+export declare type getPredictionResponse = {
     data: Array<predictionEntry>;
     pagination: {
         cursor?: string;
     };
 };
-export type createPredictionResponse = {
+export declare type createPredictionResponse = {
     data: Array<predictionEntry>;
 };
-export type endPredictionResponse = createPredictionResponse;
+export declare type endPredictionResponse = createPredictionResponse;

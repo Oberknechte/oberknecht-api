@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPredictions = getPredictions;
+exports.getPredictions = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -22,3 +22,4 @@ async function getPredictions(sym, ids, first, after, broadcasterID, customToken
         });
     });
 }
+exports.getPredictions = getPredictions;

@@ -172,6 +172,31 @@ class urls {
             endpoint: "/moderation/moderators",
             scopes: ["moderation:read"],
         };
+        static conduits = class {
+            static getConduits = {
+                endpoint: "/eventsub/conduits",
+            };
+            static createConduits = {
+                endpoint: "/eventsub/conduits",
+                method: "POST",
+            };
+        };
+        static getGuestStarSession = {
+            endpoint: "/guest_star/session",
+            scopes: ["moderator:read:guest_star"],
+        };
+        static sendGuestStarInvite = {
+            endpoint: "/guest_star/invites",
+            method: "POST",
+            scopes: ["moderator:manage:guest_star"],
+            code: 204,
+        };
+        static deleteGuestStarSlot = {
+            endpoint: "/guest_star/slot",
+            method: "DELETE",
+            scopes: ["moderator:manage:guest_star"],
+            code: 204,
+        };
     };
     static ivrfitwitch = class {
         static _base = "https://api.ivr.fi/v2/twitch";

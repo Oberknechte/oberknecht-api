@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getColor = getColor;
+exports.getColor = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
@@ -32,3 +32,4 @@ async function getColor(sym, userID, customToken) {
         });
     });
 }
+exports.getColor = getColor;

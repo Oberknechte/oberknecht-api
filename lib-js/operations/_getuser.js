@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._getuser = _getuser;
+exports._getuser = void 0;
 const __1 = require("..");
 const _getUsers_1 = require("../endpoints/_getUsers");
 async function _getuser(sym, user) {
@@ -39,3 +39,4 @@ async function _getuser(sym, user) {
         });
     });
 }
+exports._getuser = _getuser;

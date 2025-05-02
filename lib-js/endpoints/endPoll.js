@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.endPoll = endPoll;
+exports.endPoll = void 0;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -27,3 +27,4 @@ async function endPoll(sym, id, status, broadcasterID, customToken) {
         });
     });
 }
+exports.endPoll = endPoll;

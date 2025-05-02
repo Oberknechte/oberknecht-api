@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateTokenWR = validateTokenWR;
+exports.validateTokenWR = void 0;
 const oberknecht_utils_1 = require("oberknecht-utils");
 const __1 = require("..");
 const _validatetoken_1 = require("../endpoints/_validatetoken");
@@ -29,3 +29,4 @@ function validateTokenWR(sym, accessToken, noRefresh) {
         (0, _refreshRefreshToken_1._refreshRefreshToken)(sym, refreshToken).then(resolve).catch(reject);
     });
 }
+exports.validateTokenWR = validateTokenWR;

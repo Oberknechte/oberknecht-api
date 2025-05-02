@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._stackname = _stackname;
+exports._stackname = void 0;
 const _staticspacer_1 = require("./_staticspacer");
 function _stackname(...args) {
     let opt = [...arguments][0];
@@ -35,4 +35,5 @@ function _stackname(...args) {
         }
     }
 }
+exports._stackname = _stackname;
 ;

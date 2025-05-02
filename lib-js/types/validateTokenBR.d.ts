@@ -1,5 +1,5 @@
 import { validateTokenResponse } from "./endpoints/validateToken";
-export type validateTokenBRType = validateTokenResponse & {
+export declare type validateTokenBRType = validateTokenResponse & {
     refreshToken?: string;
     accessToken: string;
 };

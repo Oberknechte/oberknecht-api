@@ -1,4 +1,4 @@
-export type getConduitsResponse = {
+export declare type getConduitsResponse = {
     data: Array<{
         id: string;
         shard_count: number;

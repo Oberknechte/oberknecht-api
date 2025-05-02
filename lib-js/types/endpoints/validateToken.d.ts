@@ -1,6 +1,6 @@
 export declare const scopes: string[];
-export type scopesType = typeof scopes[number];
-export type validateTokenResponseOld = {
+export declare type scopesType = typeof scopes[number];
+export declare type validateTokenResponseOld = {
     client_id: string;
     login: string;
     scopes: scopesType[];
@@ -8,7 +8,7 @@ export type validateTokenResponseOld = {
     expires_in: number;
     expiresAt: number;
 };
-export type validateTokenResponse = {
+export declare type validateTokenResponse = {
     clientID: string;
     userLogin: string;
     scopes: scopesType[];

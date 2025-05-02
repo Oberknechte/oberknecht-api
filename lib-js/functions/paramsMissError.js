@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.paramsMissError = paramsMissError;
+exports.paramsMissError = void 0;
 const oberknecht_utils_1 = require("oberknecht-utils");
 function paramsMissError(paramValues, paramNames, allUndefined) {
     let paramValues_ = (0, oberknecht_utils_1.convertToArray)(paramValues, false, true);
@@ -15,3 +15,4 @@ function paramsMissError(paramValues, paramNames, allUndefined) {
         return undefined;
     return Error(`Missing values on ${missingParams.join(allUndefined ? " or " : ", ")}`);
 }
+exports.paramsMissError = paramsMissError;

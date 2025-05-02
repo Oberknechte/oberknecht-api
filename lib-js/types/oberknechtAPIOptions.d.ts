@@ -1,7 +1,7 @@
 import { jsonsplitteroptions } from "oberknecht-jsonsplitter/lib-ts/types/jsonsplitter.options";
-type clientIDType = string;
-type clientSecretType = string;
-export type oberknechtAPIOptionsType = {
+declare type clientIDType = string;
+declare type clientSecretType = string;
+export declare type oberknechtAPIOptionsType = {
     token?: string;
     refreshToken?: string;
     clientSecrets?: clientSecretType | Record<clientIDType, clientSecretType>;

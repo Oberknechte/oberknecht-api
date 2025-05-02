@@ -24,7 +24,7 @@ export declare class oberknechtAPI {
     constructor(options: oberknechtAPIOptionsType);
     verify(): Promise<void>;
     destroy(): Promise<void>;
-    _validatetoken: (customToken: string, useOldFormat?: boolean) => Promise<import("../types/endpoints/validateToken").validateTokenResponse | import("../types/endpoints/validateToken").validateTokenResponseOld>;
+    _validatetoken: (customToken: string, useOldFormat?: boolean) => Promise<import("../types/endpoints/validateToken").validateTokenResponseOld | import("../types/endpoints/validateToken").validateTokenResponse>;
     _validateRefreshTokenCode: (code: string, redirectURL: string, clientID?: string, clientSecret?: string) => Promise<import("../types/endpoints/validateRefreshTokenCode").validateRefreshTokenCodeResponse>;
     _refreshRefreshToken: (refreshToken: string, clientID: string, clientSecret: string) => Promise<import("../types/endpoints/refreshRefreshToken").refreshRefreshTokenResponse>;
     _getDataForRefreshToken: (refreshToken: string) => any;
@@ -92,12 +92,7 @@ export declare class oberknechtAPI {
     getFollowedChannels: (broadcasterID?: string, first?: string, after?: string, userID?: undefined, customToken?: string) => Promise<import("../types/endpoints/getFollowedChannels").getFollowedChannelsResponse>;
     getModeratedChannels: (first?: number, after?: string, userID?: undefined, customToken?: string) => Promise<import("../types/endpoints/getModeratedChannels").getModeratedChannelsResponse>;
     getChannelModerators: (userID?: string, first?: string, after?: string, broadcasterID?: string, customToken?: string) => Promise<import("../types/endpoints/getChannelModerators").channelModeratorsResponse>;
-<<<<<<< HEAD
     getGuestStarSession: (broadcasterID?: string, customToken?: string) => Promise<import("../types/endpoints/getGuestStarSession").getGuestStarSessionResponse>;
     sendGuestStarInvite: (guestID: string, sessionID?: string, broadcasterID?: string, customToken?: string) => Promise<void>;
     deleteGuestStarSlot: (guestID: string, shouldReinvite?: boolean, slotID?: string, sessionID?: string, broadcasterID?: string, customToken?: string) => Promise<void>;
-=======
-    getConduits: (customToken?: string) => Promise<import("../types/endpoints/conduits/getConduits").getConduitsResponse>;
-    createConduits: (shardCount: number, customToken?: string) => Promise<import("../types/endpoints/conduits/getConduits").getConduitsResponse>;
->>>>>>> refs/remotes/origin/master
 }
