@@ -60,9 +60,14 @@ const validateTokenBR_1 = require("../functions/validateTokenBR");
 const _getUser_1 = require("../endpoints/_getUser");
 const getChannelModerators_1 = require("../endpoints/getChannelModerators");
 const getValidAccessTokenForRT_1 = require("../functions/getValidAccessTokenForRT");
+<<<<<<< HEAD
 const getGuestStarSession_1 = require("../endpoints/getGuestStarSession");
 const sendGuestStarInvite_1 = require("../endpoints/sendGuestStarInvite");
 const deleteGuestStarSlot_1 = require("../endpoints/deleteGuestStarSlot");
+=======
+const getConduits_1 = require("../endpoints/conduits/getConduits");
+const createConduits_1 = require("../endpoints/conduits/createConduits");
+>>>>>>> refs/remotes/origin/master
 let clientSymNum = 0;
 (0, oberknecht_request_1.request)(null, null, null, {
     returnAfter: true,
@@ -379,6 +384,7 @@ class oberknechtAPI {
     getChannelModerators = (userID, first, after, broadcasterID, customToken) => {
         return (0, getChannelModerators_1.getChannelModerators)(this.symbol, broadcasterID, userID, first, after, customToken);
     };
+<<<<<<< HEAD
     getGuestStarSession = (broadcasterID, customToken) => {
         return (0, getGuestStarSession_1.getGuestStarSession)(this.symbol, broadcasterID, customToken);
     };
@@ -387,6 +393,14 @@ class oberknechtAPI {
     };
     deleteGuestStarSlot = (guestID, shouldReinvite = false, slotID, sessionID, broadcasterID, customToken) => {
         return (0, deleteGuestStarSlot_1.deleteGuestStarSlot)(this.symbol, guestID, shouldReinvite, slotID, sessionID, broadcasterID, customToken);
+=======
+    // Conduits
+    getConduits = (customToken) => {
+        return (0, getConduits_1.getConduits)(this.symbol, customToken);
+    };
+    createConduits = (shardCount, customToken) => {
+        return (0, createConduits_1.createConduits)(this.symbol, shardCount, customToken);
+>>>>>>> refs/remotes/origin/master
     };
 }
 exports.oberknechtAPI = oberknechtAPI;

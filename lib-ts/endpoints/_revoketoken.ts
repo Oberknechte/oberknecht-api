@@ -32,7 +32,7 @@ export async function _revoketoken(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "revokeToken"))
-          return reject(Error(e.stack ?? r.data));
+          return reject(Error(e?.stack ?? r?.data));
 
         return resolve();
       }

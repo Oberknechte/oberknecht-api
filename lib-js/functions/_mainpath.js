@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._mainpath = void 0;
+exports._mainpath = _mainpath;
 const path_1 = __importDefault(require("path"));
 const __1 = require("..");
 function _mainpath(sym, path_) {
@@ -20,5 +20,4 @@ function _mainpath(sym, path_) {
     }
     ;
 }
-exports._mainpath = _mainpath;
 ;

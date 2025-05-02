@@ -92,7 +92,12 @@ export declare class oberknechtAPI {
     getFollowedChannels: (broadcasterID?: string, first?: string, after?: string, userID?: undefined, customToken?: string) => Promise<import("../types/endpoints/getFollowedChannels").getFollowedChannelsResponse>;
     getModeratedChannels: (first?: number, after?: string, userID?: undefined, customToken?: string) => Promise<import("../types/endpoints/getModeratedChannels").getModeratedChannelsResponse>;
     getChannelModerators: (userID?: string, first?: string, after?: string, broadcasterID?: string, customToken?: string) => Promise<import("../types/endpoints/getChannelModerators").channelModeratorsResponse>;
+<<<<<<< HEAD
     getGuestStarSession: (broadcasterID?: string, customToken?: string) => Promise<import("../types/endpoints/getGuestStarSession").getGuestStarSessionResponse>;
     sendGuestStarInvite: (guestID: string, sessionID?: string, broadcasterID?: string, customToken?: string) => Promise<void>;
     deleteGuestStarSlot: (guestID: string, shouldReinvite?: boolean, slotID?: string, sessionID?: string, broadcasterID?: string, customToken?: string) => Promise<void>;
+=======
+    getConduits: (customToken?: string) => Promise<import("../types/endpoints/conduits/getConduits").getConduitsResponse>;
+    createConduits: (shardCount: number, customToken?: string) => Promise<import("../types/endpoints/conduits/getConduits").getConduitsResponse>;
+>>>>>>> refs/remotes/origin/master
 }

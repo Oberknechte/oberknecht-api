@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPolls = void 0;
+exports.getPolls = getPolls;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -16,9 +16,8 @@ async function getPolls(sym, id, first, after, broadcasterID, customToken) {
             headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "getPolls"))
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             return resolve(r.data);
         });
     });
 }
-exports.getPolls = getPolls;

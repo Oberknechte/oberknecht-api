@@ -1,4 +1,4 @@
-export declare type clipEntry = {
+export type clipEntry = {
     id: string;
     url: string;
     embed_url: string;
@@ -16,6 +16,6 @@ export declare type clipEntry = {
     duration: number;
     vod_offset: number;
 };
-export declare type getClipsResponse = {
+export type getClipsResponse = {
     data: clipEntry[];
 };

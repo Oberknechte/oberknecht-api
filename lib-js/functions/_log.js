@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._log = void 0;
+exports._log = _log;
 function date_() { return new Date(new Date().setMinutes(new Date().getMinutes() - new Date().getTimezoneOffset())).toISOString().split("Z")[0].replace("T", " "); }
 ;
 /** @param {number?} logopt 0 = log, 1 = info, 2 = error @param {string | Error?} logmsg @param {string?} logcolorfg @param {string?} logcolorbg */
@@ -31,5 +31,4 @@ function _log(logopt, logmsg, logcolorfg, logcolorbg) {
     }
     ;
 }
-exports._log = _log;
 ;

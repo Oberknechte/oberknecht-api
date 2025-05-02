@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.endPoll = void 0;
+exports.endPoll = endPoll;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -22,9 +22,8 @@ async function endPoll(sym, id, status, broadcasterID, customToken) {
             }),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "endPoll"))
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             return resolve(r.data);
         });
     });
 }
-exports.endPoll = endPoll;

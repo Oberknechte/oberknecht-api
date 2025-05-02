@@ -45,7 +45,7 @@ export async function whisper(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "whisper"))
-          return reject(Error(e.stack ?? r.data));
+          return reject(Error(e?.stack ?? r?.data));
 
         return resolve();
       }

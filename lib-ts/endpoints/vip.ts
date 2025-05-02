@@ -42,7 +42,7 @@ export async function vip(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "vip"))
-          return reject(Error(e.stack ?? r.data));
+          return reject(Error(e?.stack ?? r?.data));
 
         return resolve();
       }

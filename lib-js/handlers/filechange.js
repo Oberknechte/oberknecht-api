@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filechange = void 0;
+exports.filechange = filechange;
 const __1 = require("..");
 const _log_1 = require("../functions/_log");
 const _stackname_1 = require("../functions/_stackname");
@@ -29,5 +29,4 @@ function filechange(sym) {
     if ((0, isdebug_1.isdebug)(sym, 2))
         (0, _log_1._log)(0, `${(0, _stackname_1._stackname)("oberknecht-api", "handlers", "filechange")[3]} executed\t(Changed ${changed_files})`);
 }
-exports.filechange = filechange;
 ;

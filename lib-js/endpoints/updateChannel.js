@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateChannel = void 0;
+exports.updateChannel = updateChannel;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const __1 = require("..");
@@ -26,9 +26,8 @@ async function updateChannel(sym, channelData, broadcasterID, customToken) {
             body: JSON.stringify(channelData_),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "updateChannel"))
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             return resolve();
         });
     });
 }
-exports.updateChannel = updateChannel;

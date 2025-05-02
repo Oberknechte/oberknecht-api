@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFollowedChannels = void 0;
+exports.getFollowedChannels = getFollowedChannels;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -23,9 +23,8 @@ async function getFollowedChannels(sym, broadcasterID, first, after, userID, cus
             headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "getFollowedChannels"))
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             return resolve(r.data);
         });
     });
 }
-exports.getFollowedChannels = getFollowedChannels;

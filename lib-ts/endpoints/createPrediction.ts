@@ -45,7 +45,7 @@ export async function createPrediction(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "createPrediction"))
-          return reject(Error(e.stack ?? r.data));
+          return reject(Error(e?.stack ?? r?.data));
 
         return resolve(r.data);
       }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateColor = void 0;
+exports.updateColor = updateColor;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -16,9 +16,8 @@ async function updateColor(sym, color, customToken) {
             headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "updateColor"))
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             return resolve();
         });
     });
 }
-exports.updateColor = updateColor;

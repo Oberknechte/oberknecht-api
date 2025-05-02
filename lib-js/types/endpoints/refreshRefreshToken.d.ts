@@ -1,5 +1,5 @@
 import { validateTokenResponse } from "./validateToken";
-export declare type refreshRefreshTokenResponse = validateTokenResponse & {
+export type refreshRefreshTokenResponse = validateTokenResponse & {
     refreshToken: string;
     accessToken: string;
 };

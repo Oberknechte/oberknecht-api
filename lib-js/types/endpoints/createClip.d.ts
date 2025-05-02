@@ -1,7 +1,7 @@
-export declare type createClipEntry = {
+export type createClipEntry = {
     id: string;
     edit_url: string;
 };
-export declare type createClipResponse = {
+export type createClipResponse = {
     data: [createClipEntry];
 };

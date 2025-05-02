@@ -76,7 +76,7 @@ export async function getClips(
       },
       (e, r) => {
         if (e || r.status !== urls._code("twitch", "getClips"))
-          return reject(Error(e.stack ?? r.data));
+          return reject(Error(e?.stack ?? r?.data));
 
         return resolve(r.data);
       }

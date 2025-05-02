@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStreams = void 0;
+exports.getStreams = getStreams;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
@@ -21,7 +21,7 @@ async function getStreams(sym, filters, customToken) {
             headers: urls_1.urls.twitch._headers(sym, accessToken, clientID),
         }, (e, r) => {
             if (e || r.status !== urls_1.urls._code("twitch", "getStreams"))
-                return reject(Error(e.stack ?? r.data));
+                return reject(Error(e?.stack ?? r?.data));
             if (__1.i.apiclientData[sym]?._options?.saveIDs) {
                 r.data.data.forEach(async (a) => {
                     __1.i.apiclientData[sym].jsonsplitters.users.addKeySync(["logins", a.user_login], a.user_id);
@@ -32,4 +32,3 @@ async function getStreams(sym, filters, customToken) {
         });
     });
 }
-exports.getStreams = getStreams;
