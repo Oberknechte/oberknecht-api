@@ -60,6 +60,9 @@ const validateTokenBR_1 = require("../functions/validateTokenBR");
 const _getUser_1 = require("../endpoints/_getUser");
 const getChannelModerators_1 = require("../endpoints/getChannelModerators");
 const getValidAccessTokenForRT_1 = require("../functions/getValidAccessTokenForRT");
+const getGuestStarSession_1 = require("../endpoints/getGuestStarSession");
+const sendGuestStarInvite_1 = require("../endpoints/sendGuestStarInvite");
+const deleteGuestStarSlot_1 = require("../endpoints/deleteGuestStarSlot");
 let clientSymNum = 0;
 (0, oberknecht_request_1.request)(null, null, null, {
     returnAfter: true,
@@ -375,6 +378,15 @@ class oberknechtAPI {
     };
     getChannelModerators = (userID, first, after, broadcasterID, customToken) => {
         return (0, getChannelModerators_1.getChannelModerators)(this.symbol, broadcasterID, userID, first, after, customToken);
+    };
+    getGuestStarSession = (broadcasterID, customToken) => {
+        return (0, getGuestStarSession_1.getGuestStarSession)(this.symbol, broadcasterID, customToken);
+    };
+    sendGuestStarInvite = (guestID, sessionID, broadcasterID, customToken) => {
+        return (0, sendGuestStarInvite_1.sendGuestStarInvite)(this.symbol, guestID, sessionID, broadcasterID, customToken);
+    };
+    deleteGuestStarSlot = (guestID, shouldReinvite = false, slotID, sessionID, broadcasterID, customToken) => {
+        return (0, deleteGuestStarSlot_1.deleteGuestStarSlot)(this.symbol, guestID, shouldReinvite, slotID, sessionID, broadcasterID, customToken);
     };
 }
 exports.oberknechtAPI = oberknechtAPI;

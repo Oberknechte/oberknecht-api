@@ -26,7 +26,7 @@ async function _validateRefreshTokenCode(sym, code, redirectURL, clientID, clien
             let accessToken = r.data.access_token;
             let scopes = r.data.scope;
             let refreshTokenData = {
-                expiresAt: Date.now() + r.data.expires_in * 1000,
+                expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
                 clientID: clientID_,
                 scopes: scopes,
             };

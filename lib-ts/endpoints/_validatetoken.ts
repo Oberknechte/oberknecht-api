@@ -29,7 +29,7 @@ export async function _validatetoken<useOldFormatType extends boolean>(
       `https://id.twitch.tv/oauth2/validate`,
       {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           Authorization: `OAuth ${
             customtoken_ ?? i.apiclientData[sym]?._options?.token
           }`,

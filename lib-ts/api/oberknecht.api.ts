@@ -71,6 +71,9 @@ import { validateTokenBR } from "../functions/validateTokenBR";
 import { _getUser } from "../endpoints/_getUser";
 import { getChannelModerators } from "../endpoints/getChannelModerators";
 import { getValidAccessTokenForRT } from "../functions/getValidAccessTokenForRT";
+import { getGuestStarSession } from "../endpoints/getGuestStarSession";
+import { sendGuestStarInvite } from "../endpoints/sendGuestStarInvite";
+import { deleteGuestStarSlot } from "../endpoints/deleteGuestStarSlot";
 let clientSymNum = 0;
 
 request(null, null, null, {
@@ -282,11 +285,11 @@ export class oberknechtAPI {
 
   _getDataForAccessToken = (accessToken: string) => {
     return this.tokenSplitter.getKeySync(["accessToken", accessToken]);
-  }
+  };
 
   _validateTokenWR = (accessOrRefreshToken?: string) => {
     return validateTokenWR(this.symbol, accessOrRefreshToken);
-  }
+  };
 
   _revoketoken = (token: string, clientID?: string) => {
     return _revoketoken(this.symbol, token, clientID);
@@ -761,6 +764,44 @@ export class oberknechtAPI {
       userID,
       first,
       after,
+      customToken
+    );
+  };
+
+  getGuestStarSession = (broadcasterID?: string, customToken?: string) => {
+    return getGuestStarSession(this.symbol, broadcasterID, customToken);
+  };
+
+  sendGuestStarInvite = (
+    guestID: string,
+    sessionID?: string,
+    broadcasterID?: string,
+    customToken?: string
+  ) => {
+    return sendGuestStarInvite(
+      this.symbol,
+      guestID,
+      sessionID,
+      broadcasterID,
+      customToken
+    );
+  };
+
+  deleteGuestStarSlot = (
+    guestID: string,
+    shouldReinvite: boolean = false,
+    slotID?: string,
+    sessionID?: string,
+    broadcasterID?: string,
+    customToken?: string
+  ) => {
+    return deleteGuestStarSlot(
+      this.symbol,
+      guestID,
+      shouldReinvite,
+      slotID,
+      sessionID,
+      broadcasterID,
       customToken
     );
   };

@@ -30,6 +30,7 @@ export function validateTokenBR(sym: string, accessOrRefreshToken?: string) {
       else accessToken = i.apiclientData[sym]._options.token;
     }
 
+
     if (!accessToken) return reject(Error("No access token"));
 
     let tokenData: validateTokenWRType = !tokenSplitter

@@ -156,6 +156,22 @@ export declare class urls {
             endpoint: string;
             scopes: string[];
         };
+        getGuestStarSession: {
+            endpoint: string;
+            scopes: string[];
+        };
+        sendGuestStarInvite: {
+            endpoint: string;
+            method: string;
+            scopes: string[];
+            code: number;
+        };
+        deleteGuestStarSlot: {
+            endpoint: string;
+            method: string;
+            scopes: string[];
+            code: number;
+        };
     };
     static ivrfitwitch: {
         new (): {};

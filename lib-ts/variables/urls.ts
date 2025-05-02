@@ -213,6 +213,26 @@ export class urls {
       endpoint: "/moderation/moderators",
       scopes: ["moderation:read"],
     };
+
+    static getGuestStarSession = {
+      endpoint: "/guest_star/session",
+      scopes: ["moderator:read:guest_star"],
+    };
+
+    static sendGuestStarInvite = {
+      endpoint: "/guest_star/invites",
+      method: "POST",
+      scopes: ["moderator:manage:guest_star"],
+      code: 204,
+    };
+
+    
+    static deleteGuestStarSlot = {
+      endpoint: "/guest_star/slot",
+      method: "DELETE",
+      scopes: ["moderator:manage:guest_star"],
+      code: 204,
+    };
   };
 
   static ivrfitwitch = class {
