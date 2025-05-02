@@ -14,6 +14,10 @@ async function sendGuestStarInvite(sym, guestID, sessionID, broadcasterID, custo
     (0, checkThrowMissingParams_1.checkThrowMissingParams)([guestID], ["guestID"]);
     let { clientID, accessToken, userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
     let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? userID;
+    if ((0, checkTwitchUsername_1.checkTwitchUsername)(broadcasterID_))
+        await (0, _getUser_1._getUser)(sym, broadcasterID_).then((u) => {
+            broadcasterID_ = u.id;
+        });
     let sessionID_ = sessionID;
     if (!sessionID_)
         await (0, getGuestStarSession_1.getGuestStarSession)(sym, broadcasterID_, customToken).then((r) => {

@@ -8,6 +8,8 @@ import {
 } from "oberknecht-utils";
 import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 import { getGuestStarSessionResponse } from "../types/endpoints/getGuestStarSession";
+import { checkTwitchUsername } from "../functions/checkTwitchUsername";
+import { _getUser } from "./_getUser";
 
 export async function getGuestStarSession(
   sym: string,
@@ -22,6 +24,11 @@ export async function getGuestStarSession(
   );
 
   let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
+
+  if (checkTwitchUsername(broadcasterID_))
+    await _getUser(sym, broadcasterID_).then((u) => {
+      broadcasterID_ = u.id;
+    });
 
   return new Promise<getGuestStarSessionResponse>(async (resolve, reject) => {
     request(

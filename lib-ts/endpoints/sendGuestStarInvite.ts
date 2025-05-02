@@ -32,6 +32,11 @@ export async function sendGuestStarInvite(
 
   let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
 
+  if (checkTwitchUsername(broadcasterID_))
+    await _getUser(sym, broadcasterID_).then((u) => {
+      broadcasterID_ = u.id;
+    });
+
   let sessionID_ = sessionID;
 
   if (!sessionID_)
