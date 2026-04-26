@@ -9,7 +9,7 @@ import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function getChannelFollowers(
   sym: string,
-  broadcasterID: string,
+  broadcasterID?: string,
   userID?: string,
   customToken?: string
 ) {

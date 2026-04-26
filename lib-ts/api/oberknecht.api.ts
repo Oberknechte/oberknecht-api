@@ -78,10 +78,11 @@ import { getConduits } from "../endpoints/conduits/getConduits";
 import { createConduits } from "../endpoints/conduits/createConduits";
 let clientSymNum = 0;
 
-request(null, null, null, {
+// @ts-ignore
+request(undefined, null, null, {
   returnAfter: true,
   callbackOptions: {
-    callback: (a) => {},
+    callback: (a: any) => {},
   },
   options: {
     timeout: 5000,
@@ -102,7 +103,7 @@ export class oberknechtAPI {
   static get options(): oberknechtAPIOptionsType {
     return this.options;
   }
-  static get symbol() {
+  static get symbol(): any {
     return this.symbol;
   }
   get clientData() {
@@ -110,10 +111,12 @@ export class oberknechtAPI {
   }
 
   verified = false;
+  // @ts-ignore
   userssplitter: jsonsplitter;
+  // @ts-ignore
   tokenSplitter: jsonsplitter;
   userssplitterpromise;
-  _options: oberknechtAPIOptionsType;
+  _options: oberknechtAPIOptionsType = {} as oberknechtAPIOptionsType;
 
   constructor(options: oberknechtAPIOptionsType) {
     let _options: oberknechtAPIOptionsType = options ?? {};

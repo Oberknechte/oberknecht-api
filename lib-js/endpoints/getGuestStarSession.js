@@ -12,7 +12,7 @@ async function getGuestStarSession(sym, broadcasterID, customToken) {
     (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
     let { clientID, accessToken, userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
     let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? userID;
-    if ((0, checkTwitchUsername_1.checkTwitchUsername)(broadcasterID_))
+    if (!(0, checkTwitchUsername_1.checkTwitchUsername)(broadcasterID_))
         await (0, _getUser_1._getUser)(sym, broadcasterID_).then((u) => {
             broadcasterID_ = u.id;
         });

@@ -25,7 +25,7 @@ export async function getGuestStarSession(
 
   let broadcasterID_ = cleanChannelName(broadcasterID) ?? userID;
 
-  if (checkTwitchUsername(broadcasterID_))
+  if (!checkTwitchUsername(broadcasterID_))
     await _getUser(sym, broadcasterID_).then((u) => {
       broadcasterID_ = u.id;
     });

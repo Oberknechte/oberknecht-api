@@ -64,7 +64,8 @@ const getGuestStarSession_1 = require("../endpoints/getGuestStarSession");
 const sendGuestStarInvite_1 = require("../endpoints/sendGuestStarInvite");
 const deleteGuestStarSlot_1 = require("../endpoints/deleteGuestStarSlot");
 let clientSymNum = 0;
-(0, oberknecht_request_1.request)(null, null, null, {
+// @ts-ignore
+(0, oberknecht_request_1.request)(undefined, null, null, {
     returnAfter: true,
     callbackOptions: {
         callback: (a) => { },
@@ -93,10 +94,12 @@ class oberknechtAPI {
         return index_1.i.apiclientData[this.symbol];
     }
     verified = false;
+    // @ts-ignore
     userssplitter;
+    // @ts-ignore
     tokenSplitter;
     userssplitterpromise;
-    _options;
+    _options = {};
     constructor(options) {
         let _options = options ?? {};
         if (_options.skipCreation)

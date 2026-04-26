@@ -9,7 +9,7 @@ async function _getUsers(sym, logins, ids, noautofilterids /* Prevent filtering 
     (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
     (0, checkThrowMissingParams_1.checkThrowMissingParams)([logins, ids], ["logins", "ids"], true);
     return new Promise(async (resolve, reject) => {
-        let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map((a) => String((0, oberknecht_utils_1.cleanChannelName)(a).toLowerCase()));
+        let logins_ = (0, oberknecht_utils_1.convertToArray)(logins, false).map((a) => String((0, oberknecht_utils_1.cleanChannelName)(a)?.toLowerCase()));
         let ids_ = (0, oberknecht_utils_1.convertToArray)(ids, false).map((a) => String(a).toLowerCase());
         if (!noautofilterids) {
             let idsinlogins = logins_.filter((a) => __1.i.regex.numregex().test(a));

@@ -21,7 +21,7 @@ export async function _getUsers(
   checkThrowMissingParams([logins, ids], ["logins", "ids"], true);
   return new Promise<_getUsersResponse>(async (resolve, reject) => {
     let logins_ = convertToArray(logins, false).map((a) =>
-      String(cleanChannelName(a).toLowerCase())
+      String(cleanChannelName(a)?.toLowerCase())
     );
     let ids_ = convertToArray(ids, false).map((a) => String(a).toLowerCase());
 
@@ -40,7 +40,7 @@ export async function _getUsers(
       loginsInvalid: [],
     } as _getUsersResponse;
 
-    let requestnew = [];
+    let requestnew: any[] = [];
 
     r.loginsInvalid = logins_.filter(
       (a) => !regex.twitch.usernamereg().test(a)
@@ -48,7 +48,7 @@ export async function _getUsers(
     logins_ = logins_.filter((a) => regex.twitch.usernamereg().test(a));
 
     if (!refreshCache && i.apiclientData[sym]?._options?.saveIDs) {
-      recreate(logins_).forEach((login) => {
+      recreate(logins_).forEach((login: string) => {
         let u = i.apiclientData[sym]?.jsonsplitters?.users?.getKeySync([
           "logins",
           login,
@@ -73,7 +73,7 @@ export async function _getUsers(
         }
       });
 
-      recreate(ids_).forEach((id) => {
+      recreate(ids_).forEach((id: string) => {
         let u = i.apiclientData[sym]?.jsonsplitters?.users?.getKeySync([
           "ids",
           id,

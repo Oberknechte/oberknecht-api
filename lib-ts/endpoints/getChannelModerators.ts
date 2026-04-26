@@ -9,7 +9,7 @@ import { channelModeratorsResponse } from "../types/endpoints/getChannelModerato
 
 export async function getChannelModerators(
   sym: string,
-  broadcasterID: string,
+  broadcasterID?: string,
   userID?: string,
   first?: string,
   after?: string,
@@ -24,7 +24,12 @@ export async function getChannelModerators(
     customToken
   );
 
-  let broadcasterID_ = _userID;
+  let broadcasterID_ = cleanChannelName(broadcasterID) ?? _userID;
+
+  if (checkTwitchUsername(broadcasterID_))
+    await _getUser(sym, broadcasterID_).then((u) => {
+      broadcasterID_ = u.id;
+    });
 
   if (checkTwitchUsername(userID_))
     await _getUser(sym, userID_).then((u) => {

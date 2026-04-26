@@ -12,7 +12,11 @@ async function getChannelModerators(sym, broadcasterID, userID, first, after, cu
     (0, checkThrowMissingParams_1.checkThrowMissingParams)([sym, customToken], ["sym", "customToken"], true);
     let userID_ = (0, oberknecht_utils_1.cleanChannelName)(userID);
     let { clientID, accessToken, userID: _userID } = await (0, validateTokenBR_1.validateTokenBR)(sym, customToken);
-    let broadcasterID_ = _userID;
+    let broadcasterID_ = (0, oberknecht_utils_1.cleanChannelName)(broadcasterID) ?? _userID;
+    if ((0, checkTwitchUsername_1.checkTwitchUsername)(broadcasterID_))
+        await (0, _getUser_1._getUser)(sym, broadcasterID_).then((u) => {
+            broadcasterID_ = u.id;
+        });
     if ((0, checkTwitchUsername_1.checkTwitchUsername)(userID_))
         await (0, _getUser_1._getUser)(sym, userID_).then((u) => {
             userID_ = u.id;

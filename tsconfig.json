@@ -1,14 +1,16 @@
 {
     "include": [
-        "./lib-ts"
+        "./lib-ts/"
     ],
     "compilerOptions": {
-        "downlevelIteration": true,
-        "target": "ESNext",
-        "module": "NodeNext",
+        "rootDir": "./lib-ts",
         "esModuleInterop": true,
-        "outDir": "./lib-js",
-        "moduleResolution": "nodenext",
-        "declaration": true
+        "outDir": "./lib-js/",
+        "declaration": true,
+        "module": "NodeNext",
+        "target": "ESNext",
+        "types": [
+            "node"
+        ]
     }
 }
