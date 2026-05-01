@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendGuestStarInvite = void 0;
+exports.sendGuestStarInvite = sendGuestStarInvite;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -39,4 +39,3 @@ async function sendGuestStarInvite(sym, guestID, sessionID, broadcasterID, custo
         });
     });
 }
-exports.sendGuestStarInvite = sendGuestStarInvite;

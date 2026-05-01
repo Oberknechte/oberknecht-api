@@ -1,4 +1,4 @@
-export declare type guestStarEntry = {
+export type guestStarEntry = {
     slot_id: string;
     user_id: string;
     user_display_name: string;
@@ -17,7 +17,7 @@ export declare type guestStarEntry = {
         is_guest_enabled: boolean;
     };
 };
-export declare type getGuestStarSessionResponse = {
+export type getGuestStarSessionResponse = {
     data: [
         {
             id: string;

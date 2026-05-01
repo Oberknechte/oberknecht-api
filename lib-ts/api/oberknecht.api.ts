@@ -321,7 +321,7 @@ export class oberknechtAPI {
   };
 
   ban = (
-    broadcasterID: string,
+    broadcasterID: string | undefined,
     targetUserID: string,
     reason: string,
     customToken?: string
@@ -336,14 +336,14 @@ export class oberknechtAPI {
     );
   };
   deleteMessage = (
-    broadcasterID: string,
+    broadcasterID: string | undefined,
     messageID: string,
     customToken?: string
   ) => {
     return deleteMessage(this.symbol, broadcasterID, messageID, customToken);
   };
   delete = this.deleteMessage;
-  clearChat = (broadcasterID: string, customToken?: string) => {
+  clearChat = (broadcasterID: string | undefined, customToken?: string) => {
     return deleteMessage(this.symbol, broadcasterID, undefined, customToken);
   };
   getUsers = (
@@ -355,7 +355,7 @@ export class oberknechtAPI {
     return getUsers(this.symbol, logins, ids, noautofilterids, customToken);
   };
   shoutout = (
-    fromBroadcasterID: string,
+    fromBroadcasterID: string | undefined,
     toBroadcasterID: string,
     customToken?: string
   ) => {
@@ -367,7 +367,7 @@ export class oberknechtAPI {
     );
   };
   timeout = (
-    broadcasterID: string,
+    broadcasterID: string | undefined,
     targetUserID: string,
     duration: number,
     reason?: string,
@@ -383,19 +383,19 @@ export class oberknechtAPI {
     );
   };
   unban = (
-    broadcasterID: string,
+    broadcasterID: string | undefined,
     targetUserID: string,
     customToken?: string
   ) => {
     return unban(this.symbol, broadcasterID, targetUserID, customToken);
   };
   untimeout = this.unban;
-  whisper = (toUserID: string, message: string, customToken: string) => {
+  whisper = (toUserID: string, message: string, customToken?: string) => {
     return whisper(this.symbol, toUserID, message, customToken);
   };
 
   announce = (
-    broadcasterID: string,
+    broadcasterID: string | undefined,
     message: string,
     color: announcementColorsType,
     customToken?: string
@@ -403,7 +403,7 @@ export class oberknechtAPI {
     return announce(this.symbol, broadcasterID, message, color, customToken);
   };
   updateChatSettings = (
-    broadcasterID: string,
+    broadcasterID: string | undefined,
     settings: chatSettingEntry,
     customToken?: string
   ) => {
@@ -415,7 +415,7 @@ export class oberknechtAPI {
     );
   };
 
-  slow = (broadcasterID: string, waitTime: number, customToken?: string) => {
+  slow = (broadcasterID: string | undefined, waitTime: number, customToken?: string) => {
     return updateSingleChatSetting.slow(
       this.symbol,
       broadcasterID,
@@ -423,7 +423,7 @@ export class oberknechtAPI {
       customToken
     );
   };
-  slowOff = (broadcasterID: string, customToken?: string) => {
+  slowOff = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.slowOff(
       this.symbol,
       broadcasterID,
@@ -432,7 +432,7 @@ export class oberknechtAPI {
   };
 
   followers = (
-    broadcasterID: string,
+    broadcasterID: string | undefined,
     duration?: number,
     customToken?: string
   ) => {
@@ -443,7 +443,7 @@ export class oberknechtAPI {
       customToken
     );
   };
-  followersOff = (broadcasterID: string, customToken?: string) => {
+  followersOff = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.followersOff(
       this.symbol,
       broadcasterID,
@@ -451,14 +451,14 @@ export class oberknechtAPI {
     );
   };
 
-  subscribers = (broadcasterID: string, customToken?: string) => {
+  subscribers = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.subscribers(
       this.symbol,
       broadcasterID,
       customToken
     );
   };
-  subscribersOff = (broadcasterID: string, customToken?: string) => {
+  subscribersOff = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.subscribersOff(
       this.symbol,
       broadcasterID,
@@ -466,7 +466,7 @@ export class oberknechtAPI {
     );
   };
 
-  emote = (broadcasterID: string, customToken?: string) => {
+  emote = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.emote(
       this.symbol,
       broadcasterID,
@@ -474,7 +474,7 @@ export class oberknechtAPI {
     );
   };
   emoteOnly = this.emote;
-  emoteOff = (broadcasterID: string, customToken?: string) => {
+  emoteOff = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.emoteOff(
       this.symbol,
       broadcasterID,
@@ -483,11 +483,11 @@ export class oberknechtAPI {
   };
   emoteOnlyOff = this.emoteOff;
 
-  r9k = (broadcasterID: string, customToken?: string) => {
+  r9k = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.r9k(this.symbol, broadcasterID, customToken);
   };
   uniqueChat = this.r9k;
-  r9kOff = (broadcasterID: string, customToken?: string) => {
+  r9kOff = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.r9kOff(
       this.symbol,
       broadcasterID,
@@ -497,8 +497,8 @@ export class oberknechtAPI {
   uniqueChatOff = this.r9kOff;
 
   chatdelay = (
-    broadcasterID: string,
-    duration: 2 | 4 | 6,
+    broadcasterID: string | undefined,
+    duration: number | 2 | 4 | 6,
     customToken?: string
   ) => {
     return updateSingleChatSetting.chatdelay(
@@ -508,7 +508,7 @@ export class oberknechtAPI {
       customToken
     );
   };
-  chatdelayOff = (broadcasterID: string, customToken?: string) => {
+  chatdelayOff = (broadcasterID: string | undefined, customToken?: string) => {
     return updateSingleChatSetting.chatdelayOff(
       this.symbol,
       broadcasterID,
@@ -516,7 +516,7 @@ export class oberknechtAPI {
     );
   };
 
-  getChatSettings = (broadcasterID: string, customToken?: string) => {
+  getChatSettings = (broadcasterID: string | undefined, customToken?: string) => {
     return getChatSettings(this.symbol, broadcasterID, customToken);
   };
   getStreams = (filters: getStreamsFiltersType, customToken?: string) => {
@@ -727,7 +727,7 @@ export class oberknechtAPI {
     );
   };
 
-  createClip = (broadcasterID: string, hasDelay?: boolean) => {
+  createClip = (broadcasterID: string | undefined, hasDelay?: boolean) => {
     return createClip(this.symbol, broadcasterID, hasDelay);
   };
 

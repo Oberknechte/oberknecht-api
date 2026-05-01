@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._revoketoken = void 0;
+exports._revoketoken = _revoketoken;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenWR_1 = require("../functions/validateTokenWR");
@@ -27,4 +27,3 @@ async function _revoketoken(sym, token, clientID) {
         });
     });
 }
-exports._revoketoken = _revoketoken;

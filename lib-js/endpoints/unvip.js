@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.unvip = void 0;
+exports.unvip = unvip;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -33,4 +33,3 @@ async function unvip(sym, broadcasterID, userID, customToken) {
         });
     });
 }
-exports.unvip = unvip;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._getUser = void 0;
+exports._getUser = _getUser;
 const _getUsers_1 = require("./_getUsers");
 function _getUser(sym, user, refreshCache) {
     return new Promise((resolve, reject) => {
@@ -15,4 +15,3 @@ function _getUser(sym, user, refreshCache) {
         });
     });
 }
-exports._getUser = _getUser;

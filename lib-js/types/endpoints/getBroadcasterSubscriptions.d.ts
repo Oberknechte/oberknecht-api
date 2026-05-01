@@ -1,5 +1,5 @@
 import { subscriptionTiersType } from "./subscription.tier";
-export declare type getBroadcasterSubscriptionEntry = {
+export type getBroadcasterSubscriptionEntry = {
     broadcaster_id: string;
     broadcaster_login: string;
     broadcaster_name: string;
@@ -13,7 +13,7 @@ export declare type getBroadcasterSubscriptionEntry = {
     user_name: string;
     user_login: string;
 };
-export declare type getBroadcasterSubscriptionsResponse = {
+export type getBroadcasterSubscriptionsResponse = {
     data: Array<getBroadcasterSubscriptionEntry>;
     pagination: {
         cursor: string;

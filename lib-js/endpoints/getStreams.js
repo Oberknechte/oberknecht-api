@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStreams = void 0;
+exports.getStreams = getStreams;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
@@ -32,4 +32,3 @@ async function getStreams(sym, filters, customToken) {
         });
     });
 }
-exports.getStreams = getStreams;

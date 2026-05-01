@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._validatetoken = void 0;
+exports._validatetoken = _validatetoken;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -39,4 +39,3 @@ async function _validatetoken(sym, customToken, useOldFormat) {
         });
     });
 }
-exports._validatetoken = _validatetoken;

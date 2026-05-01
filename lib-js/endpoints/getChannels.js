@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getChannels = void 0;
+exports.getChannels = getChannels;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const urls_1 = require("../variables/urls");
@@ -31,4 +31,3 @@ async function getChannels(sym, broadcaster_ids, customToken) {
         });
     });
 }
-exports.getChannels = getChannels;

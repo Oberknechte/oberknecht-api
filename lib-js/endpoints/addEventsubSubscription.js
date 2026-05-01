@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addEventsubSubscription = void 0;
+exports.addEventsubSubscription = addEventsubSubscription;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -32,4 +32,3 @@ async function addEventsubSubscription(sym, type, version, condition, transport,
             .catch(reject);
     });
 }
-exports.addEventsubSubscription = addEventsubSubscription;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteGuestStarSlot = void 0;
+exports.deleteGuestStarSlot = deleteGuestStarSlot;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -51,4 +51,3 @@ async function deleteGuestStarSlot(sym, guestID, shouldReinvite = false, slotID,
         });
     });
 }
-exports.deleteGuestStarSlot = deleteGuestStarSlot;

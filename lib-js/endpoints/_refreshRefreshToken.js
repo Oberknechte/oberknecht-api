@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._refreshRefreshToken = void 0;
+exports._refreshRefreshToken = _refreshRefreshToken;
 const oberknecht_request_1 = require("oberknecht-request");
 const __1 = require("..");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -69,4 +69,3 @@ async function _refreshRefreshToken(sym, refreshToken, clientID, clientSecret) {
         });
     });
 }
-exports._refreshRefreshToken = _refreshRefreshToken;

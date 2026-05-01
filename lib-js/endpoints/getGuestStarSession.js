@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getGuestStarSession = void 0;
+exports.getGuestStarSession = getGuestStarSession;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -27,4 +27,3 @@ async function getGuestStarSession(sym, broadcasterID, customToken) {
         });
     });
 }
-exports.getGuestStarSession = getGuestStarSession;

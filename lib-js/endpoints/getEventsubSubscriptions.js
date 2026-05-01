@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEventsubSubscriptions = void 0;
+exports.getEventsubSubscriptions = getEventsubSubscriptions;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -20,4 +20,3 @@ async function getEventsubSubscriptions(sym, customToken) {
         });
     });
 }
-exports.getEventsubSubscriptions = getEventsubSubscriptions;

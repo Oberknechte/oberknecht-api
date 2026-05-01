@@ -1,7 +1,7 @@
-export declare type raidEntry = {
+export type raidEntry = {
     created_at: string;
     is_mature: boolean;
 };
-export declare type raidResponse = {
+export type raidResponse = {
     data: Array<raidEntry>;
 };

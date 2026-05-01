@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getClips = void 0;
+exports.getClips = getClips;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -45,4 +45,3 @@ async function getClips(sym, broadcasterID, ids, gameID, startedAt, endedAt, fir
         });
     });
 }
-exports.getClips = getClips;

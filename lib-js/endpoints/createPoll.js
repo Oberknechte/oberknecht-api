@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPoll = void 0;
+exports.createPoll = createPoll;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const validateTokenBR_1 = require("../functions/validateTokenBR");
@@ -34,4 +34,3 @@ async function createPoll(sym, title, choices /* Min. 2, Max. 5 */, duration /* 
         });
     });
 }
-exports.createPoll = createPoll;

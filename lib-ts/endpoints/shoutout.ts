@@ -9,7 +9,7 @@ import { checkThrowMissingParams } from "../functions/checkThrowMissingParams";
 
 export async function shoutout(
   sym: string,
-  fromBroadcasterID: string,
+  fromBroadcasterID: string | undefined,
   toBroadcasterID: string,
   customToken?: string
 ) {

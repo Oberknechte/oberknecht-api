@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getModeratedChannels = void 0;
+exports.getModeratedChannels = getModeratedChannels;
 const oberknecht_request_1 = require("oberknecht-request");
 const urls_1 = require("../variables/urls");
 const oberknecht_utils_1 = require("oberknecht-utils");
@@ -21,4 +21,3 @@ async function getModeratedChannels(sym, first, after, userID, customToken) {
         });
     });
 }
-exports.getModeratedChannels = getModeratedChannels;
